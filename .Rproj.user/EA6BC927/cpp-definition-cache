@@ -1,0 +1,136 @@
+[
+    {
+        "file": "/home/jmazucheli/Downloads/vasicekreg/src/vasicekmean.cpp",
+        "file_last_write": 1619632659.0,
+        "definitions": [
+            {
+                "usr": "c:@F@logpdf_vasicekmean#d#d#d#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "logpdf_vasicekmean(double, double, double)",
+                "file": "/home/jmazucheli/Downloads/vasicekreg/src/vasicekmean.cpp",
+                "line": 7,
+                "column": 15,
+                "hidden": false
+            },
+            {
+                "usr": "c:@F@cpp_dvasicekmean#1$@N@Rcpp@S@Vector>#VI14#@N@Rcpp@ST>1#T@PreserveStorage#1S0_#1S0_#1b#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "cpp_dvasicekmean(const NumericVector, const NumericVector, const NumericVector, const bool)",
+                "file": "/home/jmazucheli/Downloads/vasicekreg/src/vasicekmean.cpp",
+                "line": 21,
+                "column": 15,
+                "hidden": false
+            },
+            {
+                "usr": "c:@F@cdf_vasicekmean#d#d#d#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "cdf_vasicekmean(double, double, double)",
+                "file": "/home/jmazucheli/Downloads/vasicekreg/src/vasicekmean.cpp",
+                "line": 39,
+                "column": 15,
+                "hidden": false
+            },
+            {
+                "usr": "c:@F@cpp_pvasicekmean#1$@N@Rcpp@S@Vector>#VI14#@N@Rcpp@ST>1#T@PreserveStorage#1S0_#1S0_#1b#1b#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "cpp_pvasicekmean(const NumericVector, const NumericVector, const NumericVector, const bool, const bool)",
+                "file": "/home/jmazucheli/Downloads/vasicekreg/src/vasicekmean.cpp",
+                "line": 48,
+                "column": 15,
+                "hidden": false
+            },
+            {
+                "usr": "c:@F@invcdf_vasicekmean#d#d#d#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "invcdf_vasicekmean(double, double, double)",
+                "file": "/home/jmazucheli/Downloads/vasicekreg/src/vasicekmean.cpp",
+                "line": 70,
+                "column": 16,
+                "hidden": false
+            },
+            {
+                "usr": "c:@F@cpp_qvasicekmean#1$@N@Rcpp@S@Vector>#VI14#@N@Rcpp@ST>1#T@PreserveStorage#1S0_#1S0_#1b#1b#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "cpp_qvasicekmean(const NumericVector, const NumericVector, const NumericVector, const bool, const bool)",
+                "file": "/home/jmazucheli/Downloads/vasicekreg/src/vasicekmean.cpp",
+                "line": 79,
+                "column": 16,
+                "hidden": false
+            }
+        ],
+        "hidden": false
+    },
+    {
+        "file": "/home/jmazucheli/Downloads/vasicekreg/src/vasicekquant.cpp",
+        "file_last_write": 1619651969.0,
+        "definitions": [
+            {
+                "usr": "c:@F@logpdf_vasicekquant#d#d#d#d#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "logpdf_vasicekquant(double, double, double, double)",
+                "file": "/home/jmazucheli/Downloads/vasicekreg/src/vasicekquant.cpp",
+                "line": 7,
+                "column": 15,
+                "hidden": false
+            },
+            {
+                "usr": "c:@F@cpp_dvasicekquant#1$@N@Rcpp@S@Vector>#VI14#@N@Rcpp@ST>1#T@PreserveStorage#1S0_#1S0_#1S0_#1b#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "cpp_dvasicekquant(const NumericVector, const NumericVector, const NumericVector, const NumericVector, const bool)",
+                "file": "/home/jmazucheli/Downloads/vasicekreg/src/vasicekquant.cpp",
+                "line": 24,
+                "column": 15,
+                "hidden": false
+            },
+            {
+                "usr": "c:@F@cdf_vasicekquant#d#d#d#d#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "cdf_vasicekquant(double, double, double, double)",
+                "file": "/home/jmazucheli/Downloads/vasicekreg/src/vasicekquant.cpp",
+                "line": 44,
+                "column": 15,
+                "hidden": false
+            },
+            {
+                "usr": "c:@F@cpp_pvasicekquant#1$@N@Rcpp@S@Vector>#VI14#@N@Rcpp@ST>1#T@PreserveStorage#1S0_#1S0_#1S0_#1b#1b#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "cpp_pvasicekquant(const NumericVector, const NumericVector, const NumericVector, const NumericVector, const bool, const bool)",
+                "file": "/home/jmazucheli/Downloads/vasicekreg/src/vasicekquant.cpp",
+                "line": 55,
+                "column": 15,
+                "hidden": false
+            },
+            {
+                "usr": "c:@F@invcdf_vasicekquant#d#d#d#d#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "invcdf_vasicekquant(double, double, double, double)",
+                "file": "/home/jmazucheli/Downloads/vasicekreg/src/vasicekquant.cpp",
+                "line": 79,
+                "column": 15,
+                "hidden": false
+            },
+            {
+                "usr": "c:@F@cpp_qvasicekquant#1$@N@Rcpp@S@Vector>#VI14#@N@Rcpp@ST>1#T@PreserveStorage#1S0_#1S0_#1S0_#1b#1b#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "cpp_qvasicekquant(const NumericVector, const NumericVector, const NumericVector, const NumericVector, const bool, const bool)",
+                "file": "/home/jmazucheli/Downloads/vasicekreg/src/vasicekquant.cpp",
+                "line": 90,
+                "column": 15,
+                "hidden": false
+            }
+        ],
+        "hidden": false
+    }
+]
