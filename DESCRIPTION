@@ -1,0 +1,32 @@
+Package: vasicekreg
+Type: Package
+Title: Regression Modeling Using Vasicek Distribution
+Version: 1.0.2
+Date: 2026-01-12
+Authors@R: 
+    c(person(given = "Josmar",
+             family = "Mazucheli",
+             role = c("aut", "cre"),
+             email = "jmazucheli@gmail.com"),
+      person(given = "Bruna",
+             family = "Alves",
+             role = "ctb",
+             email = "pg402900@uem.br"))
+Description: Provides probability density, cumulative distribution,
+    quantile, and random number generation functions for the Vasicek
+    distribution. In addition, two functions are available for fitting
+    Generalized Additive Models for Location, Scale and Shape introduced
+    by Rigby and Stasinopoulos (2005,
+    <doi:10.1111/j.1467-9876.2005.00510.x>). Some functions are written in
+    'C++' using 'Rcpp', developed by Eddelbuettel and Francois (2011,
+    <doi:10.18637/jss.v040.i08>).
+License: MIT + file LICENSE
+Encoding: UTF-8
+ByteCompile: yes
+LazyData: true
+Depends: R (>= 3.6)
+Imports: Rcpp, stats, gamlss, gamlss.dist, mvtnorm
+LinkingTo: Rcpp
+Suggests: testthat (>= 3.0.0)
+RoxygenNote: 7.3.3
+NeedsCompilation: yes

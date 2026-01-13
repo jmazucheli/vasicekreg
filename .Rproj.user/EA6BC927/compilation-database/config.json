@@ -1,0 +1,30 @@
+{
+    "args": [
+        "-std=gnu++17",
+        "-I/usr/share/R/include",
+        "-DNDEBUG",
+        "-fpic",
+        "-fno-omit-frame-pointer",
+        "-ffile-prefix-map=/build/r-base-FPSnzf/r-base-4.3.3=.",
+        "-fstack-protector-strong",
+        "-fstack-clash-protection",
+        "-fcf-protection",
+        "-fdebug-prefix-map=/build/r-base-FPSnzf/r-base-4.3.3=/usr/src/r-base-4.3.3-2build2",
+        "-D_FORTIFY_SOURCE=3",
+        "-I/usr/local/lib/R/site-library/Rcpp/include",
+        "-DEIGEN_DONT_VECTORIZE",
+        "-I/usr/include/c++/13",
+        "-I/usr/include/x86_64-linux-gnu/c++/13",
+        "-I/usr/include/c++/13/backward",
+        "-I/usr/lib/gcc/x86_64-linux-gnu/13/include",
+        "-I/usr/local/include",
+        "-I/usr/include/x86_64-linux-gnu",
+        "-I/usr/include"
+    ],
+    "pch": "Rcpp",
+    "is_cpp": true,
+    "hash": "1622137202",
+    "compiler": "9591782505921053015",
+    "rversion": "4.3.3",
+    "dbversion": 4
+}
