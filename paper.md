@@ -1,69 +1,111 @@
 ---
-title: "vasicekreg: An R package for Vasicek-based mean and quantile regression models for bounded data"
+title: 'vasicekreg package: Mean and quantile regression models for bounded data based
+  on the Vasicek distribution in R'
 tags:
-  - R
-  - bounded data
-  - Vasicek distribution
-  - beta regression
-  - quantile regression
-  - parametric regression
-authors:
-  - name: Josmar Mazucheli
-    orcid: 0000-0002-5405-6644
-    affiliation: 1
-affiliations:
-  - name: Department of Statistics, Universidade Estadual de Maringá, Brazil
-    index: 1
+- R
+- bounded data
+- Vasicek distribution
+- beta regression
+- quantile regression
 date: "2026-01-13"
+output: pdf_document
+affiliations:
+- name: Department of Statistics, Universidade Estadual de Maringá, Brazil
+  index: 1
 bibliography: paper.bib
+authors:
+- name: Josmar Mazucheli
+  orcid: "0000-0002-5405-6644"
+  affiliation: 1
+- name: Bruna Alves
+  affiliation: 1
 ---
 
 ## Summary
 
-Bounded continuous outcomes on the unit interval arise across many fields, including biomedicine, epidemiology, environmental sciences, and finance. Beta regression has become the default modeling tool for such data, largely due to its flexibility. However, beta-based approaches are primarily mean-oriented and can be less convenient when the scientific question targets conditional quantiles (e.g., tail behavior), which often requires nontrivial reparameterizations and may lead to numerical instability.
-
-The Vasicek distribution provides a competitive alternative for modeling unit-interval data. Beyond supporting regression on the mean, it naturally enables quantile-based parameterizations, making fully parametric quantile regression feasible in a coherent likelihood framework. Despite these advantages, Vasicek-based regression models have been comparatively underexplored in the statistical literature.
-
-The `vasicekreg` R package implements likelihood-based inference for both mean and quantile regression models using the Vasicek distribution, providing a unified and reproducible workflow for modeling bounded data.
+Continuous response variables restricted to the unit interval are frequently observed in 
+areas such as biomedicine, epidemiology, environmental sciences, and finance. Regression models based on 
+the beta distribution are commonly employed to analyze such data. However, beta regression is primarily used 
+to assess the effect of one or more explanatory variables on the mean of the response variable. In contrast, 
+the Vasicek distribution offers a flexible alternative that extends beyond mean-based analysis by admitting 
+direct quantile-based parameterizations. Consequently, the \texttt{vasicekreg} R package implements likelihood-based 
+inference for both mean and quantile regression models, providing a unified framework for modeling 
+bounded data. The package is intended for applied statisticians and researchers working with rates, proportions, and
+bounded responses in empirical studies.
 
 ## Statement of need
 
-Regression modeling for bounded responses is typically carried out using the beta distribution and its variants. While effective in many applications, beta regression does not naturally yield parametric quantile regression, and extensions often rely on complex parameterizations or ad hoc strategies that can complicate interpretation and computation.
+Regression models for bounded responses are most commonly based on the beta 
+distribution [@FerrariCribari2004; @SmithsonVerkuilen2006; @CribariNetoZeileis2010]. 
+Although beta regression has become the standard approach for modeling rates and proportions,
+it is primarily designed for conditional mean inference and does not naturally support
+fully parametric quantile regression.
 
-The Vasicek distribution is a two-parameter family on the unit interval originally arising in credit risk modeling, where it describes default or loss rates in large homogeneous portfolios [@VasicekDistribution; @VasicekQuantilesCI]. Its structure admits an analytically tractable quantile function and supports quantile-based parameterizations in a particularly direct way, which is advantageous when researchers need conditional quantiles and not only conditional means.
+The Vasicek distribution is a two-parameter model defined on the unit interval, 
+originally introduced in the context of credit risk modeling 
+[@VasicekDistribution; @VasicekQuantilesCI]. It admits a closed-form quantile 
+function and allows for direct quantile-based parameterizations, making it a 
+natural alternative to the beta distribution when interest lies in modeling 
+conditional quantiles in addition to conditional means. Despite these characteristics, 
+Vasicek-based regression models have received considerably less attention in the statistical 
+literature than beta-based approaches [@BeyondBetaVasicek; @VasicekLogisticNote].
 
-Even though the Vasicek distribution has been studied and compared with other unit-interval distributions [@BeyondBetaVasicek], the regression literature has used it far less than beta-based models. To the best of our knowledge, the first comprehensive development of *both* mean regression and quantile regression models based on the Vasicek distribution was presented in a peer-reviewed article published in *Mathematics* in 2022 [@Mazucheli2022Mathematics]. The `vasicekreg` package operationalizes these methodological developments and makes them accessible to applied researchers through a stable and documented implementation in R.
+Compared to existing beta regression tools, such as the \texttt{betareg} 
+package [@CribariNetoZeileis2010], the \texttt{vasicekreg} package provides a fully 
+parametric likelihood-based framework for both mean and quantile regression 
+of bounded responses. To the best of our knowledge, the first comprehensive 
+treatment of Vasicek-based mean and quantile regression models was presented 
+in @Mazucheli2022Mathematics. The \texttt{vasicekreg} package implements these methodological 
+developments by offering two 
+complete regression frameworks within the \texttt{gamlss} environment [@RigbyStasinopoulos2005]: one for 
+Vasicek mean regression and another for Vasicek quantile regression 
+at any percentile order $\tau \in (0,1)$.
+
+
+
 
 ## Software description
 
-The `vasicekreg` package provides a cohesive interface to fit Vasicek-based regression models for responses in (0, 1). The software includes:
+The \texttt{vasicekreg} package provides a cohesive interface for fitting Vasicek-based regression models to 
+responses bounded on the unit interval. The software supports:
 
-- Maximum likelihood estimation for mean and quantile regression parameterizations;
-- Flexible regression predictors and link functions for model components;
-- Model-based inference and comparison via likelihood tools;
-- Predictive routines and utilities supporting reproducible analysis workflows.
+- likelihood-based estimation for mean and quantile regression parameterizations;
+- flexible regression predictors and link functions;
+- model-based inference, prediction, and simulation tools.
 
-The package is distributed through CRAN and is designed to integrate seamlessly with standard R workflows for statistical modeling.
+The package is distributed through CRAN and integrates seamlessly with standard R modeling workflows.
 
 ## Implementation details
 
-Estimation in `vasicekreg` is performed by maximizing the Vasicek log-likelihood under regression structures. The package supports both mean-based and quantile-based parameterizations, allowing the analyst to choose the modeling target most aligned with the scientific question (central tendency versus tails). Particular attention is given to numerical robustness and stable optimization behavior, with implementation choices guided by practical experience in simulation and real-data analyses.
+Estimation in \texttt{vasicekreg} is implemented via two custom distribution families within the `gamlss` framework, enabling both mean-based and quantile-based Vasicek regression models. The quantile regression framework allows inference at any fixed percentile order $\tau \in (0,1)$. Core computational routines, including evaluation of the density, distribution, quantile function, and random number generation, are implemented in C++ using the `Rcpp` interface, ensuring computational efficiency and numerical robustness.
 
 ## Research impact
 
-The Vasicek distribution has a long tradition in credit risk and portfolio loss modeling, including inferential work for quantiles and risk measures [@VasicekDistribution; @VasicekQuantilesCI]. More recently, comparative studies have evaluated Vasicek alongside beta and other unit-interval distributions, highlighting its flexibility but also the relative scarcity of accessible implementations for modern regression tasks [@BeyondBetaVasicek]. Related model developments also include logistic-type formulations and extensions in risk modeling contexts [@VasicekLogisticNote].
+The Vasicek distribution has been extensively studied in the context of credit portfolio losses and risk measures [@VasicekDistribution; @VasicekQuantilesCI], and has been compared with beta and other unit-interval distributions in simulation studies [@BeyondBetaVasicek]. Related methodological developments include logistic-type formulations and extensions in risk modeling [@VasicekLogisticNote].
 
-The `vasicekreg` package has been used in peer-reviewed research in both methodological and applied settings. It supported the first systematic investigation of Vasicek-based mean and quantile regression models for bounded data published in *Mathematics* [@Mazucheli2022Mathematics], and it has been employed in a broader review and applied study published in *Computer Methods and Programs in Biomedicine* with biomedical and COVID-19 data applications [@Mazucheli2022CMPB].
+The \texttt{vasicekreg} package has supported peer-reviewed methodological and applied studies
+by providing likelihood-based estimation for Vasicek mean and quantile regression models. It 
+provided the computational basis for the first systematic investigation of Vasicek-based mean and quantile regression 
+models for bounded data published in *Mathematics* [@Mazucheli2022Mathematics], and was subsequently
+employed in a 
+review and application study involving biomedical and COVID-19 data [@Mazucheli2022CMPB].
 
-From its first CRAN release on 2021-05-01 to the latest CRAN submission on 2026-01-12, `vasicekreg` has accumulated 12,321 downloads (as measured via `dlstats::cran_stats("vasicekreg")`), providing quantitative evidence of sustained community adoption.
+Since its first CRAN release on 2021-05-01, and with the latest submission on 2026-01-12, the package has accumulated 12,321 downloads, indicating sustained adoption by the statistical modeling community.
 
 ## Availability
 
-The package is available from CRAN at:  
-<https://cran.r-project.org/package=vasicekreg>
+The package is available from CRAN at  
+<https://cran.r-project.org/package=vasicekreg>.
 
-The source code is publicly available in a version-controlled repository and distributed under an OSI-approved open-source license.
+The source code is publicly available in a version-controlled repository and is distributed under an OSI-approved open-source license.
 
 ## Acknowledgements
 
-The author acknowledges collaborators and users for feedback and testing, and the open-source R community for foundational tools enabling reproducible statistical software.
+The author thanks collaborators and users for valuable feedback and testing, and acknowledges the R open-source community for foundational tools enabling this work.
+
+## AI usage disclosure
+
+No generative artificial intelligence tools were used in the development of the software or in the writing of this manuscript.
+
+## References
+
