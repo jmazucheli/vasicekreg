@@ -2,15 +2,22 @@
 using namespace Rcpp;
 using namespace std;
 
+inline void check_len_quant(int len, int n, const char* name)
+{
+    if (len != 1 && len != n)
+        Rcpp::stop("Length of '%s' must be 1 or equal to the data length.",
+                   name);
+}
+
 // log-pdf Vasicek - quant parameterization
 
-inline double logpdf_vasicekquant(double x, double mu, double theta, double tau)
+inline double logpdf_NvasicekQ(double x, double mu, double theta, double tau)
 {
     double qnormmu = R::qnorm(mu, 0.0, 1.0, TRUE, FALSE);
     double qnormtau = R::qnorm(tau, 0.0, 1.0, TRUE, FALSE);
     double qnormx = R::qnorm(x, 0.0, 1.0, TRUE, FALSE);
-    double alpha = R::pnorm(-sqrt(theta) * qnormtau + qnormmu * sqrt(0.1e1 - theta), 0.0, 1.0, TRUE, FALSE);
-    double qnormalpha = R::qnorm(alpha, 0.0, 1.0, TRUE, FALSE);
+    double qnormalpha = -sqrt(theta) * qnormtau +
+        qnormmu * sqrt(0.1e1 - theta);
     double t2 = 0.1e1 - theta;
     double t3 = log(t2);
     double t5 = log(theta);
@@ -21,7 +28,7 @@ inline double logpdf_vasicekquant(double x, double mu, double theta, double tau)
     }
 
 // [[Rcpp::export]]
-NumericVector cpp_dvasicekquant(const NumericVector x,
+NumericVector cpp_dNVASIQ(const NumericVector x,
                                const NumericVector mu,
                                const NumericVector theta,
                                const NumericVector tau,
@@ -31,28 +38,40 @@ NumericVector cpp_dvasicekquant(const NumericVector x,
     const int nmu = mu.length(); 
     const int ntheta = theta.length();
     const int ntau = tau.length();
+    check_len_quant(nmu, n, "mu");
+    check_len_quant(ntheta, n, "sigma");
+    check_len_quant(ntau, n, "tau");
     NumericVector out(n);
     
     for(int i = 0; i < n; i++)
-        out[i] = logpdf_vasicekquant(x[i], mu[i % nmu], theta[i % ntheta], tau[i % ntau]);
+        out[i] = logpdf_NvasicekQ(
+            x[i],
+            mu[nmu == 1 ? 0 : i],
+            theta[ntheta == 1 ? 0 : i],
+            tau[ntau == 1 ? 0 : i]
+        );
     
     if(logprob) return(out); else return(Rcpp::exp(out));
 }
 
 // cdf Vasicek - quant parameterization
 
-inline double cdf_vasicekquant(double x, double mu, double theta, double tau)
+inline double cdf_NvasicekQ(double x, double mu, double theta, double tau,
+                               bool lowertail, bool logprob)
 {
     double qnormmu = R::qnorm(mu, 0.0, 1.0, TRUE, FALSE);
     double qnormtau = R::qnorm(tau, 0.0, 1.0, TRUE, FALSE);
     double qnormx = R::qnorm(x, 0.0, 1.0, TRUE, FALSE);
-    double alpha = R::pnorm(-sqrt(theta) * qnormtau + qnormmu * sqrt(0.1e1 - theta), 0.0, 1.0, TRUE, FALSE);
-    double qnormalpha = R::qnorm(alpha, 0.0, 1.0, TRUE, FALSE);
-    return(R::pnorm((sqrt(0.1e1 - theta) * qnormx - qnormalpha) / sqrt(theta), 0.0, 1.0, TRUE, FALSE));
+    double qnormalpha = -sqrt(theta) * qnormtau +
+        qnormmu * sqrt(0.1e1 - theta);
+    return(R::pnorm(
+        (sqrt(0.1e1 - theta) * qnormx - qnormalpha) / sqrt(theta),
+        0.0, 1.0, lowertail, logprob
+    ));
 }
 
 // [[Rcpp::export]]
-NumericVector cpp_pvasicekquant(const NumericVector x,
+NumericVector cpp_pNVASIQ(const NumericVector x,
                                const NumericVector mu,
                                const NumericVector theta,
                                const NumericVector tau,
@@ -63,31 +82,39 @@ NumericVector cpp_pvasicekquant(const NumericVector x,
     const int nmu = mu.length(); 
     const int ntheta = theta.length();
     const int ntau = tau.length();
+    check_len_quant(nmu, n, "mu");
+    check_len_quant(ntheta, n, "sigma");
+    check_len_quant(ntau, n, "tau");
     NumericVector out(n);
     
     for(int i = 0; i < n; i++)
-        out[i] = cdf_vasicekquant(x[i], mu[i % nmu], theta[i % ntheta], tau[i % ntau]);
-    
-    if (!lowertail) out = 0.1e1 - out;
-    if (logprob) out = Rcpp::log(out);
+        out[i] = cdf_NvasicekQ(
+            x[i],
+            mu[nmu == 1 ? 0 : i],
+            theta[ntheta == 1 ? 0 : i],
+            tau[ntau == 1 ? 0 : i],
+            lowertail,
+            logprob
+        );
     
     return(out);
 }
 
-// inv-cdf vasicekquant
+// inv-cdf NvasicekQ
 
-inline double invcdf_vasicekquant(double x, double mu, double theta, double tau)
+inline double invcdf_NvasicekQ(double p, double mu, double theta,
+                                  double tau, bool lowertail, bool logprob)
 {
-    double qnormx = R::qnorm(x, 0.0, 1.0, TRUE, FALSE);
+    double qnormx = R::qnorm(p, 0.0, 1.0, lowertail, logprob);
     double qnormmu = R::qnorm(mu, 0.0, 1.0, TRUE, FALSE);
     double qnormtau = R::qnorm(tau, 0.0, 1.0, TRUE, FALSE);
-    double alpha = R::pnorm(-sqrt(theta) * qnormtau + qnormmu * sqrt(0.1e1 - theta), 0.0, 1.0, TRUE, FALSE);
-    double qnormalpha = R::qnorm(alpha, 0.0, 1.0, TRUE, FALSE); ;
+    double qnormalpha = -sqrt(theta) * qnormtau +
+        qnormmu * sqrt(0.1e1 - theta);
     return(R::pnorm((qnormalpha + sqrt(theta) * qnormx) / sqrt(0.1e1 - theta),0.0, 1.0, TRUE, FALSE)); 
 }
 
 // [[Rcpp::export]]
-NumericVector cpp_qvasicekquant(const NumericVector x,
+NumericVector cpp_qNVASIQ(const NumericVector x,
                                 const NumericVector mu,
                                 const NumericVector theta,
                                 const NumericVector tau,
@@ -98,18 +125,20 @@ NumericVector cpp_qvasicekquant(const NumericVector x,
     const int nmu = mu.length(); 
     const int ntheta = theta.length();
     const int ntau = tau.length();
+    check_len_quant(nmu, n, "mu");
+    check_len_quant(ntheta, n, "sigma");
+    check_len_quant(ntau, n, "tau");
     NumericVector out(n);
     
-    if(lowertail)
-    {
-        for(int i = 0; i < n; i++)
-            out[i] = invcdf_vasicekquant(x[i], mu[i % nmu], theta[i % ntheta], tau[i % ntau] );
-    }
-    else
-    {
-        for(int i = 0; i < n; i++)
-            out[i] = invcdf_vasicekquant(0.1e1 - x[i], mu[i % nmu], theta[i % ntheta], tau[i % ntau]);
-    }
+    for(int i = 0; i < n; i++)
+        out[i] = invcdf_NvasicekQ(
+            x[i],
+            mu[nmu == 1 ? 0 : i],
+            theta[ntheta == 1 ? 0 : i],
+            tau[ntau == 1 ? 0 : i],
+            lowertail,
+            logprob
+        );
     
-    if(logprob) return(Rcpp::log(out)); else return(out);
+    return(out);
 }

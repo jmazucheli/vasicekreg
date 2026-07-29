@@ -10,9 +10,9 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
-// cpp_dvasicekmean
-NumericVector cpp_dvasicekmean(const NumericVector x, const NumericVector alpha, const NumericVector theta, const bool logprob);
-RcppExport SEXP _vasicekreg_cpp_dvasicekmean(SEXP xSEXP, SEXP alphaSEXP, SEXP thetaSEXP, SEXP logprobSEXP) {
+// cpp_dlvasicek
+NumericVector cpp_dlvasicek(const NumericVector x, const NumericVector alpha, const NumericVector theta, const bool logprob);
+RcppExport SEXP _vasicekreg_cpp_dlvasicek(SEXP xSEXP, SEXP alphaSEXP, SEXP thetaSEXP, SEXP logprobSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -20,28 +20,13 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const NumericVector >::type alpha(alphaSEXP);
     Rcpp::traits::input_parameter< const NumericVector >::type theta(thetaSEXP);
     Rcpp::traits::input_parameter< const bool >::type logprob(logprobSEXP);
-    rcpp_result_gen = Rcpp::wrap(cpp_dvasicekmean(x, alpha, theta, logprob));
+    rcpp_result_gen = Rcpp::wrap(cpp_dlvasicek(x, alpha, theta, logprob));
     return rcpp_result_gen;
 END_RCPP
 }
-// cpp_pvasicekmean
-NumericVector cpp_pvasicekmean(const NumericVector x, const NumericVector alpha, const NumericVector theta, const bool lowertail, const bool logprob);
-RcppExport SEXP _vasicekreg_cpp_pvasicekmean(SEXP xSEXP, SEXP alphaSEXP, SEXP thetaSEXP, SEXP lowertailSEXP, SEXP logprobSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const NumericVector >::type x(xSEXP);
-    Rcpp::traits::input_parameter< const NumericVector >::type alpha(alphaSEXP);
-    Rcpp::traits::input_parameter< const NumericVector >::type theta(thetaSEXP);
-    Rcpp::traits::input_parameter< const bool >::type lowertail(lowertailSEXP);
-    Rcpp::traits::input_parameter< const bool >::type logprob(logprobSEXP);
-    rcpp_result_gen = Rcpp::wrap(cpp_pvasicekmean(x, alpha, theta, lowertail, logprob));
-    return rcpp_result_gen;
-END_RCPP
-}
-// cpp_qvasicekmean
-NumericVector cpp_qvasicekmean(const NumericVector x, const NumericVector alpha, const NumericVector theta, const bool lowertail, const bool logprob);
-RcppExport SEXP _vasicekreg_cpp_qvasicekmean(SEXP xSEXP, SEXP alphaSEXP, SEXP thetaSEXP, SEXP lowertailSEXP, SEXP logprobSEXP) {
+// cpp_plvasicek
+NumericVector cpp_plvasicek(const NumericVector x, const NumericVector alpha, const NumericVector theta, const bool lowertail, const bool logprob);
+RcppExport SEXP _vasicekreg_cpp_plvasicek(SEXP xSEXP, SEXP alphaSEXP, SEXP thetaSEXP, SEXP lowertailSEXP, SEXP logprobSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -50,13 +35,159 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const NumericVector >::type theta(thetaSEXP);
     Rcpp::traits::input_parameter< const bool >::type lowertail(lowertailSEXP);
     Rcpp::traits::input_parameter< const bool >::type logprob(logprobSEXP);
-    rcpp_result_gen = Rcpp::wrap(cpp_qvasicekmean(x, alpha, theta, lowertail, logprob));
+    rcpp_result_gen = Rcpp::wrap(cpp_plvasicek(x, alpha, theta, lowertail, logprob));
     return rcpp_result_gen;
 END_RCPP
 }
-// cpp_dvasicekquant
-NumericVector cpp_dvasicekquant(const NumericVector x, const NumericVector mu, const NumericVector theta, const NumericVector tau, const bool logprob);
-RcppExport SEXP _vasicekreg_cpp_dvasicekquant(SEXP xSEXP, SEXP muSEXP, SEXP thetaSEXP, SEXP tauSEXP, SEXP logprobSEXP) {
+// cpp_qlvasicek
+NumericVector cpp_qlvasicek(const NumericVector p, const NumericVector alpha, const NumericVector theta, const bool lowertail, const bool logprob);
+RcppExport SEXP _vasicekreg_cpp_qlvasicek(SEXP pSEXP, SEXP alphaSEXP, SEXP thetaSEXP, SEXP lowertailSEXP, SEXP logprobSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const NumericVector >::type p(pSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type theta(thetaSEXP);
+    Rcpp::traits::input_parameter< const bool >::type lowertail(lowertailSEXP);
+    Rcpp::traits::input_parameter< const bool >::type logprob(logprobSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_qlvasicek(p, alpha, theta, lowertail, logprob));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cpp_rlvasicek
+NumericVector cpp_rlvasicek(const int n, const NumericVector alpha, const NumericVector theta);
+RcppExport SEXP _vasicekreg_cpp_rlvasicek(SEXP nSEXP, SEXP alphaSEXP, SEXP thetaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type theta(thetaSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_rlvasicek(n, alpha, theta));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cpp_dLVASIQ
+NumericVector cpp_dLVASIQ(const NumericVector x, const NumericVector mu, const NumericVector theta, const double tau, const bool logprob);
+RcppExport SEXP _vasicekreg_cpp_dLVASIQ(SEXP xSEXP, SEXP muSEXP, SEXP thetaSEXP, SEXP tauSEXP, SEXP logprobSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type theta(thetaSEXP);
+    Rcpp::traits::input_parameter< const double >::type tau(tauSEXP);
+    Rcpp::traits::input_parameter< const bool >::type logprob(logprobSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_dLVASIQ(x, mu, theta, tau, logprob));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cpp_pLVASIQ
+NumericVector cpp_pLVASIQ(const NumericVector x, const NumericVector mu, const NumericVector theta, const double tau, const bool lowertail, const bool logprob);
+RcppExport SEXP _vasicekreg_cpp_pLVASIQ(SEXP xSEXP, SEXP muSEXP, SEXP thetaSEXP, SEXP tauSEXP, SEXP lowertailSEXP, SEXP logprobSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type theta(thetaSEXP);
+    Rcpp::traits::input_parameter< const double >::type tau(tauSEXP);
+    Rcpp::traits::input_parameter< const bool >::type lowertail(lowertailSEXP);
+    Rcpp::traits::input_parameter< const bool >::type logprob(logprobSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_pLVASIQ(x, mu, theta, tau, lowertail, logprob));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cpp_qLVASIQ
+NumericVector cpp_qLVASIQ(const NumericVector p, const NumericVector mu, const NumericVector theta, const double tau, const bool lowertail, const bool logprob);
+RcppExport SEXP _vasicekreg_cpp_qLVASIQ(SEXP pSEXP, SEXP muSEXP, SEXP thetaSEXP, SEXP tauSEXP, SEXP lowertailSEXP, SEXP logprobSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const NumericVector >::type p(pSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type theta(thetaSEXP);
+    Rcpp::traits::input_parameter< const double >::type tau(tauSEXP);
+    Rcpp::traits::input_parameter< const bool >::type lowertail(lowertailSEXP);
+    Rcpp::traits::input_parameter< const bool >::type logprob(logprobSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_qLVASIQ(p, mu, theta, tau, lowertail, logprob));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cpp_rLVASIQ
+NumericVector cpp_rLVASIQ(const int n, const NumericVector mu, const NumericVector theta, const double tau);
+RcppExport SEXP _vasicekreg_cpp_rLVASIQ(SEXP nSEXP, SEXP muSEXP, SEXP thetaSEXP, SEXP tauSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type theta(thetaSEXP);
+    Rcpp::traits::input_parameter< const double >::type tau(tauSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_rLVASIQ(n, mu, theta, tau));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cpp_mean_lvasicek
+NumericVector cpp_mean_lvasicek(const NumericVector alpha, const NumericVector theta, const int npts);
+RcppExport SEXP _vasicekreg_cpp_mean_lvasicek(SEXP alphaSEXP, SEXP thetaSEXP, SEXP nptsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const NumericVector >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type theta(thetaSEXP);
+    Rcpp::traits::input_parameter< const int >::type npts(nptsSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_mean_lvasicek(alpha, theta, npts));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cpp_dNVASIM
+NumericVector cpp_dNVASIM(const NumericVector x, const NumericVector alpha, const NumericVector theta, const bool logprob);
+RcppExport SEXP _vasicekreg_cpp_dNVASIM(SEXP xSEXP, SEXP alphaSEXP, SEXP thetaSEXP, SEXP logprobSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type theta(thetaSEXP);
+    Rcpp::traits::input_parameter< const bool >::type logprob(logprobSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_dNVASIM(x, alpha, theta, logprob));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cpp_pNVASIM
+NumericVector cpp_pNVASIM(const NumericVector x, const NumericVector alpha, const NumericVector theta, const bool lowertail, const bool logprob);
+RcppExport SEXP _vasicekreg_cpp_pNVASIM(SEXP xSEXP, SEXP alphaSEXP, SEXP thetaSEXP, SEXP lowertailSEXP, SEXP logprobSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type theta(thetaSEXP);
+    Rcpp::traits::input_parameter< const bool >::type lowertail(lowertailSEXP);
+    Rcpp::traits::input_parameter< const bool >::type logprob(logprobSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_pNVASIM(x, alpha, theta, lowertail, logprob));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cpp_qNVASIM
+NumericVector cpp_qNVASIM(const NumericVector x, const NumericVector alpha, const NumericVector theta, const bool lowertail, const bool logprob);
+RcppExport SEXP _vasicekreg_cpp_qNVASIM(SEXP xSEXP, SEXP alphaSEXP, SEXP thetaSEXP, SEXP lowertailSEXP, SEXP logprobSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type theta(thetaSEXP);
+    Rcpp::traits::input_parameter< const bool >::type lowertail(lowertailSEXP);
+    Rcpp::traits::input_parameter< const bool >::type logprob(logprobSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_qNVASIM(x, alpha, theta, lowertail, logprob));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cpp_dNVASIQ
+NumericVector cpp_dNVASIQ(const NumericVector x, const NumericVector mu, const NumericVector theta, const NumericVector tau, const bool logprob);
+RcppExport SEXP _vasicekreg_cpp_dNVASIQ(SEXP xSEXP, SEXP muSEXP, SEXP thetaSEXP, SEXP tauSEXP, SEXP logprobSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -65,13 +196,13 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const NumericVector >::type theta(thetaSEXP);
     Rcpp::traits::input_parameter< const NumericVector >::type tau(tauSEXP);
     Rcpp::traits::input_parameter< const bool >::type logprob(logprobSEXP);
-    rcpp_result_gen = Rcpp::wrap(cpp_dvasicekquant(x, mu, theta, tau, logprob));
+    rcpp_result_gen = Rcpp::wrap(cpp_dNVASIQ(x, mu, theta, tau, logprob));
     return rcpp_result_gen;
 END_RCPP
 }
-// cpp_pvasicekquant
-NumericVector cpp_pvasicekquant(const NumericVector x, const NumericVector mu, const NumericVector theta, const NumericVector tau, const bool lowertail, const bool logprob);
-RcppExport SEXP _vasicekreg_cpp_pvasicekquant(SEXP xSEXP, SEXP muSEXP, SEXP thetaSEXP, SEXP tauSEXP, SEXP lowertailSEXP, SEXP logprobSEXP) {
+// cpp_pNVASIQ
+NumericVector cpp_pNVASIQ(const NumericVector x, const NumericVector mu, const NumericVector theta, const NumericVector tau, const bool lowertail, const bool logprob);
+RcppExport SEXP _vasicekreg_cpp_pNVASIQ(SEXP xSEXP, SEXP muSEXP, SEXP thetaSEXP, SEXP tauSEXP, SEXP lowertailSEXP, SEXP logprobSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -81,13 +212,13 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const NumericVector >::type tau(tauSEXP);
     Rcpp::traits::input_parameter< const bool >::type lowertail(lowertailSEXP);
     Rcpp::traits::input_parameter< const bool >::type logprob(logprobSEXP);
-    rcpp_result_gen = Rcpp::wrap(cpp_pvasicekquant(x, mu, theta, tau, lowertail, logprob));
+    rcpp_result_gen = Rcpp::wrap(cpp_pNVASIQ(x, mu, theta, tau, lowertail, logprob));
     return rcpp_result_gen;
 END_RCPP
 }
-// cpp_qvasicekquant
-NumericVector cpp_qvasicekquant(const NumericVector x, const NumericVector mu, const NumericVector theta, const NumericVector tau, const bool lowertail, const bool logprob);
-RcppExport SEXP _vasicekreg_cpp_qvasicekquant(SEXP xSEXP, SEXP muSEXP, SEXP thetaSEXP, SEXP tauSEXP, SEXP lowertailSEXP, SEXP logprobSEXP) {
+// cpp_qNVASIQ
+NumericVector cpp_qNVASIQ(const NumericVector x, const NumericVector mu, const NumericVector theta, const NumericVector tau, const bool lowertail, const bool logprob);
+RcppExport SEXP _vasicekreg_cpp_qNVASIQ(SEXP xSEXP, SEXP muSEXP, SEXP thetaSEXP, SEXP tauSEXP, SEXP lowertailSEXP, SEXP logprobSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -97,18 +228,27 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const NumericVector >::type tau(tauSEXP);
     Rcpp::traits::input_parameter< const bool >::type lowertail(lowertailSEXP);
     Rcpp::traits::input_parameter< const bool >::type logprob(logprobSEXP);
-    rcpp_result_gen = Rcpp::wrap(cpp_qvasicekquant(x, mu, theta, tau, lowertail, logprob));
+    rcpp_result_gen = Rcpp::wrap(cpp_qNVASIQ(x, mu, theta, tau, lowertail, logprob));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_vasicekreg_cpp_dvasicekmean", (DL_FUNC) &_vasicekreg_cpp_dvasicekmean, 4},
-    {"_vasicekreg_cpp_pvasicekmean", (DL_FUNC) &_vasicekreg_cpp_pvasicekmean, 5},
-    {"_vasicekreg_cpp_qvasicekmean", (DL_FUNC) &_vasicekreg_cpp_qvasicekmean, 5},
-    {"_vasicekreg_cpp_dvasicekquant", (DL_FUNC) &_vasicekreg_cpp_dvasicekquant, 5},
-    {"_vasicekreg_cpp_pvasicekquant", (DL_FUNC) &_vasicekreg_cpp_pvasicekquant, 6},
-    {"_vasicekreg_cpp_qvasicekquant", (DL_FUNC) &_vasicekreg_cpp_qvasicekquant, 6},
+    {"_vasicekreg_cpp_dlvasicek", (DL_FUNC) &_vasicekreg_cpp_dlvasicek, 4},
+    {"_vasicekreg_cpp_plvasicek", (DL_FUNC) &_vasicekreg_cpp_plvasicek, 5},
+    {"_vasicekreg_cpp_qlvasicek", (DL_FUNC) &_vasicekreg_cpp_qlvasicek, 5},
+    {"_vasicekreg_cpp_rlvasicek", (DL_FUNC) &_vasicekreg_cpp_rlvasicek, 3},
+    {"_vasicekreg_cpp_dLVASIQ", (DL_FUNC) &_vasicekreg_cpp_dLVASIQ, 5},
+    {"_vasicekreg_cpp_pLVASIQ", (DL_FUNC) &_vasicekreg_cpp_pLVASIQ, 6},
+    {"_vasicekreg_cpp_qLVASIQ", (DL_FUNC) &_vasicekreg_cpp_qLVASIQ, 6},
+    {"_vasicekreg_cpp_rLVASIQ", (DL_FUNC) &_vasicekreg_cpp_rLVASIQ, 4},
+    {"_vasicekreg_cpp_mean_lvasicek", (DL_FUNC) &_vasicekreg_cpp_mean_lvasicek, 3},
+    {"_vasicekreg_cpp_dNVASIM", (DL_FUNC) &_vasicekreg_cpp_dNVASIM, 4},
+    {"_vasicekreg_cpp_pNVASIM", (DL_FUNC) &_vasicekreg_cpp_pNVASIM, 5},
+    {"_vasicekreg_cpp_qNVASIM", (DL_FUNC) &_vasicekreg_cpp_qNVASIM, 5},
+    {"_vasicekreg_cpp_dNVASIQ", (DL_FUNC) &_vasicekreg_cpp_dNVASIQ, 5},
+    {"_vasicekreg_cpp_pNVASIQ", (DL_FUNC) &_vasicekreg_cpp_pNVASIQ, 6},
+    {"_vasicekreg_cpp_qNVASIQ", (DL_FUNC) &_vasicekreg_cpp_qNVASIQ, 6},
     {NULL, NULL, 0}
 };
 

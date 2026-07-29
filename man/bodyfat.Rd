@@ -30,9 +30,10 @@ assisted in a public hospital in Curitiba, Paraná, Brazil.
 \examples{
 data(bodyfat, package = "vasicekreg")
 
-bodyfat$BMI <- bodyfat$BMI / 100
+bodyfat$AGE <- bodyfat$AGE - 46.00
+bodyfat$BMI <- bodyfat$BMI - 24.72
 bodyfat$SEX <- as.factor(bodyfat$SEX)
-bodyfat$IPAQ <- as.factor(bodyfat$IPAQ)
+bodyfat$IPAQ<- as.factor(bodyfat$IPAQ)
 
 library(gamlss)
 
@@ -40,21 +41,40 @@ library(gamlss)
 fitmean <- gamlss(
   ARMS ~ AGE + BMI + SEX + IPAQ,
   data = bodyfat,
-  family = VASIM(mu.link = "logit", sigma.link = "logit")
+  family = NVASIM(mu.link = "logit", sigma.link = "logit")
 )
 
 \dontrun{
-## Quantile regression models for different tau levels
-fittaus <- lapply(c(0.10, 0.25, 0.50, 0.75, 0.90), function(Tau) {
+tau_levels <- c(0.10, 0.25, 0.50, 0.75, 0.90)
+
+## Quantile regression models with the normal kernel
+fit_normal <- lapply(tau_levels, function(Tau) {
   tau <<- Tau
   gamlss(
     ARMS ~ AGE + BMI + SEX + IPAQ,
     data = bodyfat,
-    family = VASIQ(mu.link = "logit", sigma.link = "logit")
+    family = NVASIQ(
+      mu.link = "logit",
+      sigma.link = "logit"
+    )
   )
 })
 
-sapply(fittaus, summary)
+## Quantile regression models with the logistic kernel
+fit_logistic <- lapply(tau_levels, function(Tau) {
+  tau <<- Tau
+  gamlss(
+    ARMS ~ AGE + BMI + SEX + IPAQ,
+    data = bodyfat,
+    family = LVASIQ(
+      mu.link = "logit",
+      sigma.link = "logit"
+    )
+  )
+})
+
+lapply(fit_normal, summary)
+lapply(fit_logistic, summary)
 }
 }
 \references{

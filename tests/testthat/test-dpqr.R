@@ -1,0 +1,94 @@
+test_that("NVASIM distribution functions are mutually consistent", {
+    p <- c(1e-8, 0.10, 0.50, 0.90, 1 - 1e-8)
+    mu <- 0.63
+    sigma <- 0.27
+
+    expect_equal(
+        pNVASIM(qNVASIM(p, mu, sigma), mu, sigma),
+        p,
+        tolerance = 1e-10
+    )
+    expect_equal(
+        qNVASIM(log(p), mu, sigma, log.p = TRUE),
+        qNVASIM(p, mu, sigma),
+        tolerance = 1e-12
+    )
+    expect_equal(
+        qNVASIM(log(p), mu, sigma, lower.tail = FALSE, log.p = TRUE),
+        qNVASIM(p, mu, sigma, lower.tail = FALSE),
+        tolerance = 1e-12
+    )
+    expect_equal(pNVASIM(c(0, 1), mu, sigma), c(0, 1))
+    expect_equal(qNVASIM(c(0, 1), mu, sigma), c(0, 1))
+    expect_equal(qNVASIM(c(-Inf, 0), mu, sigma, log.p = TRUE), c(0, 1))
+    expect_equal(
+        integrate(function(x) dNVASIM(x, mu, sigma), 0, 1)$value,
+        1,
+        tolerance = 1e-7
+    )
+})
+
+test_that("NVASIQ distribution functions preserve the selected quantile", {
+    p <- c(1e-8, 0.10, 0.50, 0.90, 1 - 1e-8)
+    mu <- 0.63
+    sigma <- 0.27
+    tau <- 0.20
+
+    expect_equal(qNVASIQ(tau, mu, sigma, tau), mu, tolerance = 1e-12)
+    expect_equal(
+        pNVASIQ(qNVASIQ(p, mu, sigma, tau), mu, sigma, tau),
+        p,
+        tolerance = 1e-10
+    )
+    expect_equal(
+        qNVASIQ(log(p), mu, sigma, tau, log.p = TRUE),
+        qNVASIQ(p, mu, sigma, tau),
+        tolerance = 1e-12
+    )
+    expect_equal(pNVASIQ(c(0, 1), mu, sigma, tau), c(0, 1))
+    expect_equal(qNVASIQ(c(0, 1), mu, sigma, tau), c(0, 1))
+    expect_equal(
+        integrate(function(x) dNVASIQ(x, mu, sigma, tau), 0, 1)$value,
+        1,
+        tolerance = 1e-7
+    )
+})
+
+test_that("logistic-kernel distribution functions are mutually consistent", {
+    p <- c(1e-8, 0.10, 0.50, 0.90, 1 - 1e-8)
+    mu <- 0.63
+    sigma <- 0.27
+    tau <- 0.20
+
+    expect_equal(qLVASIQ(tau, mu, sigma, tau), mu, tolerance = 1e-12)
+    expect_equal(
+        pLVASIQ(qLVASIQ(p, mu, sigma, tau), mu, sigma, tau),
+        p,
+        tolerance = 1e-10
+    )
+    expect_equal(
+        qLVASIQ(log(p), mu, sigma, tau, log.p = TRUE),
+        qLVASIQ(p, mu, sigma, tau),
+        tolerance = 1e-12
+    )
+    expect_equal(pLVASIQ(c(0, 1), mu, sigma, tau), c(0, 1))
+    expect_equal(qLVASIQ(c(0, 1), mu, sigma, tau), c(0, 1))
+    expect_equal(
+        integrate(function(x) dLVASIQ(x, mu, sigma, tau), 0, 1)$value,
+        1,
+        tolerance = 1e-6
+    )
+})
+
+test_that("random generators follow the standard n convention", {
+    expect_length(rNVASIM(5, 0.5, 0.3), 5)
+    expect_length(rNVASIQ(c(4, 8), 0.5, 0.3, 0.5), 2)
+    expect_length(rLVASIQ(0, 0.5, 0.3, 0.5), 0)
+})
+
+test_that("incompatible parameter lengths are rejected", {
+    expect_error(dNVASIM(c(0.2, 0.4, 0.6), c(0.3, 0.7), 0.4))
+    expect_error(pNVASIQ(c(0.2, 0.4, 0.6), 0.5, c(0.3, 0.7), 0.5))
+    expect_error(qLVASIQ(c(0.2, 0.4, 0.6), 0.5, c(0.3, 0.7), 0.5))
+})
+
