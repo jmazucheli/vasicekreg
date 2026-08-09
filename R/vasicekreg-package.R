@@ -2,8 +2,8 @@
 #'
 #' @description
 #' The \pkg{vasicekreg} package provides distribution functions and GAMLSS
-#' families for Vasicek-type distributions on the unit interval. The package
-#' includes three parameterizations:
+#' families for Vasicek-type distributions on the unit interval. Three base
+#' families are available:
 #' \itemize{
 #'   \item \code{NVASIM}: normal kernel with mean parameterization, where
 #'   \eqn{\mu=E(Y)}.
@@ -12,10 +12,20 @@
 #'   \item \code{LVASIQ}: logistic kernel with quantile parameterization, where
 #'   \eqn{\mu=Q_Y(\tau)} for a fixed \eqn{\tau\in(0,1)}.
 #' }
-#' In each case, \eqn{\sigma\in(0,1)} controls dispersion. The corresponding
-#' \code{d}, \code{p}, \code{q}, and \code{r} functions provide the density,
-#' cumulative distribution function, quantile function, and random number
-#' generation, respectively.
+#' For responses observed at the boundaries, the normal-kernel mean model is
+#' also available as:
+#' \itemize{
+#'   \item \code{ZANVASIM}: point mass at zero and a continuous component on
+#'   \eqn{(0,1)}.
+#'   \item \code{OANVASIM}: point mass at one and a continuous component on
+#'   \eqn{(0,1)}.
+#'   \item \code{ZOANVASIM}: point masses at zero and one and a continuous
+#'   component on \eqn{(0,1)}.
+#' }
+#' The parameter \eqn{\sigma\in(0,1)} controls dispersion in the continuous
+#' Vasicek component. The corresponding \code{d}, \code{p}, \code{q}, and
+#' \code{r} functions provide density or probability mass values, cumulative
+#' probabilities, quantiles, and random observations, respectively.
 #'
 #' @details
 #' \code{\link[vasicekreg]{bodyfat}}:
@@ -37,23 +47,43 @@
 #' family is not provided because the mean has no closed-form expression and
 #' does not equal \eqn{\mu} under this parameterization.
 #'
+#' \code{\link[vasicekreg]{ZANVASIM}}:
+#' Zero-adjusted normal-kernel mean family. Here
+#' \eqn{\nu=P(Y=0)}, \eqn{\mu=E(Y\mid Y>0)}, and the marginal mean is
+#' \eqn{E(Y)=(1-\nu)\mu}.
+#'
+#' \code{\link[vasicekreg]{OANVASIM}}:
+#' One-adjusted normal-kernel mean family. Here
+#' \eqn{\nu=P(Y=1)}, \eqn{\mu=E(Y\mid Y<1)}, and the marginal mean is
+#' \eqn{E(Y)=\nu+(1-\nu)\mu}.
+#'
+#' \code{\link[vasicekreg]{ZOANVASIM}}:
+#' Zero-and-one-adjusted normal-kernel mean family. Here
+#' \eqn{\nu=P(Y=0)}, \eqn{\tau=P(Y=1\mid Y>0)}, and
+#' \eqn{\mu=E(Y\mid 0<Y<1)}. Consequently,
+#' \eqn{P(Y=1)=(1-\nu)\tau} and
+#' \eqn{E(Y)=(1-\nu)[\tau+(1-\tau)\mu]}.
+#'
 #' The distribution functions \code{dNVASIM}, \code{pNVASIM},
 #' \code{qNVASIM}, \code{dNVASIQ}, \code{pNVASIQ}, \code{qNVASIQ},
 #' \code{dLVASIQ}, \code{pLVASIQ}, and \code{qLVASIQ} call compiled
-#' \proglang{C++} routines through \pkg{Rcpp}. The functions
-#' \code{rNVASIM} and \code{rNVASIQ} use inverse-transform generation with
-#' their compiled quantile routines, whereas \code{rLVASIQ} calls a compiled
-#' random-generation routine directly. Parameter validation, the GAMLSS
-#' family definitions, and the analytical log-likelihood derivatives are
-#' implemented in \proglang{R}. The mean and variance components of the
-#' \code{LVASIQ()} family object are obtained by numerical quadrature because
-#' these moments have no closed-form expressions.
+#' \proglang{C++} routines through \pkg{Rcpp}. The boundary-adjusted
+#' distribution functions are implemented in \proglang{R} and reuse the
+#' compiled \code{NVASIM} functions for their continuous component.
+#' Parameter validation, the GAMLSS family definitions, and all
+#' log-likelihood derivatives are implemented in \proglang{R}. The mean and
+#' variance components of the \code{LVASIQ()} family object are obtained by
+#' numerical quadrature because these moments have no closed-form
+#' expressions.
 #'
 #' For the distribution functions associated with \code{NVASIQ} and
 #' \code{LVASIQ}, \code{tau} is supplied as an argument. For GAMLSS fitting,
 #' \code{NVASIQ()} and \code{LVASIQ()} require \code{tau} to be defined as a
 #' scalar variable in the global environment. The same value must be retained
-#' when residuals or other post-fit quantities are computed.
+#' when residuals or other post-fit quantities are computed. This fixed
+#' quantile level is distinct from the parameter \code{tau} in
+#' \code{ZOANVASIM()}, which represents the conditional probability at one
+#' among nonzero observations.
 #'
 #' @author
 #' Josmar Mazucheli \email{jmazucheli@gmail.com}

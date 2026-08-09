@@ -1,3 +1,35 @@
+# vasicekreg development version (2026-08-09)
+
+## Boundary-adjusted mean regression
+
+- Added `ZANVASIM()`, a zero-adjusted normal-kernel Vasicek mean family,
+  with `nu` modeling the probability at zero.
+- Added `OANVASIM()`, a one-adjusted normal-kernel Vasicek mean family,
+  with `nu` modeling the probability at one.
+- Added `ZOANVASIM()`, a zero-and-one-adjusted normal-kernel Vasicek mean
+  family. In this family, `nu` is the probability at zero and `tau` is
+  the conditional probability at one among nonzero observations.
+- Added the corresponding `d0NVASIM()`, `p0NVASIM()`, `q0NVASIM()`,
+  `r0NVASIM()`, `d1NVASIM()`, `p1NVASIM()`, `q1NVASIM()`,
+  `r1NVASIM()`, `d01NVASIM()`, `p01NVASIM()`, `q01NVASIM()`, and
+  `r01NVASIM()` functions.
+- Added analytical derivatives, randomized quantile residuals, marginal
+  moments, and GAMLSS fitting support for all three boundary-adjusted
+  families.
+
+## Documentation and tests
+
+- Standardized the R source filenames as `dpqr-0NvasicekM.R`,
+  `dpqr-1NvasicekM.R`, and `dpqr-01NvasicekM.R`.
+- Added numerical verification of all first, second, and cross derivatives
+  for `ZANVASIM`, `OANVASIM`, and `ZOANVASIM`.
+- Clarified the roles of `x` and `q` and distinguished the boundary
+  behavior of the zero-adjusted, one-adjusted, and zero-and-one-adjusted
+  distributions.
+- Updated the package overview to describe the boundary-adjusted families
+  and to distinguish the `tau` parameter in `ZOANVASIM` from the fixed
+  quantile level used by `NVASIQ` and `LVASIQ`.
+
 # vasicekreg 1.1.0 (2026-07-28)
 
 ## Interface reorganization
