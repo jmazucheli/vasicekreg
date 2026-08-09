@@ -64,9 +64,12 @@ the global environment before \code{LVASIQ()} is evaluated.
 }
 \details{
 Let
-\eqn{\mathrm{logit}(u)=\log\left\{\frac{u}{1-u}\right\}} and
+\eqn{\mathrm{logit}(u)=
+\log\left(\frac{u}{1-u}\right)} and
 \eqn{\Lambda(z)=\frac{1}{1+e^{-z}}},
-with \eqn{\lambda(z)=\Lambda(z)\left[1-\Lambda(z)\right]}.
+with
+\eqn{\lambda(z)=
+\Lambda(z)\left[1-\Lambda(z)\right]}.
 Define
 \deqn{z =
 \sqrt{\frac{1-\sigma}{\sigma}}

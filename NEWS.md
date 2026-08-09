@@ -108,3 +108,4 @@
 
 ## Initial release
 - First release of the vasicekreg package on CRAN.
+

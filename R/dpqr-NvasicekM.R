@@ -97,7 +97,7 @@
 #' 
 #' Variance
 #' \deqn{Var(X) = \Phi_2\left ( \Phi^{-1}(\mu),\Phi^{-1}(\mu),\sigma \right )-\mu^2}
-#' where \eqn{0<(x, \mu, \tau, \sigma)<1} and \eqn{\Phi_2(\cdot)} is the probability distribution function for the standard bivariate normal distribution with correlation \eqn{\sigma}.
+#' where \eqn{(x, \mu, \sigma, \tau) \in (0,1)} and \eqn{\Phi_2(\cdot)} is the probability distribution function for the standard bivariate normal distribution with correlation \eqn{\sigma}.
 #'
 #' @examples
 #'

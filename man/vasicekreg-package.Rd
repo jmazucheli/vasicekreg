@@ -142,6 +142,7 @@ if (requireNamespace("betareg", quietly = TRUE)) {
     comparison
 }
 }
+
 }
 \author{
 Josmar Mazucheli \email{jmazucheli@gmail.com}
