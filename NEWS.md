@@ -29,6 +29,8 @@
 - Updated the package overview to describe the boundary-adjusted families
   and to distinguish the `tau` parameter in `ZOANVASIM` from the fixed
   quantile level used by `NVASIQ` and `LVASIQ`.
+- Added a package-level example comparing `OANVASIM` and `BEOI` using the
+  one-inflated `accuracy1` response from the `ReadingSkills` data.
 
 # vasicekreg 1.1.0 (2026-07-28)
 
