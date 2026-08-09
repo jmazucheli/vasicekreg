@@ -171,3 +171,45 @@ test_that("LVASIQ fits an intercept-only GAMLSS model", {
         tolerance = 0.15
     )
 })
+
+
+test_that("boundary-adjusted families support likelihood-based covariance", {
+    set.seed(20260809)
+    control <- gamlss::gamlss.control(n.cyc = 75, trace = FALSE)
+
+    y_za <- r0NVASIM(250, mu = 0.58, sigma = 0.30, nu = 0.20)
+    y_oa <- r1NVASIM(250, mu = 0.58, sigma = 0.30, nu = 0.20)
+    y_zoa <- r01NVASIM(
+        300, mu = 0.58, sigma = 0.30, nu = 0.20, tau = 0.25
+    )
+
+    fit_za <- gamlss::gamlss(
+        y_za ~ 1,
+        sigma.formula = ~ 1,
+        nu.formula = ~ 1,
+        family = ZANVASIM(),
+        control = control
+    )
+    fit_oa <- gamlss::gamlss(
+        y_oa ~ 1,
+        sigma.formula = ~ 1,
+        nu.formula = ~ 1,
+        family = OANVASIM(),
+        control = control
+    )
+    fit_zoa <- gamlss::gamlss(
+        y_zoa ~ 1,
+        sigma.formula = ~ 1,
+        nu.formula = ~ 1,
+        tau.formula = ~ 1,
+        family = ZOANVASIM(),
+        control = control
+    )
+
+    for (fit in list(fit_za, fit_oa, fit_zoa)) {
+        expect_s3_class(fit, "gamlss")
+        covariance <- expect_silent(stats::vcov(fit))
+        expect_true(is.matrix(covariance))
+        expect_true(all(is.finite(covariance)))
+    }
+})

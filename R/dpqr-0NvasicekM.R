@@ -1,5 +1,5 @@
 #' @name ZANVASIM
-#' @aliases ZANVASIM d0NVASIM p0NVASIM q0NVASIM r0NVASIM
+#' @aliases ZANVASIM d0NVASIM p0NVASIM q0NVASIM r0NVASIM dZANVASIM pZANVASIM qZANVASIM rZANVASIM
 #'
 #' @title Zero-adjusted N-Vasicek distribution with mean parameterization
 #'
@@ -54,6 +54,9 @@
 #' \code{d0NVASIM()}, \code{p0NVASIM()}, \code{q0NVASIM()}, and
 #' \code{r0NVASIM()} return density or probability mass values, cumulative
 #' probabilities, quantiles, and random observations, respectively.
+#' \code{dZANVASIM()}, \code{pZANVASIM()}, \code{qZANVASIM()}, and
+#' \code{rZANVASIM()} are equivalent names following the GAMLSS family-name
+#' convention.
 #'
 #' @references
 #' Mazucheli, J., Alves, B., Korkmaz, M. C., and Leiva, V. (2022).
@@ -104,6 +107,7 @@ NULL
 
     lapply(values, rep_len, length.out = target)
 }
+
 #' @rdname ZANVASIM
 #' @export
 d0NVASIM <- function(x, mu = 0.5, sigma = 0.5, nu = 0.1,
@@ -242,6 +246,36 @@ r0NVASIM <- function(n, mu = 0.5, sigma = 0.5, nu = 0.1) {
         sigma = args[[2L]],
         nu = args[[3L]]
     )
+}
+
+# GAMLSS derives distribution-function names from family[[1]]. These
+# wrappers preserve the established numbered API while satisfying that
+# convention.
+#' @rdname ZANVASIM
+#' @export
+dZANVASIM <- function(x, mu = 0.5, sigma = 0.5, nu = 0.1,
+                      log = FALSE) {
+    d0NVASIM(x, mu, sigma, nu, log)
+}
+
+#' @rdname ZANVASIM
+#' @export
+pZANVASIM <- function(q, mu = 0.5, sigma = 0.5, nu = 0.1,
+                      lower.tail = TRUE, log.p = FALSE) {
+    p0NVASIM(q, mu, sigma, nu, lower.tail, log.p)
+}
+
+#' @rdname ZANVASIM
+#' @export
+qZANVASIM <- function(p, mu = 0.5, sigma = 0.5, nu = 0.1,
+                      lower.tail = TRUE, log.p = FALSE) {
+    q0NVASIM(p, mu, sigma, nu, lower.tail, log.p)
+}
+
+#' @rdname ZANVASIM
+#' @export
+rZANVASIM <- function(n, mu = 0.5, sigma = 0.5, nu = 0.1) {
+    r0NVASIM(n, mu, sigma, nu)
 }
 
 #' @rdname ZANVASIM

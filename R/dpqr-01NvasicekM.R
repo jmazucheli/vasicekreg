@@ -1,5 +1,5 @@
 #' @name ZOANVASIM
-#' @aliases ZOANVASIM d01NVASIM p01NVASIM q01NVASIM r01NVASIM
+#' @aliases ZOANVASIM d01NVASIM p01NVASIM q01NVASIM r01NVASIM dZOANVASIM pZOANVASIM qZOANVASIM rZOANVASIM
 #'
 #' @title Zero-and-one-adjusted N-Vasicek distribution
 #'
@@ -64,7 +64,9 @@
 #' The functions \code{d01NVASIM()}, \code{p01NVASIM()},
 #' \code{q01NVASIM()}, and \code{r01NVASIM()} return probability mass or
 #' density values, cumulative probabilities, quantiles, and random
-#' observations, respectively.
+#' observations, respectively. \code{dZOANVASIM()}, \code{pZOANVASIM()},
+#' \code{qZOANVASIM()}, and \code{rZOANVASIM()} are equivalent names
+#' following the GAMLSS family-name convention.
 #'
 #' @references
 #' Ospina, R. and Ferrari, S. L. P. (2010). Inflated beta distributions.
@@ -112,6 +114,7 @@ NULL
 
     lapply(values, rep_len, length.out = target)
 }
+
 #' @rdname ZOANVASIM
 #' @export
 d01NVASIM <- function(x, mu = 0.5, sigma = 0.5,
@@ -245,6 +248,39 @@ r01NVASIM <- function(n, mu = 0.5, sigma = 0.5,
     q01NVASIM(
         stats::runif(n), args[[1L]], args[[2L]], args[[3L]], args[[4L]]
     )
+}
+
+# GAMLSS derives distribution-function names from family[[1]]. These
+# wrappers preserve the established numbered API while satisfying that
+# convention.
+#' @rdname ZOANVASIM
+#' @export
+dZOANVASIM <- function(x, mu = 0.5, sigma = 0.5,
+                       nu = 0.1, tau = 0.1, log = FALSE) {
+    d01NVASIM(x, mu, sigma, nu, tau, log)
+}
+
+#' @rdname ZOANVASIM
+#' @export
+pZOANVASIM <- function(q, mu = 0.5, sigma = 0.5,
+                       nu = 0.1, tau = 0.1,
+                       lower.tail = TRUE, log.p = FALSE) {
+    p01NVASIM(q, mu, sigma, nu, tau, lower.tail, log.p)
+}
+
+#' @rdname ZOANVASIM
+#' @export
+qZOANVASIM <- function(p, mu = 0.5, sigma = 0.5,
+                       nu = 0.1, tau = 0.1,
+                       lower.tail = TRUE, log.p = FALSE) {
+    q01NVASIM(p, mu, sigma, nu, tau, lower.tail, log.p)
+}
+
+#' @rdname ZOANVASIM
+#' @export
+rZOANVASIM <- function(n, mu = 0.5, sigma = 0.5,
+                       nu = 0.1, tau = 0.1) {
+    r01NVASIM(n, mu, sigma, nu, tau)
 }
 
 #' @rdname ZOANVASIM

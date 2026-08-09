@@ -92,3 +92,65 @@ test_that("incompatible parameter lengths are rejected", {
     expect_error(qLVASIQ(c(0.2, 0.4, 0.6), 0.5, c(0.3, 0.7), 0.5))
 })
 
+
+test_that("boundary-adjusted GAMLSS aliases match numbered dpqr functions", {
+    x <- c(0, 0.23, 0.71, 1)
+    p <- c(0.05, 0.25, 0.75, 0.95)
+    pars <- list(mu = 0.61, sigma = 0.28, nu = 0.17)
+
+    expect_equal(
+        dZANVASIM(x, pars$mu, pars$sigma, pars$nu),
+        d0NVASIM(x, pars$mu, pars$sigma, pars$nu)
+    )
+    expect_equal(
+        pZANVASIM(x, pars$mu, pars$sigma, pars$nu),
+        p0NVASIM(x, pars$mu, pars$sigma, pars$nu)
+    )
+    expect_equal(
+        qZANVASIM(p, pars$mu, pars$sigma, pars$nu),
+        q0NVASIM(p, pars$mu, pars$sigma, pars$nu)
+    )
+    set.seed(101)
+    za <- rZANVASIM(20, pars$mu, pars$sigma, pars$nu)
+    set.seed(101)
+    expect_equal(za, r0NVASIM(20, pars$mu, pars$sigma, pars$nu))
+
+    expect_equal(
+        dOANVASIM(x, pars$mu, pars$sigma, pars$nu),
+        d1NVASIM(x, pars$mu, pars$sigma, pars$nu)
+    )
+    expect_equal(
+        pOANVASIM(x, pars$mu, pars$sigma, pars$nu),
+        p1NVASIM(x, pars$mu, pars$sigma, pars$nu)
+    )
+    expect_equal(
+        qOANVASIM(p, pars$mu, pars$sigma, pars$nu),
+        q1NVASIM(p, pars$mu, pars$sigma, pars$nu)
+    )
+    set.seed(102)
+    oa <- rOANVASIM(20, pars$mu, pars$sigma, pars$nu)
+    set.seed(102)
+    expect_equal(oa, r1NVASIM(20, pars$mu, pars$sigma, pars$nu))
+
+    expect_equal(
+        dZOANVASIM(x, pars$mu, pars$sigma, pars$nu, tau = 0.24),
+        d01NVASIM(x, pars$mu, pars$sigma, pars$nu, tau = 0.24)
+    )
+    expect_equal(
+        pZOANVASIM(x, pars$mu, pars$sigma, pars$nu, tau = 0.24),
+        p01NVASIM(x, pars$mu, pars$sigma, pars$nu, tau = 0.24)
+    )
+    expect_equal(
+        qZOANVASIM(p, pars$mu, pars$sigma, pars$nu, tau = 0.24),
+        q01NVASIM(p, pars$mu, pars$sigma, pars$nu, tau = 0.24)
+    )
+    set.seed(103)
+    zoa <- rZOANVASIM(
+        20, pars$mu, pars$sigma, pars$nu, tau = 0.24
+    )
+    set.seed(103)
+    expect_equal(
+        zoa,
+        r01NVASIM(20, pars$mu, pars$sigma, pars$nu, tau = 0.24)
+    )
+})

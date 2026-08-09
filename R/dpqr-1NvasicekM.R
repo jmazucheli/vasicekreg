@@ -1,5 +1,5 @@
 #' @name OANVASIM
-#' @aliases OANVASIM d1NVASIM p1NVASIM q1NVASIM r1NVASIM
+#' @aliases OANVASIM d1NVASIM p1NVASIM q1NVASIM r1NVASIM dOANVASIM pOANVASIM qOANVASIM rOANVASIM
 #'
 #' @title One-adjusted N-Vasicek distribution with mean parameterization
 #'
@@ -50,6 +50,9 @@
 #' \code{d1NVASIM()}, \code{p1NVASIM()}, \code{q1NVASIM()}, and
 #' \code{r1NVASIM()} return probability mass or density values, cumulative
 #' probabilities, quantiles, and random observations, respectively.
+#' \code{dOANVASIM()}, \code{pOANVASIM()}, \code{qOANVASIM()}, and
+#' \code{rOANVASIM()} are equivalent names following the GAMLSS family-name
+#' convention.
 #'
 #' @references
 #' Ospina, R. and Ferrari, S. L. P. (2010). Inflated beta distributions.
@@ -93,6 +96,7 @@ NULL
 
     lapply(values, rep_len, length.out = target)
 }
+
 #' @rdname OANVASIM
 #' @export
 d1NVASIM <- function(x, mu = 0.5, sigma = 0.5, nu = 0.1,
@@ -204,6 +208,36 @@ r1NVASIM <- function(n, mu = 0.5, sigma = 0.5, nu = 0.1) {
 
     args <- .recycle_1nvasim(mu, sigma, nu, .n = n)
     q1NVASIM(stats::runif(n), args[[1L]], args[[2L]], args[[3L]])
+}
+
+# GAMLSS derives distribution-function names from family[[1]]. These
+# wrappers preserve the established numbered API while satisfying that
+# convention.
+#' @rdname OANVASIM
+#' @export
+dOANVASIM <- function(x, mu = 0.5, sigma = 0.5, nu = 0.1,
+                      log = FALSE) {
+    d1NVASIM(x, mu, sigma, nu, log)
+}
+
+#' @rdname OANVASIM
+#' @export
+pOANVASIM <- function(q, mu = 0.5, sigma = 0.5, nu = 0.1,
+                      lower.tail = TRUE, log.p = FALSE) {
+    p1NVASIM(q, mu, sigma, nu, lower.tail, log.p)
+}
+
+#' @rdname OANVASIM
+#' @export
+qOANVASIM <- function(p, mu = 0.5, sigma = 0.5, nu = 0.1,
+                      lower.tail = TRUE, log.p = FALSE) {
+    q1NVASIM(p, mu, sigma, nu, lower.tail, log.p)
+}
+
+#' @rdname OANVASIM
+#' @export
+rOANVASIM <- function(n, mu = 0.5, sigma = 0.5, nu = 0.1) {
+    r1NVASIM(n, mu, sigma, nu)
 }
 
 #' @rdname OANVASIM

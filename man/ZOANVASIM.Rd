@@ -6,6 +6,10 @@
 \alias{p01NVASIM}
 \alias{q01NVASIM}
 \alias{r01NVASIM}
+\alias{dZOANVASIM}
+\alias{pZOANVASIM}
+\alias{qZOANVASIM}
+\alias{rZOANVASIM}
 \title{Zero-and-one-adjusted N-Vasicek distribution}
 \usage{
 d01NVASIM(x, mu = 0.5, sigma = 0.5, nu = 0.1, tau = 0.1, log = FALSE)
@@ -31,6 +35,30 @@ q01NVASIM(
 )
 
 r01NVASIM(n, mu = 0.5, sigma = 0.5, nu = 0.1, tau = 0.1)
+
+dZOANVASIM(x, mu = 0.5, sigma = 0.5, nu = 0.1, tau = 0.1, log = FALSE)
+
+pZOANVASIM(
+  q,
+  mu = 0.5,
+  sigma = 0.5,
+  nu = 0.1,
+  tau = 0.1,
+  lower.tail = TRUE,
+  log.p = FALSE
+)
+
+qZOANVASIM(
+  p,
+  mu = 0.5,
+  sigma = 0.5,
+  nu = 0.1,
+  tau = 0.1,
+  lower.tail = TRUE,
+  log.p = FALSE
+)
+
+rZOANVASIM(n, mu = 0.5, sigma = 0.5, nu = 0.1, tau = 0.1)
 
 ZOANVASIM(
   mu.link = "logit",
@@ -85,7 +113,9 @@ taken to be the number required.}
 The functions \code{d01NVASIM()}, \code{p01NVASIM()},
 \code{q01NVASIM()}, and \code{r01NVASIM()} return probability mass or
 density values, cumulative probabilities, quantiles, and random
-observations, respectively.
+observations, respectively. \code{dZOANVASIM()}, \code{pZOANVASIM()},
+\code{qZOANVASIM()}, and \code{rZOANVASIM()} are equivalent names
+following the GAMLSS family-name convention.
 }
 \description{
 Defines a normal-kernel Vasicek distribution augmented by point masses at

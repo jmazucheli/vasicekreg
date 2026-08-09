@@ -2,6 +2,10 @@
 
 ## Boundary-adjusted mean regression
 
+- Added the GAMLSS-conventional aliases `d/p/q/rZANVASIM()`,
+  `d/p/q/rOANVASIM()`, and `d/p/q/rZOANVASIM()`. The established numbered
+  names remain available. This correspondence allows likelihood-based
+  methods such as `vcov.gamlss()` to locate each family's density function.
 - Added `ZANVASIM()`, a zero-adjusted normal-kernel Vasicek mean family,
   with `nu` modeling the probability at zero.
 - Added `OANVASIM()`, a one-adjusted normal-kernel Vasicek mean family,

@@ -6,6 +6,10 @@
 \alias{p0NVASIM}
 \alias{q0NVASIM}
 \alias{r0NVASIM}
+\alias{dZANVASIM}
+\alias{pZANVASIM}
+\alias{qZANVASIM}
+\alias{rZANVASIM}
 \title{Zero-adjusted N-Vasicek distribution with mean parameterization}
 \usage{
 d0NVASIM(x, mu = 0.5, sigma = 0.5, nu = 0.1, log = FALSE)
@@ -15,6 +19,14 @@ p0NVASIM(q, mu = 0.5, sigma = 0.5, nu = 0.1, lower.tail = TRUE, log.p = FALSE)
 q0NVASIM(p, mu = 0.5, sigma = 0.5, nu = 0.1, lower.tail = TRUE, log.p = FALSE)
 
 r0NVASIM(n, mu = 0.5, sigma = 0.5, nu = 0.1)
+
+dZANVASIM(x, mu = 0.5, sigma = 0.5, nu = 0.1, log = FALSE)
+
+pZANVASIM(q, mu = 0.5, sigma = 0.5, nu = 0.1, lower.tail = TRUE, log.p = FALSE)
+
+qZANVASIM(p, mu = 0.5, sigma = 0.5, nu = 0.1, lower.tail = TRUE, log.p = FALSE)
+
+rZANVASIM(n, mu = 0.5, sigma = 0.5, nu = 0.1)
 
 ZANVASIM(mu.link = "logit", sigma.link = "logit", nu.link = "logit")
 }
@@ -58,6 +70,9 @@ taken to be the number required.}
 \code{d0NVASIM()}, \code{p0NVASIM()}, \code{q0NVASIM()}, and
 \code{r0NVASIM()} return density or probability mass values, cumulative
 probabilities, quantiles, and random observations, respectively.
+\code{dZANVASIM()}, \code{pZANVASIM()}, \code{qZANVASIM()}, and
+\code{rZANVASIM()} are equivalent names following the GAMLSS family-name
+convention.
 }
 \description{
 Defines a zero-adjusted normal-kernel Vasicek distribution for responses
