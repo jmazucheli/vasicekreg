@@ -331,6 +331,11 @@ citation("vasicekreg")
   *Mathematics*, **10**, 1389.
   [doi:10.3390/math10091389](https://doi.org/10.3390/math10091389)
 
+- Witzany, J. (2013). A note on the Vasicek's model with the logistic
+  distribution. *Ekonomický časopis (Journal of Economics)*, **61**(10),
+  1053--1066.
+  [IES Working Paper 1/2013](https://ideas.repec.org/p/fau/wpaper/wp2013_01.html)
+
 ### GAMLSS framework
 
 - Rigby, R. A., and Stasinopoulos, D. M. (2005). Generalized additive
