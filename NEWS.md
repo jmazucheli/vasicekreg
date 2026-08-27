@@ -21,12 +21,30 @@
   moments, and GAMLSS fitting support for all three boundary-adjusted
   families.
 
+## Simulated residual envelopes
+
+- Added `vasicek_envelope()` for parametric-bootstrap simulated envelopes
+  based on fitted `gamlss` objects.
+- Added support for normalized randomized quantile residuals and generalized
+  Cox--Snell residuals, with the latter defined from the same fitted
+  probability integral transform.
+- Added pointwise percentile and pointwise minimum--maximum envelopes.
+- Each accepted bootstrap sample is simulated from the fitted model, refitted,
+  and used to recalculate and order the requested residuals.
+- Added print and plot methods for `vasicek_envelope` objects.
+
 ## Documentation and tests
 
 - Standardized the R source filenames as `dpqr-0NvasicekM.R`,
   `dpqr-1NvasicekM.R`, and `dpqr-01NvasicekM.R`.
 - Added numerical verification of all first, second, and cross derivatives
   for `ZANVASIM`, `OANVASIM`, and `ZOANVASIM`.
+- Added tests of the randomized quantile residual expressions for the
+  zero-adjusted, one-adjusted, and zero-and-one-adjusted families, including
+  the CDF jump intervals, interior observations, reproducibility, and
+  simulation from the fitted family.
+- Added tests for simulated residual envelopes, including argument
+  validation, reproducibility, returned components, and plotting.
 - Clarified the roles of `x` and `q` and distinguished the boundary
   behavior of the zero-adjusted, one-adjusted, and zero-and-one-adjusted
   distributions.
@@ -35,6 +53,9 @@
   quantile level used by `NVASIQ` and `LVASIQ`.
 - Added a package-level example comparing `OANVASIM` and `BEOI` using the
   one-inflated `accuracy1` response from the `ReadingSkills` data.
+- Expanded the README references for the Vasicek distributions, GAMLSS,
+  boundary-adjusted models, randomized quantile and Cox--Snell residuals,
+  simulated envelopes, and Rcpp.
 
 # vasicekreg 1.1.0 (2026-07-28)
 
@@ -108,4 +129,3 @@
 
 ## Initial release
 - First release of the vasicekreg package on CRAN.
-
