@@ -315,13 +315,70 @@ To cite the package, use:
 citation("vasicekreg")
 ```
 
-The main methodological reference is:
+## References
 
-> Mazucheli, J., Alves, B., Korkmaz, M. Ç., and Leiva, V. (2022).
-> Vasicek quantile and mean regression models for bounded data: New
-> formulation, mathematical derivations, and numerical applications.
-> *Mathematics*, **10**, 1389.
-> https://doi.org/10.3390/math10091389
+### Vasicek distribution and regression
+
+- Vasicek, O. A. (1987). *Probability of Loss on Loan Portfolio*. KMV
+  Corporation.
+
+- Vasicek, O. A. (2002). The distribution of loan portfolio value.
+  *Risk*, **15**(12), 160--162.
+
+- Mazucheli, J., Alves, B., Korkmaz, M. Ç., and Leiva, V. (2022).
+  Vasicek quantile and mean regression models for bounded data: New
+  formulation, mathematical derivations, and numerical applications.
+  *Mathematics*, **10**, 1389.
+  [doi:10.3390/math10091389](https://doi.org/10.3390/math10091389)
+
+### GAMLSS framework
+
+- Rigby, R. A., and Stasinopoulos, D. M. (2005). Generalized additive
+  models for location, scale and shape. *Journal of the Royal Statistical
+  Society: Series C (Applied Statistics)*, **54**(3), 507--554.
+  [doi:10.1111/j.1467-9876.2005.00510.x](https://doi.org/10.1111/j.1467-9876.2005.00510.x)
+
+- Stasinopoulos, D. M., and Rigby, R. A. (2007). Generalized additive
+  models for location scale and shape (GAMLSS) in R. *Journal of
+  Statistical Software*, **23**(7), 1--46.
+  [doi:10.18637/jss.v023.i07](https://doi.org/10.18637/jss.v023.i07)
+
+### Boundary-adjusted distributions
+
+- Ospina, R., and Ferrari, S. L. P. (2010). Inflated beta distributions.
+  *Statistical Papers*, **51**(1), 111--126.
+  [doi:10.1007/s00362-008-0125-4](https://doi.org/10.1007/s00362-008-0125-4)
+
+### Residuals and simulated envelopes
+
+- Cox, D. R., and Snell, E. J. (1968). A general definition of residuals.
+  *Journal of the Royal Statistical Society: Series B (Methodological)*,
+  **30**(2), 248--275.
+  [doi:10.1111/j.2517-6161.1968.tb00724.x](https://doi.org/10.1111/j.2517-6161.1968.tb00724.x)
+
+- Dunn, P. K., and Smyth, G. K. (1996). Randomized quantile residuals.
+  *Journal of Computational and Graphical Statistics*, **5**(3), 236--244.
+  [doi:10.1080/10618600.1996.10474708](https://doi.org/10.1080/10618600.1996.10474708)
+
+- Atkinson, A. C. (1985). *Plots, Transformations, and Regression: An
+  Introduction to Graphical Methods of Diagnostic Regression Analysis*.
+  Clarendon Press.
+
+- Zhao, Y., Lee, A. H., Yau, K. K. W., and McLachlan, G. J. (2011).
+  Assessing the adequacy of Weibull survival models: A simulated envelope
+  approach. *Journal of Applied Statistics*, **38**(10), 2089--2097.
+  [doi:10.1080/02664763.2010.545115](https://doi.org/10.1080/02664763.2010.545115)
+
+- Moral, R. A., Hinde, J., and Demétrio, C. G. B. (2017). Half-normal
+  plots and overdispersed models in R: The hnp package. *Journal of
+  Statistical Software*, **81**(10), 1--23.
+  [doi:10.18637/jss.v081.i10](https://doi.org/10.18637/jss.v081.i10)
+
+### Computational implementation
+
+- Eddelbuettel, D., and François, R. (2011). Rcpp: Seamless R and C++
+  integration. *Journal of Statistical Software*, **40**(8), 1--18.
+  [doi:10.18637/jss.v040.i08](https://doi.org/10.18637/jss.v040.i08)
 
 ## License
 
