@@ -1,4 +1,4 @@
-# vasicekreg development version (2026-08-09)
+# vasicekreg development version (2026-08-27)
 
 ## Boundary-adjusted mean regression
 
