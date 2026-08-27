@@ -44,20 +44,37 @@
 #' and
 #' \deqn{r_i^{CS}=-\log(1-U_i).}
 #' For adjusted families, \eqn{U_i} is randomized over the relevant jump of
-#' the fitted distribution at zero or one. Consequently, the Cox--Snell
-#' residual is also randomized for boundary observations and has an
-#' \eqn{\operatorname{Exp}(1)} reference distribution under a correctly
-#' specified model.
+#' the fitted distribution at zero or one, so the reported residuals inherit
+#' whatever randomization \code{residuals()} applies for those families; the
+#' Cox--Snell residual is then also randomized at boundary observations and
+#' has an \eqn{\operatorname{Exp}(1)} reference distribution under a correctly
+#' specified model. The Cox--Snell residual is obtained from the quantile
+#' residual on the log survival scale, \eqn{-\log\{\Pr(Z>r_i^q)\}}, which is
+#' numerically stable in the upper tail and preserves the ordering of the
+#' quantile residuals.
 #'
-#' The envelope is pointwise, not simultaneous. With
-#' \code{envelope = "quantile"}, the two tail probabilities are equal and
-#' sum to \eqn{1-\mathrm{level}}. With \code{envelope = "minmax"}, the limits are
-#' the minimum and maximum, following the construction used by Zhao et al.
+#' Each residual is displayed as a full quantile--quantile plot of the ordered
+#' residuals against the corresponding theoretical quantiles (normal or
+#' exponential), not as a half-normal plot. The envelope is pointwise, not
+#' simultaneous: even under a correctly specified model a fraction of points
+#' is expected to fall outside the band. With \code{envelope = "quantile"},
+#' the two tail probabilities are equal and sum to \eqn{1-\mathrm{level}}.
+#' With \code{envelope = "minmax"}, the limits are the minimum and maximum at
+#' each order position, following the construction used by Zhao et al.
+#'
+#' The pointwise mean of the ordered simulated residuals is the reference
+#' calibrated to the fitted model and to the sample size. The identity line
+#' drawn by the plot method is a theoretical idealization and, for Cox--Snell
+#' residuals, may separate from the mean curve in the upper tail at finite
+#' \eqn{n}; in that region the mean curve is the more reliable reference.
 #'
 #' Failed or nonconverged re-fits are discarded and replaced until
 #' \code{nsim} successful samples are obtained or \code{max.attempts} is
 #' reached. The simulation uses fitted values for every distribution
-#' parameter, so covariate-dependent parameters are retained.
+#' parameter, so covariate-dependent parameters are retained. Automatic
+#' refitting assumes that \code{data} contains exactly the observations used
+#' by the original fit; if rows were dropped for missing values or via
+#' \code{subset}, supply a matching \code{data} or a custom \code{refit}.
 #'
 #' @return
 #' An object of class \code{"vasicek_envelope"}. Its \code{results} component
@@ -229,17 +246,20 @@ vasicek_envelope <- function(
 
     observed <- list(quantile = observed_quantile)
     simulations <- list(quantile = simulated_quantile)
-    probabilities <- pmin(
-        pmax(stats::pnorm(observed_quantile), .Machine$double.eps),
-        1 - .Machine$double.eps
+    # Cox--Snell residual r^{CS} = -log(1 - U) with U = Phi(r^q). It is computed
+    # on the log survival scale, -log{ P(Z > r^q) }, rather than as
+    # -log1p(-pnorm(r^q)). The direct form suffers from catastrophic
+    # cancellation in the upper tail (pnorm saturates at 1), which caps the
+    # residual; the log-scale form is stable and, being strictly increasing in
+    # r^q, keeps the column-wise ordering of the sorted quantile residuals.
+    observed[["cox-snell"]] <- -stats::pnorm(
+        observed_quantile, lower.tail = FALSE, log.p = TRUE
     )
-    observed[["cox-snell"]] <- -log1p(-probabilities)
-    simulated_probabilities <- pmin(
-        pmax(stats::pnorm(simulated_quantile), .Machine$double.eps),
-        1 - .Machine$double.eps
+    simulations[["cox-snell"]] <- -stats::pnorm(
+        simulated_quantile, lower.tail = FALSE, log.p = TRUE
     )
-    simulations[["cox-snell"]] <- -log1p(-simulated_probabilities)
 
+    probability_points <- stats::ppoints(n)
     results <- lapply(residual, function(kind) {
         simulated <- simulations[[kind]]
         if (envelope == "quantile") {
@@ -254,7 +274,6 @@ vasicek_envelope <- function(
             lower <- apply(simulated, 1L, min)
             upper <- apply(simulated, 1L, max)
         }
-        probability_points <- stats::ppoints(n)
         theoretical <- if (kind == "quantile") {
             stats::qnorm(probability_points)
         } else {
@@ -343,6 +362,16 @@ vasicek_envelope <- function(
     response_name <- as.character(response)
     if (!response_name %in% names(data)) {
         stop("The response variable is absent from 'data'.", call. = FALSE)
+    }
+    if (nrow(data) != length(y)) {
+        stop(
+            "'data' has ", nrow(data), " rows but the fitted model used ",
+            length(y), " observations. This usually means rows were dropped ",
+            "(missing values or 'subset') during the original fit. Supply a ",
+            "'data' argument restricted to the complete cases used in the fit, ",
+            "or a custom 'refit' function.",
+            call. = FALSE
+        )
     }
     bootstrap_data <- data
     bootstrap_data[[response_name]] <- y
