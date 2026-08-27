@@ -34,58 +34,104 @@ vasicek_envelope(
 )
 }
 \arguments{
-\item{object}{A fitted object of class \code{"gamlss"} using a Vasicek family supplied by \pkg{vasicekreg}.}
-\item{residual}{Character vector selecting \code{"quantile"}, \code{"cox-snell"}, or both.}
+\item{object}{A fitted object of class \code{"gamlss"} using one of the
+Vasicek families supplied by \pkg{vasicekreg}.}
+
+\item{residual}{Character vector selecting \code{"quantile"},
+\code{"cox-snell"}, or both.}
+
 \item{nsim}{Number of successfully re-fitted simulated samples.}
-\item{level}{Pointwise coverage probability for percentile envelopes.}
-\item{envelope}{Either \code{"quantile"} or \code{"minmax"}.}
-\item{seed}{Optional integer random-number seed.}
-\item{data}{Optional data frame used in the original fit.}
-\item{max.attempts}{Maximum number of simulation and re-fitting attempts.}
-\item{refit}{Optional function with arguments \code{object}, \code{y}, and \code{data}.}
-\item{simulate}{Optional function taking \code{object} and returning one response vector.}
-\item{verbose}{Logical controlling progress messages.}
+
+\item{level}{Pointwise coverage probability used when
+\code{envelope = "quantile"}.}
+
+\item{envelope}{Either \code{"quantile"}, for percentile limits, or
+\code{"minmax"}, for the minimum and maximum at each order position.}
+
+\item{seed}{Optional integer seed. The previous random-number state is
+restored on exit.}
+
+\item{data}{Optional data frame used in the original fit. It is normally
+recovered from \code{object$call$data}.}
+
+\item{max.attempts}{Maximum number of simulation and re-fitting attempts.
+The default is five times \code{nsim}.}
+
+\item{refit}{Optional function with arguments \code{object}, \code{y}, and
+\code{data}. It must return a re-fitted \code{"gamlss"} object. This is
+useful for transformed responses or nonstandard fitting calls.}
+
+\item{simulate}{Optional function with the single argument \code{object}
+that returns one simulated response vector. By default, the random
+generator associated with the fitted Vasicek family is used.}
+
+\item{verbose}{Logical; if \code{TRUE}, reports progress and failed fits.}
+
 \item{x}{An object returned by \code{vasicek_envelope()}.}
-\item{which}{Residual type to plot.}
-\item{show.mean}{Logical; draw the simulated pointwise mean.}
+
+\item{which}{Residual type to be plotted.}
+
+\item{show.mean}{Logical; if \code{TRUE}, draws the pointwise mean of the
+ordered simulated residuals.}
+
 \item{xlab, ylab, main}{Graphical labels.}
+
 \item{envelope.col, mean.col, reference.col, point.col}{Graphical colors.}
+
 \item{...}{Further arguments passed to \code{points()}.}
+}
+\value{
+An object of class \code{"vasicek_envelope"}. Its \code{results} component
+contains, for each requested residual, the theoretical order statistics,
+ordered observed residuals, pointwise lower, mean and upper curves, and the
+matrix of ordered simulated residuals. The object also records the number
+of successful simulations, attempts and failures.
 }
 \description{
 Constructs pointwise simulated envelopes for normalized randomized quantile
-residuals and generalized Cox--Snell residuals. Each response is simulated
-under the fitted model, the model is re-estimated, and the residuals are
-ordered before the envelope is computed.
+residuals and generalized Cox--Snell residuals from a Vasicek model fitted by
+\code{gamlss()}. Each simulated response is generated under the fitted
+model, the model is re-estimated, and the residuals from the re-estimated
+model are ordered before the envelope is computed.
 }
 \details{
-Let \eqn{U_i} be the probability integral transform used by the normalized
-randomized quantile residual. The residuals are
+Let \eqn{U_i} denote the probability integral transform used by the
+normalized randomized quantile residual. The two residuals are
 \deqn{r_i^q=\Phi^{-1}(U_i)}
 and
 \deqn{r_i^{CS}=-\log(1-U_i).}
-For adjusted families, \eqn{U_i} is randomized over the relevant CDF jump.
-The Cox--Snell residual consequently has an \eqn{\operatorname{Exp}(1)}
-reference distribution under a correctly specified model.
+For adjusted families, \eqn{U_i} is randomized over the relevant jump of
+the fitted distribution at zero or one, so the reported residuals inherit
+whatever randomization \code{residuals()} applies for those families; the
+Cox--Snell residual is then also randomized at boundary observations and
+has an \eqn{\operatorname{Exp}(1)} reference distribution under a correctly
+specified model. The Cox--Snell residual is obtained from the quantile
+residual on the log survival scale, \eqn{-\log\{\Pr(Z>r_i^q)\}}, which is
+numerically stable in the upper tail and preserves the ordering of the
+quantile residuals.
 
-The envelope is pointwise. Percentile limits are used by default; the
-minimum and maximum can be requested with \code{envelope = "minmax"}.
-Failed or nonconverged re-fits are discarded and replaced.
-}
-\value{
-An object of class \code{"vasicek_envelope"} containing observed and
-simulated ordered residuals, theoretical order statistics, envelope limits,
-the simulated mean curve, and convergence information.
-}
-\references{
-Moral, R. A., Hinde, J., and Demetrio, C. G. B. (2017). Half-normal plots and
-overdispersed models in R: The hnp package. \emph{Journal of Statistical
-Software}, \bold{81}(10), 1--23. \doi{10.18637/jss.v081.i10}
+Each residual is displayed as a full quantile--quantile plot of the ordered
+residuals against the corresponding theoretical quantiles (normal or
+exponential), not as a half-normal plot. The envelope is pointwise, not
+simultaneous: even under a correctly specified model a fraction of points
+is expected to fall outside the band. With \code{envelope = "quantile"},
+the two tail probabilities are equal and sum to \eqn{1-\mathrm{level}}.
+With \code{envelope = "minmax"}, the limits are the minimum and maximum at
+each order position, following the construction used by Zhao et al.
 
-Zhao, Y., Lee, A. H., Yau, K. K. W., and McLachlan, G. J. (2011). Assessing
-the adequacy of Weibull survival models: A simulated envelope approach.
-\emph{Journal of Applied Statistics}, \bold{38}, 2089--2097.
-\doi{10.1080/02664763.2010.545115}
+The pointwise mean of the ordered simulated residuals is the reference
+calibrated to the fitted model and to the sample size. The identity line
+drawn by the plot method is a theoretical idealization and, for Cox--Snell
+residuals, may separate from the mean curve in the upper tail at finite
+\eqn{n}; in that region the mean curve is the more reliable reference.
+
+Failed or nonconverged re-fits are discarded and replaced until
+\code{nsim} successful samples are obtained or \code{max.attempts} is
+reached. The simulation uses fitted values for every distribution
+parameter, so covariate-dependent parameters are retained. Automatic
+refitting assumes that \code{data} contains exactly the observations used
+by the original fit; if rows were dropped for missing values or via
+\code{subset}, supply a matching \code{data} or a custom \code{refit}.
 }
 \examples{
 \dontrun{
@@ -94,8 +140,21 @@ set.seed(123)
 dat <- data.frame(y = rNVASIM(100, mu = 0.55, sigma = 0.30))
 fit <- gamlss(y ~ 1, sigma.formula = ~ 1, family = NVASIM(),
               data = dat, trace = FALSE)
+
 env <- vasicek_envelope(fit, nsim = 200, seed = 123)
 plot(env, which = "quantile")
 plot(env, which = "cox-snell")
 }
+
+}
+\references{
+Moral, R. A., Hinde, J., and Demetrio, C. G. B. (2017).
+Half-normal plots and overdispersed models in R: The hnp package.
+\emph{Journal of Statistical Software}, \bold{81}(10), 1--23.
+\doi{10.18637/jss.v081.i10}
+
+Zhao, Y., Lee, A. H., Yau, K. K. W., and McLachlan, G. J. (2011).
+Assessing the adequacy of Weibull survival models: A simulated envelope
+approach. \emph{Journal of Applied Statistics}, \bold{38}, 2089--2097.
+\doi{10.1080/02664763.2010.545115}
 }
