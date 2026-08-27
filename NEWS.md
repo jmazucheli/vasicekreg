@@ -27,11 +27,17 @@
   based on fitted `gamlss` objects.
 - Added support for normalized randomized quantile residuals and generalized
   Cox--Snell residuals, with the latter defined from the same fitted
-  probability integral transform.
+  probability integral transform and evaluated on the log-survival scale for
+  numerical stability in the upper tail.
 - Added pointwise percentile and pointwise minimum--maximum envelopes.
 - Each accepted bootstrap sample is simulated from the fitted model, refitted,
   and used to recalculate and order the requested residuals.
-- Added print and plot methods for `vasicek_envelope` objects.
+- Added print and plot methods for `vasicek_envelope` objects. The
+  documentation now distinguishes these full quantile--quantile plots from
+  half-normal plots and explains the finite-sample simulated mean curve.
+- Added a row-count check to automatic bootstrap refitting so data altered by
+  missing-value removal or `subset` must be supplied explicitly or handled
+  by a custom refit function.
 
 ## Documentation and tests
 
@@ -44,7 +50,8 @@
   the CDF jump intervals, interior observations, reproducibility, and
   simulation from the fitted family.
 - Added tests for simulated residual envelopes, including argument
-  validation, reproducibility, returned components, and plotting.
+  validation, reproducibility, returned components, plotting, stable
+  Cox--Snell upper-tail calculations, and incompatible refit data.
 - Clarified the roles of `x` and `q` and distinguished the boundary
   behavior of the zero-adjusted, one-adjusted, and zero-and-one-adjusted
   distributions.
