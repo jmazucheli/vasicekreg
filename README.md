@@ -259,7 +259,9 @@ recalculated and ordered. This accounts for parameter-estimation variability.
 For adjusted families, the probability integral transform is randomized over
 the fitted CDF jump at zero and/or one. Quantile residuals are compared with
 the standard normal distribution, whereas Cox--Snell residuals are compared
-with the unit-mean exponential distribution.
+with the unit-mean exponential distribution. Cox--Snell residuals are
+evaluated as `-pnorm(rq, lower.tail = FALSE, log.p = TRUE)`, which is
+equivalent to `-log(1 - pnorm(rq))` but remains stable in the upper tail.
 
 ```r
 envelope_fit <- vasicek_envelope(
@@ -275,10 +277,16 @@ plot(envelope_fit, which = "quantile")
 plot(envelope_fit, which = "cox-snell")
 ```
 
-The default envelope uses pointwise empirical percentiles. To use the minimum
-and maximum of the ordered simulated residuals at each position, set
-`envelope = "minmax"`. Failed or nonconverged bootstrap fits are discarded
-and replaced up to the limit specified by `max.attempts`.
+The plots are full quantile--quantile plots rather than half-normal plots.
+The default envelope uses pointwise empirical percentiles and is not a
+simultaneous confidence band. To use the minimum and maximum of the ordered
+simulated residuals at each position, set `envelope = "minmax"`. The blue
+mean curve is calibrated to the fitted model and sample size; for Cox--Snell
+residuals it may be more informative than the theoretical identity line in
+the finite-sample upper tail. Failed or nonconverged bootstrap fits are
+discarded and replaced up to the limit specified by `max.attempts`.
+Automatic refitting requires the supplied data to contain exactly the
+observations used in the original fit.
 
 ## Implementation
 
