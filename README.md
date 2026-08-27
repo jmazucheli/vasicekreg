@@ -248,6 +248,38 @@ with the fitted model when residuals or other post-fit quantities are
 computed. Reset `tau` before working with a model fitted at another quantile
 level.
 
+## Simulated residual envelopes
+
+The function `vasicek_envelope()` constructs pointwise simulated envelopes
+for normalized randomized quantile residuals and generalized Cox--Snell
+residuals. In every bootstrap replication, a new response is generated under
+the fitted model, the same GAMLSS model is re-estimated, and the residuals are
+recalculated and ordered. This accounts for parameter-estimation variability.
+
+For adjusted families, the probability integral transform is randomized over
+the fitted CDF jump at zero and/or one. Quantile residuals are compared with
+the standard normal distribution, whereas Cox--Snell residuals are compared
+with the unit-mean exponential distribution.
+
+```r
+envelope_fit <- vasicek_envelope(
+  object = fit_mean,
+  residual = c("quantile", "cox-snell"),
+  nsim = 200,
+  level = 0.95,
+  envelope = "quantile",
+  seed = 123
+)
+
+plot(envelope_fit, which = "quantile")
+plot(envelope_fit, which = "cox-snell")
+```
+
+The default envelope uses pointwise empirical percentiles. To use the minimum
+and maximum of the ordered simulated residuals at each position, set
+`envelope = "minmax"`. Failed or nonconverged bootstrap fits are discarded
+and replaced up to the limit specified by `max.attempts`.
+
 ## Implementation
 
 The density, cumulative distribution, and quantile functions call compiled
