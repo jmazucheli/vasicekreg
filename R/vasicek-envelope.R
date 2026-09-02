@@ -125,7 +125,7 @@ vasicek_envelope <- function(
         stop("'object' must inherit from class 'gamlss'.", call. = FALSE)
     }
     supported <- c(
-        "NVASIM", "NVASIQ", "LVASIQ", "ZANVASIM", "OANVASIM",
+        "NVASIM", "NVASIQ", "LVASIQ", "HSVASIQ", "ZANVASIM", "OANVASIM",
         "ZOANVASIM"
     )
     family_name <- as.character(object$family[1L])
@@ -332,6 +332,7 @@ vasicek_envelope <- function(
         NVASIM = c("mu", "sigma"),
         NVASIQ = c("mu", "sigma"),
         LVASIQ = c("mu", "sigma"),
+        HSVASIQ = c("mu", "sigma"),
         ZANVASIM = c("mu", "sigma", "nu"),
         OANVASIM = c("mu", "sigma", "nu"),
         ZOANVASIM = c("mu", "sigma", "nu", "tau")
@@ -346,7 +347,24 @@ vasicek_envelope <- function(
     })
     names(arguments) <- parameters
     arguments$n <- length(arguments[[1L]])
-    arguments <- arguments[c("n", parameters)]
+    quantile_families <- c("NVASIQ", "LVASIQ", "HSVASIQ")
+    if (family_name %in% quantile_families) {
+        if (!exists("tau", envir = .GlobalEnv, inherits = FALSE)) {
+            stop(
+                "A global scalar 'tau' is required to simulate from ",
+                family_name, "."
+            )
+        }
+        tau <- get("tau", envir = .GlobalEnv, inherits = FALSE)
+        if (!is.numeric(tau) || length(tau) != 1L ||
+            !is.finite(tau) || tau <= 0 || tau >= 1) {
+            stop("Global 'tau' must be a finite scalar in (0, 1).")
+        }
+        arguments$tau <- as.numeric(tau)
+    }
+    arguments <- arguments[
+        c("n", parameters, if (family_name %in% quantile_families) "tau")
+    ]
     do.call(random_function, arguments)
 }
 
