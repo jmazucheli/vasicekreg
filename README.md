@@ -5,7 +5,7 @@
 `vasicekreg` provides distribution functions and GAMLSS regression families
 for Vasicek-type distributions on the unit interval. The package supports mean
 and quantile regression under the standard normal kernel and quantile
-regression under the logistic kernel. Normal-kernel families augmented at
+regression under the logistic and hyperbolic-secant kernels. Normal-kernel families augmented at
 zero, at one, or at both boundaries are available for responses containing
 exact boundary values.
 
@@ -16,11 +16,12 @@ exact boundary values.
 | `NVASIM` | Standard normal | `(0, 1)` | Mean | `mu = E(Y)` |
 | `NVASIQ` | Standard normal | `(0, 1)` | Quantile | `mu = Q_Y(tau)` |
 | `LVASIQ` | Logistic | `(0, 1)` | Quantile | `mu = Q_Y(tau)` |
+| `HSVASIQ` | Hyperbolic secant | `(0, 1)` | Quantile | `mu = Q_Y(tau)` |
 | `ZANVASIM` | Standard normal | `[0, 1)` | Zero-adjusted mean | `mu = E(Y | Y > 0)` |
 | `OANVASIM` | Standard normal | `(0, 1]` | One-adjusted mean | `mu = E(Y | Y < 1)` |
 | `ZOANVASIM` | Standard normal | `[0, 1]` | Zero-and-one-adjusted mean | `mu = E(Y | 0 < Y < 1)` |
 
-For all six families, `sigma` lies in `(0, 1)` and controls dispersion.
+For all seven families, `sigma` lies in `(0, 1)` and controls dispersion.
 For `ZANVASIM`, `nu = P(Y = 0)` and the marginal mean is
 `E(Y) = (1 - nu) * mu`.
 For `OANVASIM`, `nu = P(Y = 1)` and the marginal mean is
@@ -28,9 +29,9 @@ For `OANVASIM`, `nu = P(Y = 1)` and the marginal mean is
 `nu = P(Y = 0)` and `tau = P(Y = 1 | Y > 0)`.
 Its marginal mean is
 `E(Y) = (1 - nu) * (tau + (1 - tau) * mu)`.
-The logistic-kernel mean does not have a closed-form expression and generally
-differs from `mu`; consequently, the package does not provide a
-logistic-kernel mean-regression family.
+The logistic- and hyperbolic-secant-kernel means do not have closed-form
+expressions and generally differ from `mu`; consequently, the package does not
+provide mean-regression families for these kernels.
 
 Each parameterization includes density, cumulative distribution, quantile,
 and random generation functions:
@@ -38,6 +39,7 @@ and random generation functions:
 - `dNVASIM()`, `pNVASIM()`, `qNVASIM()`, and `rNVASIM()`;
 - `dNVASIQ()`, `pNVASIQ()`, `qNVASIQ()`, and `rNVASIQ()`;
 - `dLVASIQ()`, `pLVASIQ()`, `qLVASIQ()`, and `rLVASIQ()`;
+- `dHSVASIQ()`, `pHSVASIQ()`, `qHSVASIQ()`, and `rHSVASIQ()`;
 - `d0NVASIM()`, `p0NVASIM()`, `q0NVASIM()`, and `r0NVASIM()`;
 - `d1NVASIM()`, `p1NVASIM()`, `q1NVASIM()`, and `r1NVASIM()`;
 - `d01NVASIM()`, `p01NVASIM()`, `q01NVASIM()`, and `r01NVASIM()`.
@@ -81,9 +83,10 @@ distribution functions:
 ```r
 qNVASIQ(p = 0.25, mu = 0.60, sigma = 0.25, tau = 0.25)
 qLVASIQ(p = 0.25, mu = 0.60, sigma = 0.25, tau = 0.25)
+qHSVASIQ(p = 0.25, mu = 0.60, sigma = 0.25, tau = 0.25)
 ```
 
-Both calls return `mu = 0.60` because `mu` represents the `tau`-th quantile.
+All three calls return `mu = 0.60` because `mu` represents the `tau`-th quantile.
 
 ## GAMLSS mean regression
 
@@ -176,11 +179,11 @@ For `ZOANVASIM`, `p0 = nu`, `p1 = (1 - nu) * tau`, and
 `pc = (1 - nu) * (1 - tau)`. This parameterization guarantees valid
 probabilities while retaining logit links for both boundary parameters. Here
 `tau` is a model parameter and is unrelated to the global quantile level used
-by `NVASIQ()` and `LVASIQ()`.
+by `NVASIQ()`, `LVASIQ()`, and `HSVASIQ()`.
 
 ## GAMLSS quantile regression
 
-For `NVASIQ()` and `LVASIQ()`, the quantile level must be defined as a scalar
+For `NVASIQ()`, `LVASIQ()`, and `HSVASIQ()`, the quantile level must be defined as a scalar
 variable named `tau` in the global environment. It is not passed as an
 argument to the GAMLSS family constructor.
 
@@ -243,6 +246,35 @@ fit_logistic <- gamlss(
 fitted(fit_logistic, what = "mu")[1]
 ```
 
+### Hyperbolic-secant kernel
+
+```r
+set.seed(123)
+tau <- 0.25
+
+dat_hs <- data.frame(
+  y = rHSVASIQ(
+    n = 300,
+    mu = 0.60,
+    sigma = 0.25,
+    tau = tau
+  )
+)
+
+fit_hs <- gamlss(
+  y ~ 1,
+  sigma.formula = ~ 1,
+  data = dat_hs,
+  family = HSVASIQ(
+    mu.link = "logit",
+    sigma.link = "logit"
+  ),
+  control = gamlss.control(trace = FALSE)
+)
+
+fitted(fit_hs, what = "mu")[1]
+```
+
 The global value of `tau` must remain equal to the quantile level associated
 with the fitted model when residuals or other post-fit quantities are
 computed. Reset `tau` before working with a model fitted at another quantile
@@ -293,15 +325,15 @@ observations used in the original fit.
 The density, cumulative distribution, and quantile functions call compiled
 C++ routines through `Rcpp`. Random generation for `NVASIM` and `NVASIQ`
 uses inverse transformation with the corresponding compiled quantile
-functions, whereas `rLVASIQ()` calls a compiled random-generation routine
-directly.
+functions, whereas `rLVASIQ()` and `rHSVASIQ()` call compiled
+random-generation routines directly.
 The boundary-adjusted functions reuse the compiled `NVASIM` functions and
 add the required point masses in R.
 
 The GAMLSS family definitions and analytical log-likelihood derivatives are
 implemented in R. Numerical differentiation is not used. The mean and
-variance components of `LVASIQ()` are evaluated by numerical quadrature
-because these moments have no closed-form expressions.
+variance components of `LVASIQ()` and `HSVASIQ()` are evaluated by numerical
+quadrature because these moments have no closed-form expressions.
 
 ## Testing
 
