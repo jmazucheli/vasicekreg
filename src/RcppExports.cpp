@@ -233,7 +233,73 @@ BEGIN_RCPP
 END_RCPP
 }
 
+// cpp_dHSVASIQ
+NumericVector cpp_dHSVASIQ(const NumericVector x, const NumericVector mu, const NumericVector sigma, const double tau, const bool logprob);
+RcppExport SEXP _vasicekreg_cpp_dHSVASIQ(SEXP xSEXP, SEXP muSEXP, SEXP sigmaSEXP, SEXP tauSEXP, SEXP logprobSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type sigma(sigmaSEXP);
+    Rcpp::traits::input_parameter< const double >::type tau(tauSEXP);
+    Rcpp::traits::input_parameter< const bool >::type logprob(logprobSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_dHSVASIQ(x, mu, sigma, tau, logprob));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cpp_pHSVASIQ
+NumericVector cpp_pHSVASIQ(const NumericVector q, const NumericVector mu, const NumericVector sigma, const double tau, const bool lower_tail, const bool log_p);
+RcppExport SEXP _vasicekreg_cpp_pHSVASIQ(SEXP qSEXP, SEXP muSEXP, SEXP sigmaSEXP, SEXP tauSEXP, SEXP lower_tailSEXP, SEXP log_pSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const NumericVector >::type q(qSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type sigma(sigmaSEXP);
+    Rcpp::traits::input_parameter< const double >::type tau(tauSEXP);
+    Rcpp::traits::input_parameter< const bool >::type lower_tail(lower_tailSEXP);
+    Rcpp::traits::input_parameter< const bool >::type log_p(log_pSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_pHSVASIQ(q, mu, sigma, tau, lower_tail, log_p));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cpp_qHSVASIQ
+NumericVector cpp_qHSVASIQ(const NumericVector p, const NumericVector mu, const NumericVector sigma, const double tau, const bool lower_tail, const bool log_p);
+RcppExport SEXP _vasicekreg_cpp_qHSVASIQ(SEXP pSEXP, SEXP muSEXP, SEXP sigmaSEXP, SEXP tauSEXP, SEXP lower_tailSEXP, SEXP log_pSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const NumericVector >::type p(pSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type sigma(sigmaSEXP);
+    Rcpp::traits::input_parameter< const double >::type tau(tauSEXP);
+    Rcpp::traits::input_parameter< const bool >::type lower_tail(lower_tailSEXP);
+    Rcpp::traits::input_parameter< const bool >::type log_p(log_pSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_qHSVASIQ(p, mu, sigma, tau, lower_tail, log_p));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cpp_rHSVASIQ
+NumericVector cpp_rHSVASIQ(const int n, const NumericVector mu, const NumericVector sigma, const double tau);
+RcppExport SEXP _vasicekreg_cpp_rHSVASIQ(SEXP nSEXP, SEXP muSEXP, SEXP sigmaSEXP, SEXP tauSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type sigma(sigmaSEXP);
+    Rcpp::traits::input_parameter< const double >::type tau(tauSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_rHSVASIQ(n, mu, sigma, tau));
+    return rcpp_result_gen;
+END_RCPP
+}
+
 static const R_CallMethodDef CallEntries[] = {
+    {"_vasicekreg_cpp_dHSVASIQ", (DL_FUNC) &_vasicekreg_cpp_dHSVASIQ, 5},
+    {"_vasicekreg_cpp_pHSVASIQ", (DL_FUNC) &_vasicekreg_cpp_pHSVASIQ, 6},
+    {"_vasicekreg_cpp_qHSVASIQ", (DL_FUNC) &_vasicekreg_cpp_qHSVASIQ, 6},
+    {"_vasicekreg_cpp_rHSVASIQ", (DL_FUNC) &_vasicekreg_cpp_rHSVASIQ, 4},
     {"_vasicekreg_cpp_dlvasicek", (DL_FUNC) &_vasicekreg_cpp_dlvasicek, 4},
     {"_vasicekreg_cpp_plvasicek", (DL_FUNC) &_vasicekreg_cpp_plvasicek, 5},
     {"_vasicekreg_cpp_qlvasicek", (DL_FUNC) &_vasicekreg_cpp_qlvasicek, 5},
@@ -256,3 +322,4 @@ RcppExport void R_init_vasicekreg(DllInfo *dll) {
     R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
     R_useDynamicSymbols(dll, FALSE);
 }
+
