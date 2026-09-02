@@ -191,13 +191,6 @@ HSVASIQ <- function(mu.link = "logit", sigma.link = "logit") {
         c("logit", "probit", "cloglog", "cauchit", "log", "own")
     )
 
-    qhs <- function(u) {
-        log(tan(pi * u / 2))
-    }
-    Hhs <- function(z) {
-        2 * atan(exp(z)) / pi
-    }
-
     structure(
         list(
             family = c("HSVASIQ", "HS-VasicekQ"),
@@ -215,15 +208,15 @@ HSVASIQ <- function(mu.link = "logit", sigma.link = "logit") {
             dldm = function(y, mu, sigma) {
                 a <- sqrt((1 - sigma) / sigma)
                 g <- pi / sin(pi * mu)
-                d <- qhs(y) - qhs(mu)
-                z <- a * d + qhs(tau)
+                d <- log(tan(pi * y / 2)) - log(tan(pi * mu / 2))
+                z <- a * d + log(tan(pi * tau / 2))
                 a * g * tanh(z)
             },
             d2ldm2 = function(y, mu, sigma) {
                 a <- sqrt((1 - sigma) / sigma)
                 g <- pi / sin(pi * mu)
-                d <- qhs(y) - qhs(mu)
-                z <- a * d + qhs(tau)
+                d <- log(tan(pi * y / 2)) - log(tan(pi * mu / 2))
+                z <- a * d + log(tan(pi * tau / 2))
                 hyperbolic_tangent <- tanh(z)
                 squared_sech <- 1 / cosh(z)^2
                 g^2 * (
@@ -234,16 +227,16 @@ HSVASIQ <- function(mu.link = "logit", sigma.link = "logit") {
             dldd = function(y, mu, sigma) {
                 a <- sqrt((1 - sigma) / sigma)
                 b <- 1 / (2 * sigma * (1 - sigma))
-                d <- qhs(y) - qhs(mu)
-                z <- a * d + qhs(tau)
+                d <- log(tan(pi * y / 2)) - log(tan(pi * mu / 2))
+                z <- a * d + log(tan(pi * tau / 2))
                 b * (a * d * tanh(z) - 1)
             },
             d2ldmdd = function(y, mu, sigma) {
                 a <- sqrt((1 - sigma) / sigma)
                 b <- 1 / (2 * sigma * (1 - sigma))
                 g <- pi / sin(pi * mu)
-                d <- qhs(y) - qhs(mu)
-                z <- a * d + qhs(tau)
+                d <- log(tan(pi * y / 2)) - log(tan(pi * mu / 2))
+                z <- a * d + log(tan(pi * tau / 2))
                 hyperbolic_tangent <- tanh(z)
                 squared_sech <- 1 / cosh(z)^2
                 -a * b * g * (
@@ -253,8 +246,8 @@ HSVASIQ <- function(mu.link = "logit", sigma.link = "logit") {
             d2ldd2 = function(y, mu, sigma) {
                 a <- sqrt((1 - sigma) / sigma)
                 b <- 1 / (2 * sigma * (1 - sigma))
-                d <- qhs(y) - qhs(mu)
-                z <- a * d + qhs(tau)
+                d <- log(tan(pi * y / 2)) - log(tan(pi * mu / 2))
+                z <- a * d + log(tan(pi * tau / 2))
                 hyperbolic_tangent <- tanh(z)
                 squared_sech <- 1 / cosh(z)^2
                 b^2 * (
@@ -296,10 +289,13 @@ HSVASIQ <- function(mu.link = "logit", sigma.link = "logit") {
                 vapply(seq_len(n), function(i) {
                     scale <- sqrt(sigma[i] / (1 - sigma[i]))
                     qfun <- function(p) {
-                        Hhs(
-                            qhs(mu[i]) +
-                                scale * (qhs(p) - qhs(tau))
-                        )
+                        linear_predictor <-
+                            log(tan(pi * mu[i] / 2)) +
+                            scale * (
+                                log(tan(pi * p / 2)) -
+                                log(tan(pi * tau / 2))
+                            )
+                        2 * atan(exp(linear_predictor)) / pi
                     }
                     stats::integrate(
                         qfun, lower = 0, upper = 1,
@@ -315,10 +311,13 @@ HSVASIQ <- function(mu.link = "logit", sigma.link = "logit") {
                 vapply(seq_len(n), function(i) {
                     scale <- sqrt(sigma[i] / (1 - sigma[i]))
                     qfun <- function(p) {
-                        Hhs(
-                            qhs(mu[i]) +
-                                scale * (qhs(p) - qhs(tau))
-                        )
+                        linear_predictor <-
+                            log(tan(pi * mu[i] / 2)) +
+                            scale * (
+                                log(tan(pi * p / 2)) -
+                                log(tan(pi * tau / 2))
+                            )
+                        2 * atan(exp(linear_predictor)) / pi
                     }
                     expected <- stats::integrate(
                         qfun, lower = 0, upper = 1,
@@ -336,4 +335,3 @@ HSVASIQ <- function(mu.link = "logit", sigma.link = "logit") {
         class = c("gamlss.family", "family")
     )
 }
-
