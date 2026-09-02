@@ -1,3 +1,16 @@
+hs_first_derivative <- function(f, x, h = 1e-6) {
+    (f(x + h) - f(x - h)) / (2 * h)
+}
+
+hs_second_derivative <- function(f, x, h = 1e-4) {
+    (f(x + h) - 2 * f(x) + f(x - h)) / h^2
+}
+
+hs_cross_derivative <- function(f, x, y, h = 1e-4) {
+    (f(x + h, y + h) - f(x + h, y - h) -
+         f(x - h, y + h) + f(x - h, y - h)) / (4 * h^2)
+}
+
 test_that("HSVASIQ distribution functions are mutually consistent", {
     p <- c(1e-8, 0.10, 0.50, 0.90, 1 - 1e-8)
     mu <- 0.63
@@ -162,15 +175,3 @@ test_that("envelope simulation retains the fixed HSVASIQ quantile level", {
         expect_identical(simulated, expected)
     })
 })
-hs_first_derivative <- function(f, x, h = 1e-6) {
-    (f(x + h) - f(x - h)) / (2 * h)
-}
-
-hs_second_derivative <- function(f, x, h = 1e-4) {
-    (f(x + h) - 2 * f(x) + f(x - h)) / h^2
-}
-
-hs_cross_derivative <- function(f, x, y, h = 1e-4) {
-    (f(x + h, y + h) - f(x + h, y - h) -
-         f(x - h, y + h) + f(x - h, y - h)) / (4 * h^2)
-}
