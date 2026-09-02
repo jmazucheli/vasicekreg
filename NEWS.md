@@ -1,4 +1,22 @@
-# vasicekreg development version (2026-08-27)
+# vasicekreg development version (2026-09-02)
+
+## Hyperbolic-secant-kernel quantile regression
+
+- Added the `HSVASIQ()` GAMLSS family for conditional quantile regression
+  with a hyperbolic-secant kernel and fixed global quantile level `tau`.
+- Added compiled `dHSVASIQ()`, `pHSVASIQ()`, `qHSVASIQ()`, and
+  `rHSVASIQ()` functions, including stable log-probability and tail
+  calculations.
+- Implemented closed-form first, second, and cross log-likelihood derivatives
+  with respect to `mu` and `sigma`.
+- Added randomized quantile residual support and numerical conditional-moment
+  functions for the GAMLSS family.
+- Extended `vasicek_envelope()` to fitted `HSVASIQ` models.
+- Corrected parametric-envelope simulation for quantile families so the
+  global fixed quantile level `tau` is passed to their random generators.
+- Added documentation and tests for distribution identities, normalization,
+  fixed-quantile preservation, vectorization, analytical derivatives,
+  conditional moments, random generation, and GAMLSS fitting.
 
 ## Boundary-adjusted mean regression
 
