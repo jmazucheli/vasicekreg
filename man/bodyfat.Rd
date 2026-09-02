@@ -45,7 +45,7 @@ fitmean <- gamlss(
 )
 
 \dontrun{
-tau_levels <- c(0.10, 0.25, 0.50, 0.75, 0.90)
+tau_levels <- c(0.25, 0.50, 0.75)
 
 ## Quantile regression models with the normal kernel
 fit_normal <- lapply(tau_levels, function(Tau) {
@@ -73,8 +73,22 @@ fit_logistic <- lapply(tau_levels, function(Tau) {
   )
 })
 
+## Quantile regression models with the Hyperbolic-secant-kernel
+fit_hsk <- lapply(tau_levels, function(Tau) {
+  tau <<- Tau
+  gamlss(
+    ARMS ~ AGE + BMI + SEX + IPAQ,
+    data = bodyfat,
+    family = HSVASIQ(
+      mu.link = "logit",
+      sigma.link = "logit"
+    )
+  )
+})
+
 lapply(fit_normal, summary)
 lapply(fit_logistic, summary)
+lapply(fit_hsk, summary)
 }
 }
 \references{

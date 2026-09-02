@@ -77,4 +77,3 @@ cpp_qNVASIQ <- function(x, mu, theta, tau, lowertail = TRUE, logprob = FALSE) {
     .Call('_vasicekreg_cpp_qNVASIQ', PACKAGE = 'vasicekreg', x, mu, theta, tau, lowertail, logprob)
 }
 
-

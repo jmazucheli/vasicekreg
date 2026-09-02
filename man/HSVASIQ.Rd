@@ -53,6 +53,9 @@ random deviates. \code{HSVASIQ()} returns a \code{gamlss.family} object.
 \description{
 \code{HSVASIQ()} defines the hyperbolic-secant-kernel Vasicek distribution
 as a \code{gamlss.family} object for conditional quantile regression.
+The functions \code{dHSVASIQ()}, \code{pHSVASIQ()}, \code{qHSVASIQ()}, and
+\code{rHSVASIQ()} provide the density, distribution function, quantile
+function, and random generation.
 }
 \details{
 Let
@@ -67,22 +70,35 @@ z=a\{q(x)-q(\mu)\}+q(\tau).}
 The cumulative distribution function and density are
 \deqn{F(x\mid\mu,\sigma,\tau)=H(z)}
 and
-\deqn{f(x\mid\mu,\sigma,\tau)=
-a\frac{h(z)}{h\{q(x)\}}.}
+\deqn{f(x\mid\mu,\sigma,\tau)=a\frac{h(z)}{h\{q(x)\}}.}
 The quantile function is
 \deqn{Q(p\mid\mu,\sigma,\tau)=
 H\left[q(\mu)+\sqrt{\frac{\sigma}{1-\sigma}}
 \{q(p)-q(\tau)\}\right].}
-Consequently, \eqn{Q(\tau)=\mu}; \eqn{\mu} is the conditional
+Consequently, \eqn{Q(\tau)=\mu}; \eqn{\mu} is exactly the conditional
 \eqn{\tau}-th quantile and is not the conditional mean in general.
 
-The GAMLSS family uses analytical first, second, and cross derivatives.
-The conditional mean and variance are evaluated by numerical integration
-of the quantile function.
+The GAMLSS family uses analytical derivatives. For one observation, let
+\deqn{d=q(y)-q(\mu),\quad z=ad+q(\tau),\quad
+T=\tanh(z),\quad S=\operatorname{sech}^2(z),}
+\deqn{b=\frac{1}{2\sigma(1-\sigma)},\qquad
+g=\frac{\pi}{\sin(\pi\mu)}.}
+If \eqn{\ell} is the individual log-likelihood contribution, then
+\deqn{\frac{\partial\ell}{\partial\mu}=agT,}
+\deqn{\frac{\partial\ell}{\partial\sigma}=b(adT-1),}
+\deqn{\frac{\partial^2\ell}{\partial\mu^2}
+=g^2\{-a\cos(\pi\mu)T-a^2S\},}
+\deqn{\frac{\partial^2\ell}{\partial\mu\,\partial\sigma}
+=-abg(T+adS),}
+and
+\deqn{\frac{\partial^2\ell}{\partial\sigma^2}
+=b^2\{2(1-2\sigma)-(3-4\sigma)adT-a^2d^2S\}.}
+The conditional mean and variance do not have elementary closed forms and
+are evaluated by numerical integration of the quantile function.
 
 For GAMLSS fitting, \code{tau} must be defined as a scalar variable in the
-global environment before \code{HSVASIQ()} is evaluated and must retain the
-same value for post-fit calculations.
+global environment before \code{HSVASIQ()} is evaluated. It must retain the
+same value when residuals or other post-fit quantities are computed.
 }
 \examples{
 set.seed(123)
@@ -97,6 +113,7 @@ fit <- gamlss::gamlss(
 )
 fitted(fit, what = "mu")[1]
 rm(tau)
+
 }
 \references{
 Dunn, P. K. and Smyth, G. K. (1996). Randomized quantile residuals.

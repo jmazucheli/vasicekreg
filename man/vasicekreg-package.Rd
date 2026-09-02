@@ -96,7 +96,7 @@ variance components of the \code{LVASIQ()} and \code{HSVASIQ()} family
 objects are obtained by numerical quadrature because these moments have no
 closed-form expressions.
 
-For the distribution functions associated with \code{NVASIQ},
+For the distribution functions associated with \code{NVASIQ} and
 \code{LVASIQ}, and \code{HSVASIQ}, \code{tau} is supplied as an argument.
 For GAMLSS fitting, \code{NVASIQ()}, \code{LVASIQ()}, and
 \code{HSVASIQ()} require \code{tau} to be defined as a scalar variable in
@@ -161,4 +161,3 @@ Josmar Mazucheli \email{jmazucheli@gmail.com}
 
 Bruna Alves \email{pg402900@uem.br}
 }
-
