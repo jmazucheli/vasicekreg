@@ -101,12 +101,11 @@ variance components of the \code{LVASIQ()} and \code{HSVASIQ()} family
 objects are obtained by numerical quadrature because these moments have no
 closed-form expressions.
 
-For the distribution functions associated with \code{NVASIQ} and
+For the distribution functions associated with \code{NVASIQ},
 \code{LVASIQ}, and \code{HSVASIQ}, \code{tau} is supplied as an argument.
-For GAMLSS fitting, \code{NVASIQ()}, \code{LVASIQ()}, and
-\code{HSVASIQ()} require \code{tau} to be defined as a scalar variable in
-the global environment. The same value must be retained when residuals or
-other post-fit quantities are computed. This fixed
+For GAMLSS fitting, these family constructors require \code{tau} to be
+defined as a scalar variable in the global environment. The same value must
+be retained when residuals or other post-fit quantities are computed. This fixed
 quantile level is distinct from the parameter \code{tau} in
 \code{ZOANVASIM()}, which represents the conditional probability at one
 among nonzero observations.

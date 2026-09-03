@@ -143,7 +143,7 @@ set.seed(123)
 x <- rLVASIQ(n = 1000, mu = 0.50, sigma = 0.25, tau = 0.5)
 S <- seq(min(x), max(x), length.out = 1000)
 
-hist(x, prob = TRUE, main = "L-Vasicek (logistic kernel)")
+hist(x, prob = TRUE, main = "Logistic-kernel Vasicek-type")
 lines(S, dLVASIQ(x = S, mu = 0.50, sigma = 0.25, tau = 0.5), col = 2)
 
 plot(ecdf(x))
