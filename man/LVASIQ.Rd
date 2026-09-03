@@ -19,7 +19,7 @@ rLVASIQ(n, mu, sigma, tau = 0.5)
 LVASIQ(mu.link = "logit", sigma.link = "logit")
 }
 \arguments{
-\item{x, q}{Vector of quantiles in \eqn{(0,1)}.}
+\item{x}{Vector of quantiles in \eqn{(0,1)}.}
 
 \item{mu}{Vector of \eqn{\tau}-quantiles, \eqn{0<\mu<1}.}
 
@@ -31,13 +31,16 @@ must be defined globally.}
 
 \item{log}{Logical; if \code{TRUE}, the log-density is returned.}
 
+\item{q}{Vector of values in \eqn{[0,1]} at which the cumulative
+distribution function is evaluated.}
+
 \item{lower.tail}{Logical; if \code{TRUE}, probabilities are \eqn{P(X\le x)}.}
 
 \item{log.p}{Logical; if \code{TRUE}, probabilities \code{p} are given
 as \code{log(p)} or cumulative probabilities are returned on the log
 scale, as appropriate.}
 
-\item{p}{Vector of probabilities in \eqn{(0,1)}.}
+\item{p}{Vector of probabilities in \eqn{[0,1]} on the probability scale.}
 
 \item{n}{Number of observations.}
 
@@ -169,7 +172,11 @@ New formulation, mathematical derivations, and numerical applications.
 \emph{Mathematics}, \bold{10}, 1389.
 
 Vasicek, O. A. (2002). The distribution of loan portfolio value.
-\emph{Risk}, \bold{15}(12), 1--10.
+\emph{Risk}, \bold{15}(12), 160--162.
+
+Witzany, J. (2013). A note on the Vasicek's model with the logistic
+distribution. \emph{Ekonomický časopis (Journal of Economics)},
+\bold{61}(10), 1053--1066.
 }
 \author{
 Josmar Mazucheli \email{jmazucheli@gmail.com}

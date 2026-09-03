@@ -1,4 +1,4 @@
-﻿#' Hyperbolic-secant-kernel Vasicek-type quantile distribution
+#' Hyperbolic-secant-kernel Vasicek-type quantile distribution
 #'
 #' @description
 #' \code{HSVASIQ()} defines the hyperbolic-secant-kernel Vasicek-type distribution
@@ -50,8 +50,10 @@
 #' global environment before \code{HSVASIQ()} is evaluated. It must retain the
 #' same value when residuals or other post-fit quantities are computed.
 #'
-#' @param x,q Vector of quantiles in \eqn{(0,1)}.
-#' @param p Vector of probabilities.
+#' @param x Vector of quantiles in \eqn{(0,1)}.
+#' @param q Vector of values in \eqn{[0,1]} at which the cumulative
+#'   distribution function is evaluated.
+#' @param p Vector of probabilities in \eqn{[0,1]} on the probability scale.
 #' @param n Number of observations.
 #' @param mu Vector of conditional \eqn{\tau}-th quantiles,
 #'   \eqn{0<\mu<1}.

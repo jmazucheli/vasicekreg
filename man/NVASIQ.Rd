@@ -19,7 +19,7 @@ rNVASIQ(n, mu, sigma, tau = 0.5)
 NVASIQ(mu.link = "logit", sigma.link = "logit")
 }
 \arguments{
-\item{x, q}{Vector of quantiles in the interval \eqn{(0,1)}.}
+\item{x}{Vector of quantiles in the interval \eqn{(0,1)}.}
 
 \item{mu}{Vector of \eqn{\tau}-th quantile parameter values.}
 
@@ -32,10 +32,13 @@ it is not a function argument and must be defined globally.}
 \item{log, log.p}{Logical; if \code{TRUE}, probabilities are returned
 on the log scale.}
 
+\item{q}{Vector of values in \eqn{[0,1]} at which the cumulative
+distribution function is evaluated.}
+
 \item{lower.tail}{Logical; if \code{TRUE} (default),
 \eqn{P(X \le x)} is returned; otherwise, \eqn{P(X > x)}.}
 
-\item{p}{Vector of probabilities.}
+\item{p}{Vector of probabilities in \eqn{[0,1]} on the probability scale.}
 
 \item{n}{Number of observations. If \code{length(n) > 1}, the length
 is taken to be the number required.}
@@ -146,7 +149,7 @@ Using GAMLSS in R}. Chapman and Hall/CRC.
 
 Stasinopoulos, D. M. and Rigby, R. A. (2007).
 Generalized additive models for location, scale and shape (GAMLSS)
-in R. \emph{Journal of Statistical Software}, \bold{23}(7), 1--45.
+in R. \emph{Journal of Statistical Software}, \bold{23}(7), 1--46.
 
 Stasinopoulos, D. M., Rigby, R. A., Heller, G., Voudouris, V.,
 and De Bastiani, F. (2017).
@@ -158,7 +161,7 @@ Probability of loss on loan portfolio. \emph{KMV Corporation}.
 
 Vasicek, O. A. (2002).
 The distribution of loan portfolio value.
-\emph{Risk}, \bold{15}(12), 1--10.
+\emph{Risk}, \bold{15}(12), 160--162.
 }
 \seealso{
 \code{\link[vasicekreg]{NVASIM}}

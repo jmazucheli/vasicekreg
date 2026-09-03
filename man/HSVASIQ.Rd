@@ -19,7 +19,7 @@ rHSVASIQ(n, mu, sigma, tau = 0.5)
 HSVASIQ(mu.link = "logit", sigma.link = "logit")
 }
 \arguments{
-\item{x, q}{Vector of quantiles in \eqn{(0,1)}.}
+\item{x}{Vector of quantiles in \eqn{(0,1)}.}
 
 \item{mu}{Vector of conditional \eqn{\tau}-th quantiles,
 \eqn{0<\mu<1}.}
@@ -31,13 +31,16 @@ HSVASIQ(mu.link = "logit", sigma.link = "logit")
 
 \item{log}{Logical; if \code{TRUE}, returns the log-density.}
 
+\item{q}{Vector of values in \eqn{[0,1]} at which the cumulative
+distribution function is evaluated.}
+
 \item{lower.tail}{Logical; if \code{TRUE}, probabilities are
 \eqn{P(X\leq x)}.}
 
 \item{log.p}{Logical; if \code{TRUE}, probabilities are supplied or
 returned on the logarithmic scale.}
 
-\item{p}{Vector of probabilities.}
+\item{p}{Vector of probabilities in \eqn{[0,1]} on the probability scale.}
 
 \item{n}{Number of observations.}
 

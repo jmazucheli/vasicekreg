@@ -2,6 +2,7 @@
 % Please edit documentation in R/vasicek-envelope.R
 \name{vasicek_envelope}
 \alias{vasicek_envelope}
+\alias{print.vasicek_envelope}
 \alias{plot.vasicek_envelope}
 \title{Simulated envelopes for residuals from Vasicek GAMLSS models}
 \usage{
@@ -18,6 +19,8 @@ vasicek_envelope(
   simulate = NULL,
   verbose = interactive()
 )
+
+\method{print}{vasicek_envelope}(x, ...)
 
 \method{plot}{vasicek_envelope}(
   x,
@@ -69,6 +72,9 @@ generator associated with the fitted Vasicek family is used.}
 
 \item{x}{An object returned by \code{vasicek_envelope()}.}
 
+\item{...}{Further arguments. For the plot method, they are passed to
+\code{points()}.}
+
 \item{which}{Residual type to be plotted.}
 
 \item{show.mean}{Logical; if \code{TRUE}, draws the pointwise mean of the
@@ -77,8 +83,6 @@ ordered simulated residuals.}
 \item{xlab, ylab, main}{Graphical labels.}
 
 \item{envelope.col, mean.col, reference.col, point.col}{Graphical colors.}
-
-\item{...}{Further arguments passed to \code{points()}.}
 }
 \value{
 An object of class \code{"vasicek_envelope"}. Its \code{results} component

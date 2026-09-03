@@ -96,3 +96,43 @@ test_that("automatic refitting rejects data with incompatible row count", {
         fixed = TRUE
     )
 })
+
+test_that("vasicek envelope print and plot methods are available", {
+    theoretical <- stats::qnorm(stats::ppoints(5))
+    result <- list(
+        theoretical = theoretical,
+        observed = theoretical,
+        lower = theoretical - 0.2,
+        mean = theoretical,
+        upper = theoretical + 0.2,
+        simulated = matrix(theoretical, ncol = 1L)
+    )
+    object <- structure(
+        list(
+            family = "NVASIM",
+            residual = "quantile",
+            nsim = 10L,
+            level = 0.95,
+            envelope = "quantile",
+            attempts = 11L,
+            failures = 1L,
+            results = list(quantile = result)
+        ),
+        class = "vasicek_envelope"
+    )
+
+    printed <- capture.output(returned <- print(object))
+    printed <- paste(printed, collapse = "\n")
+    expect_identical(returned, object)
+    expect_match(printed, "Simulated residual envelope")
+    expect_match(printed, "Family: NVASIM")
+    expect_match(printed, "Successful simulations: 10")
+    expect_match(printed, "Failed fits: 1")
+
+    plot_file <- tempfile(fileext = ".pdf")
+    grDevices::pdf(plot_file)
+    expect_silent(plot(object))
+    grDevices::dev.off()
+    expect_true(file.exists(plot_file))
+    unlink(plot_file)
+})

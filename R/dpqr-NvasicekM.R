@@ -43,7 +43,7 @@
 #'
 #' Stasinopoulos, D. M. and Rigby, R. A. (2007).
 #' Generalized additive models for location, scale and shape (GAMLSS)
-#' in R. \emph{Journal of Statistical Software}, \bold{23}(7), 1--45.
+#' in R. \emph{Journal of Statistical Software}, \bold{23}(7), 1--46.
 #'
 #' Stasinopoulos, D. M., Rigby, R. A., Heller, G., Voudouris, V.,
 #' and De Bastiani, F. (2017).
@@ -55,11 +55,12 @@
 #'
 #' Vasicek, O. A. (2002).
 #' The distribution of loan portfolio value.
-#' \emph{Risk}, \bold{15}(12), 1--10.
+#' \emph{Risk}, \bold{15}(12), 160--162.
 #'
 #' @param x Vector of quantiles in the interval \eqn{(0,1)}.
-#' @param q Vector of quantiles in the interval \eqn{(0,1)}.
-#' @param p Vector of probabilities.
+#' @param q Vector of values in \eqn{[0,1]} at which the cumulative
+#'   distribution function is evaluated.
+#' @param p Vector of probabilities in \eqn{[0,1]} on the probability scale.
 #' @param n Number of observations. If \code{length(n) > 1}, the length
 #' is taken to be the number required.
 #' @param log Logical; if \code{TRUE}, the log-density is returned.

@@ -14,6 +14,17 @@
   inappropriate-stay proportion in `aep`.
 - Extended the numerical derivative checks for all three quantile families
   to a grid of response, quantile, shape, and fixed-quantile values.
+- Added the documented `print.vasicek_envelope()` S3 method and tests for the
+  print and plot interfaces.
+- Clarified that the reductions of `ZOANVASIM` at `nu = 0` or `tau = 0` are
+  nested limiting cases in the closure of its open parameter space.
+- Aligned the documented endpoint domains of the base `d`, `p`, and `q`
+  functions with their implemented behavior.
+- Corrected bibliographic page ranges, added the logistic-kernel reference to
+  `LVASIQ`, expanded the package-level references, and documented all four
+  included datasets in the package overview and README.
+- Added direct distribution-identity and normalization tests for all three
+  boundary-augmented models.
 
 ## Hyperbolic-secant-kernel quantile regression
 

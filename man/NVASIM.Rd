@@ -27,7 +27,8 @@ NVASIM(mu.link = "logit", sigma.link = "logit")
 
 \item{log}{Logical; if \code{TRUE}, the log-density is returned.}
 
-\item{q}{Vector of quantiles in the interval \eqn{(0,1)}.}
+\item{q}{Vector of values in \eqn{[0,1]} at which the cumulative
+distribution function is evaluated.}
 
 \item{lower.tail}{Logical; if \code{TRUE},
 probabilities \eqn{P(X \le x)} are returned.}
@@ -36,7 +37,7 @@ probabilities \eqn{P(X \le x)} are returned.}
 as \code{log(p)} or cumulative probabilities are returned on the log
 scale, as appropriate.}
 
-\item{p}{Vector of probabilities.}
+\item{p}{Vector of probabilities in \eqn{[0,1]} on the probability scale.}
 
 \item{n}{Number of observations. If \code{length(n) > 1}, the length
 is taken to be the number required.}
@@ -141,7 +142,7 @@ Using GAMLSS in R}. Chapman and Hall/CRC.
 
 Stasinopoulos, D. M. and Rigby, R. A. (2007).
 Generalized additive models for location, scale and shape (GAMLSS)
-in R. \emph{Journal of Statistical Software}, \bold{23}(7), 1--45.
+in R. \emph{Journal of Statistical Software}, \bold{23}(7), 1--46.
 
 Stasinopoulos, D. M., Rigby, R. A., Heller, G., Voudouris, V.,
 and De Bastiani, F. (2017).
@@ -153,7 +154,7 @@ Probability of loss on loan portfolio. KMV Corporation.
 
 Vasicek, O. A. (2002).
 The distribution of loan portfolio value.
-\emph{Risk}, \bold{15}(12), 1--10.
+\emph{Risk}, \bold{15}(12), 160--162.
 }
 \seealso{
 \code{\link[vasicekreg]{NVASIQ}}, \code{\link[mvtnorm]{pmvnorm}}

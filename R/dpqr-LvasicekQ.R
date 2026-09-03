@@ -99,10 +99,16 @@
 #' \emph{Mathematics}, \bold{10}, 1389.
 #'
 #' Vasicek, O. A. (2002). The distribution of loan portfolio value.
-#' \emph{Risk}, \bold{15}(12), 1--10.
+#' \emph{Risk}, \bold{15}(12), 160--162.
 #'
-#' @param x,q Vector of quantiles in \eqn{(0,1)}.
-#' @param p Vector of probabilities in \eqn{(0,1)}.
+#' Witzany, J. (2013). A note on the Vasicek's model with the logistic
+#' distribution. \emph{Ekonomický časopis (Journal of Economics)},
+#' \bold{61}(10), 1053--1066.
+#'
+#' @param x Vector of quantiles in \eqn{(0,1)}.
+#' @param q Vector of values in \eqn{[0,1]} at which the cumulative
+#'   distribution function is evaluated.
+#' @param p Vector of probabilities in \eqn{[0,1]} on the probability scale.
 #' @param n Number of observations.
 #' @param mu Vector of \eqn{\tau}-quantiles, \eqn{0<\mu<1}.
 #' @param sigma Vector of shape parameter values, \eqn{0<\sigma<1}.

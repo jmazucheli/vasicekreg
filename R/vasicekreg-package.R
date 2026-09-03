@@ -36,8 +36,17 @@
 #' probabilities, quantiles, and random observations, respectively.
 #'
 #' @details
-#' \code{\link[vasicekreg]{bodyfat}}:
-#' Body fat dataset.
+#' Included datasets:
+#' \itemize{
+#'   \item \code{\link[vasicekreg]{bodyfat}}: body-fat proportions in
+#'   \eqn{(0,1)} and demographic covariates for 298 individuals.
+#'   \item \code{\link[vasicekreg]{aep}}: hospital-stay data from 1,383
+#'   patients; \code{noinap / los} contains observations at zero and one.
+#'   \item \code{\link[vasicekreg]{transport}}: bicycle-trip proportions for
+#'   60 respondents, including observations at zero.
+#'   \item \code{\link[vasicekreg]{trees}}: two-year tree-survival
+#'   proportions for 26 parks, including observations at one.
+#' }
 #'
 #' \code{\link[vasicekreg]{NVASIM}}:
 #' Normal-kernel mean parameterization and GAMLSS family. In regression
@@ -159,8 +168,53 @@
 #'
 #' Bruna Alves \email{pg402900@uem.br}
 #'
+#' @references
+#' Dunn, P. K. and Smyth, G. K. (1996). Randomized quantile residuals.
+#' \emph{Journal of Computational and Graphical Statistics}, \bold{5}(3),
+#' 236--244. \doi{10.1080/10618600.1996.10474708}
+#'
+#' Fischer, M. J., Hui, A. and Hösle, S. (2017). wHS-type distributions
+#' with application to finance. \emph{Journal of Statistics and Management
+#' Systems}, \bold{20}(1), 67--89.
+#' \doi{10.1080/09720510.2016.1190575}
+#'
+#' Mazucheli, J., Alves, B., Korkmaz, M. Ç., and Leiva, V. (2022).
+#' Vasicek quantile and mean regression models for bounded data: New
+#' formulation, mathematical derivations, and numerical applications.
+#' \emph{Mathematics}, \bold{10}, 1389. \doi{10.3390/math10091389}
+#'
+#' Moral, R. A., Hinde, J. and Demetrio, C. G. B. (2017). Half-normal plots
+#' and overdispersed models in R: The hnp package. \emph{Journal of
+#' Statistical Software}, \bold{81}(10), 1--23.
+#' \doi{10.18637/jss.v081.i10}
+#'
+#' Ospina, R. and Ferrari, S. L. P. (2010). Inflated beta distributions.
+#' \emph{Statistical Papers}, \bold{51}, 111--126.
+#' \doi{10.1007/s00362-008-0125-4}
+#'
+#' Ospina, R. and Ferrari, S. L. P. (2012). A general class of zero-or-one
+#' inflated beta regression models. \emph{Computational Statistics & Data
+#' Analysis}, \bold{56}(6), 1609--1623.
+#' \doi{10.1016/j.csda.2011.10.005}
+#'
+#' Rigby, R. A. and Stasinopoulos, D. M. (2005). Generalized additive models
+#' for location, scale and shape. \emph{Applied Statistics}, \bold{54}(3),
+#' 507--554. \doi{10.1111/j.1467-9876.2005.00510.x}
+#'
+#' Vasicek, O. A. (2002). The distribution of loan portfolio value.
+#' \emph{Risk}, \bold{15}(12), 160--162.
+#'
+#' Witzany, J. (2013). A note on the Vasicek's model with the logistic
+#' distribution. \emph{Ekonomický časopis (Journal of Economics)},
+#' \bold{61}(10), 1053--1066.
+#'
+#' Zhao, Y., Lee, A. H., Yau, K. K. W. and McLachlan, G. J. (2011).
+#' Assessing the adequacy of Weibull survival models: A simulated envelope
+#' approach. \emph{Journal of Applied Statistics}, \bold{38}(10),
+#' 2089--2097. \doi{10.1080/02664763.2010.545115}
+#'
 #' @useDynLib vasicekreg
-#' @importFrom Rcpp sourceCpp
+#' @importFrom Rcpp evalCpp
 "_PACKAGE"
 
 .onUnload <- function(libpath) {

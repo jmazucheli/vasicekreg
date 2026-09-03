@@ -57,8 +57,11 @@
 #' +\tau\right]
 #' -\left\{(1-\nu)\left[\tau+(1-\tau)\mu\right]\right\}^2.}
 #' Logit links for \eqn{\nu} and \eqn{\tau} guarantee valid probabilities.
-#' If \eqn{\nu=0}, the model reduces to the BEOI-type one-augmented model; if
-#' \eqn{\tau=0}, it reduces to the zero-augmented model.
+#' In the closure of the parameter space, \eqn{\nu=0} gives the BEOI-type
+#' one-augmented model and \eqn{\tau=0} gives the zero-augmented model. The
+#' implemented distribution functions and GAMLSS family use the open parameter
+#' space \eqn{0<\nu<1} and \eqn{0<\tau<1}; these nested models are therefore
+#' limiting cases rather than admissible interior parameter values.
 #'
 #' @return
 #' \code{ZOANVASIM()} returns a four-parameter \code{gamlss.family} object.

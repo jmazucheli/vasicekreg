@@ -1,4 +1,4 @@
-﻿# vasicekreg
+# vasicekreg
 
 [![CRAN status](https://www.r-pkg.org/badges/version/vasicekreg)](https://CRAN.R-project.org/package=vasicekreg)
 
@@ -67,6 +67,19 @@ remotes::install_github("jmazucheli/vasicekreg")
 
 Because the package contains compiled C++ code, installation from source
 requires an appropriate compiler toolchain.
+
+## Included datasets
+
+| Object | Main bounded response | Boundary pattern | Observations |
+|---|---|---|---:|
+| `bodyfat` | `ARMS`, `LEGS`, `BODY`, `ANDROID`, and `GYNECOID` | All in `(0, 1)` | 298 |
+| `aep` | `noinap / los` | Zero and one | 1,383 |
+| `transport` | `propbiked` | Zero | 60 |
+| `trees` | `prop` | One | 26 |
+
+The help pages preserve the original data provenance and the citations
+associated with each dataset. Use `?bodyfat`, `?aep`, `?transport`, or
+`?trees` for variable definitions, sources, and references.
 
 ## Distribution functions
 
@@ -430,6 +443,11 @@ citation("vasicekreg")
   *Statistical Papers*, **51**(1), 111--126.
   [doi:10.1007/s00362-008-0125-4](https://doi.org/10.1007/s00362-008-0125-4)
 
+- Ospina, R., and Ferrari, S. L. P. (2012). A general class of zero-or-one
+  inflated beta regression models. *Computational Statistics & Data
+  Analysis*, **56**(6), 1609--1623.
+  [doi:10.1016/j.csda.2011.10.005](https://doi.org/10.1016/j.csda.2011.10.005)
+
 ### Residuals and simulated envelopes
 
 - Cox, D. R., and Snell, E. J. (1968). A general definition of residuals.
@@ -441,6 +459,11 @@ citation("vasicekreg")
   *Journal of Computational and Graphical Statistics*, **5**(3), 236--244.
   [doi:10.1080/10618600.1996.10474708](https://doi.org/10.1080/10618600.1996.10474708)
 
+- Moral, R. A., Hinde, J., and Demetrio, C. G. B. (2017). Half-normal plots
+  and overdispersed models in R: The hnp package. *Journal of Statistical
+  Software*, **81**(10), 1--23.
+  [doi:10.18637/jss.v081.i10](https://doi.org/10.18637/jss.v081.i10)
+
 - Atkinson, A. C. (1985). *Plots, Transformations, and Regression: An
   Introduction to Graphical Methods of Diagnostic Regression Analysis*.
   Clarendon Press.
@@ -449,6 +472,37 @@ citation("vasicekreg")
   Assessing the adequacy of Weibull survival models: A simulated envelope
   approach. *Journal of Applied Statistics*, **38**(10), 2089--2097.
   [doi:10.1080/02664763.2010.545115](https://doi.org/10.1080/02664763.2010.545115)
+
+### Included data sources
+
+- Gange, S. J., Munoz, A., Saez, M., and Alonso, J. (1996). Use of the
+  beta-binomial distribution to model the effect of policy changes on
+  appropriateness of hospital stays. *Applied Statistics*, **45**(3),
+  371--382.
+
+- Korosteleva, O. (2019). *Advanced Regression Models with SAS and R*.
+  CRC Press.
+
+- Mazucheli, J., Leiva, V., Alves, B., and Menezes, A. F. B. (2021). A new
+  quantile regression for modeling bounded data under a unit
+  Birnbaum--Saunders distribution with applications in medicine and politics.
+  *Symmetry*, **13**(4), 1--21.
+
+- Menezes, A. F. B., Mazucheli, J., and Bourguignon, M. (2021). A parametric
+  quantile regression approach for modeling zero- or one-inflated double
+  bounded data. *Biometrical Journal*, **63**(4), 841--858.
+  [doi:10.1002/bimj.202000126](https://doi.org/10.1002/bimj.202000126)
+
+- Petterle, R. R., Bonat, W. H., Scarpin, C. T., Jonasson, T., and
+  Borba, V. Z. C. (2020). Multivariate quasi-beta regression models for
+  continuous bounded data. *The International Journal of Biostatistics*,
+  **17**(1), 39--53.
+
+- Stasinopoulos, M., and Rigby, R. (2025). *gamlss.data: Data for Generalized
+  Additive Models for Location Scale and Shape*. R package version 6.0-7.
+
+- Menezes, A. F. B. (2026). *uwquantreg: Unit-Weibull Quantile Regression*.
+  R package version 0.1.0.
 
 ### Computational implementation
 

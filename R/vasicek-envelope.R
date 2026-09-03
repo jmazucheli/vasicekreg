@@ -35,7 +35,8 @@
 #'   ordered simulated residuals.
 #' @param xlab,ylab,main Graphical labels.
 #' @param envelope.col,mean.col,reference.col,point.col Graphical colors.
-#' @param ... Further arguments passed to \code{points()}.
+#' @param ... Further arguments. For the plot method, they are passed to
+#'   \code{points()}.
 #'
 #' @details
 #' Let \eqn{U_i} denote the probability integral transform used by the
@@ -394,6 +395,26 @@ vasicek_envelope <- function(
     bootstrap_data <- data
     bootstrap_data[[response_name]] <- y
     suppressWarnings(stats::update(object, data = bootstrap_data, trace = FALSE))
+}
+
+#' @rdname vasicek_envelope
+#' @export
+print.vasicek_envelope <- function(x, ...) {
+    envelope_label <- if (identical(x$envelope, "quantile")) {
+        paste0(format(100 * x$level, trim = TRUE),
+               "% pointwise quantile")
+    } else {
+        "pointwise minimum--maximum"
+    }
+
+    cat("Simulated residual envelope\n")
+    cat("  Family: ", x$family, "\n", sep = "")
+    cat("  Residuals: ", paste(x$residual, collapse = ", "), "\n", sep = "")
+    cat("  Envelope: ", envelope_label, "\n", sep = "")
+    cat("  Successful simulations: ", x$nsim, "\n", sep = "")
+    cat("  Attempts: ", x$attempts, "\n", sep = "")
+    cat("  Failed fits: ", x$failures, "\n", sep = "")
+    invisible(x)
 }
 
 #' @rdname vasicek_envelope

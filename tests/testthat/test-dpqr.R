@@ -93,7 +93,7 @@ test_that("incompatible parameter lengths are rejected", {
 })
 
 
-test_that("boundary-adjusted GAMLSS aliases match numbered dpqr functions", {
+test_that("boundary-augmented GAMLSS aliases match numbered dpqr functions", {
     x <- c(0, 0.23, 0.71, 1)
     p <- c(0.05, 0.25, 0.75, 0.95)
     pars <- list(mu = 0.61, sigma = 0.28, nu = 0.17)
