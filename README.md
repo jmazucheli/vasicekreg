@@ -17,9 +17,9 @@ exact boundary values.
 | `NVASIQ` | Standard normal | `(0, 1)` | Quantile | `mu = Q_Y(tau)` |
 | `LVASIQ` | Logistic | `(0, 1)` | Quantile | `mu = Q_Y(tau)` |
 | `HSVASIQ` | Hyperbolic secant | `(0, 1)` | Quantile | `mu = Q_Y(tau)` |
-| `ZANVASIM` | Standard normal | `[0, 1)` | Zero-adjusted mean | `mu = E(Y | Y > 0)` |
-| `OANVASIM` | Standard normal | `(0, 1]` | One-adjusted mean | `mu = E(Y | Y < 1)` |
-| `ZOANVASIM` | Standard normal | `[0, 1]` | Zero-and-one-adjusted mean | `mu = E(Y | 0 < Y < 1)` |
+| `ZANVASIM` | Standard normal | `[0, 1)` | Zero-augmented mean | `mu = E(Y | Y > 0)` |
+| `OANVASIM` | Standard normal | `(0, 1]` | One-augmented mean | `mu = E(Y | Y < 1)` |
+| `ZOANVASIM` | Standard normal | `[0, 1]` | Zero-and-one-augmented | `mu = E(Y | 0 < Y < 1)` |
 
 For all seven families, `sigma` lies in `(0, 1)` and controls dispersion.
 For `ZANVASIM`, `nu = P(Y = 0)` and the marginal mean is
@@ -112,7 +112,7 @@ fit_mean <- gamlss(
 fitted(fit_mean, what = "mu")[1]
 ```
 
-## GAMLSS zero-adjusted mean regression
+## GAMLSS zero-augmented mean regression
 
 ```r
 set.seed(123)
