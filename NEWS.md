@@ -1,4 +1,19 @@
-# vasicekreg development version (2026-09-02)
+# vasicekreg 1.2.0 (2026-09-03)
+
+## Interface and documentation review
+
+- Updated the package title and description to cover distribution functions,
+  Vasicek-type models, and the hyperbolic-secant kernel and `HSVASIQ` family.
+- Standardized boundary terminology as "augmented" and kernel terminology as
+  "Vasicek-type" throughout the current documentation.
+- Corrected the `bodyfat` documentation: it contains 10 variables, and its five
+  response variables are proportions in `(0, 1)`, not values on a 0--100 scale.
+- Replaced generic quantile notation `tau` by `p` in the `NVASIM` quantile
+  formula and corrected the description of the bivariate-normal CDF.
+- Added a real-data `ZOANVASIM` example based on the boundary-valued
+  inappropriate-stay proportion in `aep`.
+- Extended the numerical derivative checks for all three quantile families
+  to a grid of response, quantile, shape, and fixed-quantile values.
 
 ## Hyperbolic-secant-kernel quantile regression
 
@@ -18,17 +33,17 @@
   fixed-quantile preservation, vectorization, analytical derivatives,
   conditional moments, random generation, and GAMLSS fitting.
 
-## Boundary-adjusted mean regression
+## Boundary-augmented mean regression
 
 - Added the GAMLSS-conventional aliases `d/p/q/rZANVASIM()`,
   `d/p/q/rOANVASIM()`, and `d/p/q/rZOANVASIM()`. The established numbered
   names remain available. This correspondence allows likelihood-based
   methods such as `vcov.gamlss()` to locate each family's density function.
-- Added `ZANVASIM()`, a zero-adjusted normal-kernel Vasicek mean family,
+- Added `ZANVASIM()`, a zero-augmented normal-kernel Vasicek mean family,
   with `nu` modeling the probability at zero.
-- Added `OANVASIM()`, a one-adjusted normal-kernel Vasicek mean family,
+- Added `OANVASIM()`, a one-augmented normal-kernel Vasicek mean family,
   with `nu` modeling the probability at one.
-- Added `ZOANVASIM()`, a zero-and-one-adjusted normal-kernel Vasicek mean
+- Added `ZOANVASIM()`, a zero-and-one-augmented normal-kernel Vasicek mean
   family. In this family, `nu` is the probability at zero and `tau` is
   the conditional probability at one among nonzero observations.
 - Added the corresponding `d0NVASIM()`, `p0NVASIM()`, `q0NVASIM()`,
@@ -36,7 +51,7 @@
   `r1NVASIM()`, `d01NVASIM()`, `p01NVASIM()`, `q01NVASIM()`, and
   `r01NVASIM()` functions.
 - Added analytical derivatives, randomized quantile residuals, marginal
-  moments, and GAMLSS fitting support for all three boundary-adjusted
+  moments, and GAMLSS fitting support for all three boundary-augmented
   families.
 
 ## Simulated residual envelopes
@@ -64,22 +79,22 @@
 - Added numerical verification of all first, second, and cross derivatives
   for `ZANVASIM`, `OANVASIM`, and `ZOANVASIM`.
 - Added tests of the randomized quantile residual expressions for the
-  zero-adjusted, one-adjusted, and zero-and-one-adjusted families, including
+  zero-augmented, one-augmented, and zero-and-one-augmented families, including
   the CDF jump intervals, interior observations, reproducibility, and
   simulation from the fitted family.
 - Added tests for simulated residual envelopes, including argument
   validation, reproducibility, returned components, plotting, stable
   Cox--Snell upper-tail calculations, and incompatible refit data.
 - Clarified the roles of `x` and `q` and distinguished the boundary
-  behavior of the zero-adjusted, one-adjusted, and zero-and-one-adjusted
+  behavior of the zero-augmented, one-augmented, and zero-and-one-augmented
   distributions.
-- Updated the package overview to describe the boundary-adjusted families
+- Updated the package overview to describe the boundary-augmented families
   and to distinguish the `tau` parameter in `ZOANVASIM` from the fixed
   quantile level used by `NVASIQ` and `LVASIQ`.
 - Added a package-level example comparing `OANVASIM` and `BEOI` using the
   one-inflated `accuracy1` response from the `ReadingSkills` data.
 - Expanded the README references for the Vasicek distributions, GAMLSS,
-  boundary-adjusted models, randomized quantile and Cox--Snell residuals,
+  boundary-augmented models, randomized quantile and Cox--Snell residuals,
   simulated envelopes, and Rcpp.
 
 # vasicekreg 1.1.0 (2026-07-28)

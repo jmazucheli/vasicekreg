@@ -5,16 +5,16 @@
 #' @name LVASIQ
 #' @aliases LVASIQ dLVASIQ pLVASIQ qLVASIQ rLVASIQ
 #'
-#' @title L-Vasicek distribution (logistic kernel) with quantile parameterization
+#' @title Logistic-kernel Vasicek-type distribution with quantile parameterization
 #'
 #' @description
-#' The function \code{LVASIQ()} defines the logistic-kernel Vasicek
+#' The function \code{LVASIQ()} defines the logistic-kernel Vasicek-type
 #' distribution as a \code{gamlss.family} object for conditional quantile
 #' regression. The functions \code{dLVASIQ}, \code{pLVASIQ},
 #' \code{qLVASIQ}, and \code{rLVASIQ} give the density, distribution
 #' function, quantile function, and random generation. The parameter
 #' \eqn{\mu} is the conditional \eqn{\tau}-th quantile
-#' (\eqn{0<\mu<1}), \eqn{\sigma} is a dispersion parameter
+#' (\eqn{0<\mu<1}), \eqn{\sigma} is a shape parameter
 #' (\eqn{0<\sigma<1}), and \eqn{\tau\in(0,1)} is fixed by the user.
 #' For GAMLSS fitting, \code{tau} must be defined as a scalar variable in
 #' the global environment before \code{LVASIQ()} is evaluated.
@@ -105,7 +105,7 @@
 #' @param p Vector of probabilities in \eqn{(0,1)}.
 #' @param n Number of observations.
 #' @param mu Vector of \eqn{\tau}-quantiles, \eqn{0<\mu<1}.
-#' @param sigma Vector of dispersion values, \eqn{0<\sigma<1}.
+#' @param sigma Vector of shape parameter values, \eqn{0<\sigma<1}.
 #' @param tau Scalar in \eqn{(0,1)} fixing which quantile \eqn{\mu} represents.
 #' In the \code{LVASIQ()} GAMLSS family, it is not a function argument and
 #' must be defined globally.
@@ -132,7 +132,7 @@
 #' x <- rLVASIQ(n = 1000, mu = 0.50, sigma = 0.25, tau = 0.5)
 #' S <- seq(min(x), max(x), length.out = 1000)
 #'
-#' hist(x, prob = TRUE, main = "L-Vasicek (logistic kernel)")
+#' hist(x, prob = TRUE, main = "Logistic-kernel Vasicek-type")
 #' lines(S, dLVASIQ(x = S, mu = 0.50, sigma = 0.25, tau = 0.5), col = 2)
 #'
 #' plot(ecdf(x))
@@ -247,7 +247,7 @@ LVASIQ <- function(mu.link = "logit", sigma.link = "logit") {
 
     structure(
         list(
-            family = c("LVASIQ", "L-VasicekQ"),
+            family = c("LVASIQ", "Logistic-kernel Vasicek-type quantile"),
             parameters = list(mu = TRUE, sigma = TRUE),
             nopar = 2,
             type = "Continuous",
@@ -322,12 +322,8 @@ LVASIQ <- function(mu.link = "logit", sigma.link = "logit") {
             },
             rqres = expression(
                 rqres(
-                    pfun = "pLVASIQ",
-                    type = "Continuous",
-                    y = y,
-                    mu = mu,
-                    sigma = sigma,
-                    tau = tau
+                    pfun = "pLVASIQ", type = "Continuous", y = y,
+                    mu = mu, sigma = sigma, tau = tau
                 )
             ),
             mu.initial = expression({
@@ -403,4 +399,3 @@ LVASIQ <- function(mu.link = "logit", sigma.link = "logit") {
         class = c("gamlss.family", "family")
     )
 }
-

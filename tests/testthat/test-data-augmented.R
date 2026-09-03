@@ -50,3 +50,20 @@ test_that("aep data retain their documented structure", {
     expect_equal(sum(inappropriate > 0 & inappropriate < 1), 552L)
     expect_equal(sum(inappropriate == 1), 68L)
 })
+
+test_that("bodyfat responses are proportions on the unit interval", {
+    data("bodyfat", package = "vasicekreg", envir = environment())
+
+    expect_s3_class(bodyfat, "data.frame")
+    expect_equal(dim(bodyfat), c(298L, 10L))
+    expect_named(
+        bodyfat,
+        c(
+            "ID", "AGE", "BMI", "SEX", "IPAQ", "ARMS", "LEGS",
+            "BODY", "ANDROID", "GYNECOID"
+        )
+    )
+    responses <- bodyfat[c("ARMS", "LEGS", "BODY", "ANDROID", "GYNECOID")]
+    expect_true(all(vapply(responses, function(x) all(x > 0 & x < 1), logical(1))))
+    expect_equal(range(bodyfat$ARMS), c(0.042, 0.547))
+})

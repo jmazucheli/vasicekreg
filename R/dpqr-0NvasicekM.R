@@ -1,10 +1,10 @@
 #' @name ZANVASIM
 #' @aliases ZANVASIM d0NVASIM p0NVASIM q0NVASIM r0NVASIM dZANVASIM pZANVASIM qZANVASIM rZANVASIM
 #'
-#' @title Zero-adjusted N-Vasicek distribution with mean parameterization
+#' @title Zero-augmented normal-kernel Vasicek-type distribution
 #'
 #' @description
-#' Defines a zero-adjusted normal-kernel Vasicek distribution for responses
+#' Defines a zero-augmented normal-kernel Vasicek-type distribution for responses
 #' in \eqn{[0,1)}. The parameter \eqn{\nu} is the probability of a structural
 #' zero. Conditional on a positive response, the distribution is
 #' \code{NVASIM} with mean \eqn{\mu} and shape parameter \eqn{\sigma}.
@@ -33,7 +33,7 @@
 #'
 #' @details
 #' Let \eqn{Y_+\sim\mathrm{NVASIM}(\mu,\sigma)} and let
-#' \eqn{0<\nu<1}. The zero-adjusted distribution is defined by
+#' \eqn{0<\nu<1}. The zero-augmented distribution is defined by
 #' \deqn{P(Y=0)=\nu}
 #' and
 #' \deqn{f_Y(y)=(1-\nu)f_{Y_+}(y\mid\mu,\sigma),\quad 0<y<1.}
@@ -297,7 +297,7 @@ ZANVASIM <- function(mu.link = "logit", sigma.link = "logit",
 
     structure(
         list(
-            family = c("ZANVASIM", "Zero-adjusted N-VasicekM"),
+            family = c("ZANVASIM", "Zero-augmented normal-kernel Vasicek-type mean"),
             parameters = list(mu = TRUE, sigma = TRUE, nu = TRUE),
             nopar = 3,
             # GAMLSS classification: point mass at zero plus a continuous
@@ -448,6 +448,5 @@ ZANVASIM <- function(mu.link = "logit", sigma.link = "logit",
         class = c("gamlss.family", "family")
     )
 }
-
 
 

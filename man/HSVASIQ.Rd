@@ -6,7 +6,7 @@
 \alias{pHSVASIQ}
 \alias{qHSVASIQ}
 \alias{rHSVASIQ}
-\title{Hyperbolic-secant-kernel Vasicek quantile distribution}
+\title{Hyperbolic-secant-kernel Vasicek-type quantile distribution}
 \usage{
 dHSVASIQ(x, mu, sigma, tau = 0.5, log = FALSE)
 
@@ -24,7 +24,7 @@ HSVASIQ(mu.link = "logit", sigma.link = "logit")
 \item{mu}{Vector of conditional \eqn{\tau}-th quantiles,
 \eqn{0<\mu<1}.}
 
-\item{sigma}{Vector of dispersion values, \eqn{0<\sigma<1}.}
+\item{sigma}{Vector of shape parameter values, \eqn{0<\sigma<1}.}
 
 \item{tau}{Scalar in \eqn{(0,1)} fixing the quantile represented by
 \eqn{\mu}. For \code{HSVASIQ()}, it must be defined globally.}
@@ -51,7 +51,7 @@ function, \code{qHSVASIQ()} the quantile function, and \code{rHSVASIQ()}
 random deviates. \code{HSVASIQ()} returns a \code{gamlss.family} object.
 }
 \description{
-\code{HSVASIQ()} defines the hyperbolic-secant-kernel Vasicek distribution
+\code{HSVASIQ()} defines the hyperbolic-secant-kernel Vasicek-type distribution
 as a \code{gamlss.family} object for conditional quantile regression.
 The functions \code{dHSVASIQ()}, \code{pHSVASIQ()}, \code{qHSVASIQ()}, and
 \code{rHSVASIQ()} provide the density, distribution function, quantile

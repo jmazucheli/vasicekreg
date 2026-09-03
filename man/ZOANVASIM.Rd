@@ -10,7 +10,7 @@
 \alias{pZOANVASIM}
 \alias{qZOANVASIM}
 \alias{rZOANVASIM}
-\title{Zero-and-one-adjusted N-Vasicek distribution}
+\title{Zero-and-one-augmented normal-kernel Vasicek-type distribution}
 \usage{
 d01NVASIM(x, mu = 0.5, sigma = 0.5, nu = 0.1, tau = 0.1, log = FALSE)
 
@@ -81,7 +81,8 @@ probability mass is evaluated. The distribution has support
 
 \item{tau}{Conditional probability at one among nonzero observations,
 \eqn{\tau=P(Y=1\mid Y>0)}, in \eqn{(0,1)}. This parameter is unrelated
-to the fixed quantile level used by \code{NVASIQ()} and \code{LVASIQ()}.}
+to the fixed quantile level used by \code{NVASIQ()}, \code{LVASIQ()},
+and \code{HSVASIQ()}.}
 
 \item{log}{Logical; if \code{TRUE}, log probabilities or log densities are
 returned.}
@@ -118,7 +119,7 @@ observations, respectively. \code{dZOANVASIM()}, \code{pZOANVASIM()},
 following the GAMLSS family-name convention.
 }
 \description{
-Defines a normal-kernel Vasicek distribution augmented by point masses at
+Defines a normal-kernel Vasicek-type distribution augmented by point masses at
 zero and one. Conditional on an observation in \eqn{(0,1)}, the continuous
 component is \code{NVASIM} with mean \eqn{\mu} and shape parameter
 \eqn{\sigma}.
@@ -144,8 +145,8 @@ and
 +\tau\right]
 -\left\{(1-\nu)\left[\tau+(1-\tau)\mu\right]\right\}^2.}
 Logit links for \eqn{\nu} and \eqn{\tau} guarantee valid probabilities.
-If \eqn{\nu=0}, the model reduces to the BEOI-type one-adjusted model; if
-\eqn{\tau=0}, it reduces to the zero-adjusted model.
+If \eqn{\nu=0}, the model reduces to the BEOI-type one-augmented model; if
+\eqn{\tau=0}, it reduces to the zero-augmented model.
 }
 \examples{
 set.seed(123)
@@ -165,6 +166,19 @@ fit <- gamlss(
   tau.formula = ~ 1,
   family = ZOANVASIM(),
   control = gamlss.control(trace = FALSE)
+)
+
+## Real-data example with observations at both boundaries
+data("aep", package = "vasicekreg")
+aep$inappropriate <- with(aep, noinap / los)
+fit_aep <- gamlss(
+  inappropriate ~ sex + ward + year + age + loglos,
+  sigma.formula = ~ loglos,
+  nu.formula = ~ loglos,
+  tau.formula = ~ loglos,
+  family = ZOANVASIM(),
+  data = aep,
+  control = gamlss.control(n.cyc = 200, trace = FALSE)
 )
 }
 }

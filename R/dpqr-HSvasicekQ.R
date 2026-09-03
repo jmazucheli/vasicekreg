@@ -1,7 +1,7 @@
-﻿#' Hyperbolic-secant-kernel Vasicek quantile distribution
+﻿#' Hyperbolic-secant-kernel Vasicek-type quantile distribution
 #'
 #' @description
-#' \code{HSVASIQ()} defines the hyperbolic-secant-kernel Vasicek distribution
+#' \code{HSVASIQ()} defines the hyperbolic-secant-kernel Vasicek-type distribution
 #' as a \code{gamlss.family} object for conditional quantile regression.
 #' The functions \code{dHSVASIQ()}, \code{pHSVASIQ()}, \code{qHSVASIQ()}, and
 #' \code{rHSVASIQ()} provide the density, distribution function, quantile
@@ -55,7 +55,7 @@
 #' @param n Number of observations.
 #' @param mu Vector of conditional \eqn{\tau}-th quantiles,
 #'   \eqn{0<\mu<1}.
-#' @param sigma Vector of dispersion values, \eqn{0<\sigma<1}.
+#' @param sigma Vector of shape parameter values, \eqn{0<\sigma<1}.
 #' @param tau Scalar in \eqn{(0,1)} fixing the quantile represented by
 #'   \eqn{\mu}. For \code{HSVASIQ()}, it must be defined globally.
 #' @param mu.link Link function for \eqn{\mu}.
@@ -198,7 +198,7 @@ HSVASIQ <- function(mu.link = "logit", sigma.link = "logit") {
 
     structure(
         list(
-            family = c("HSVASIQ", "HS-VasicekQ"),
+            family = c("HSVASIQ", "Hyperbolic-secant-kernel Vasicek-type quantile"),
             parameters = list(mu = TRUE, sigma = TRUE),
             nopar = 2,
             type = "Continuous",
@@ -266,12 +266,8 @@ HSVASIQ <- function(mu.link = "logit", sigma.link = "logit") {
             },
             rqres = expression(
                 rqres(
-                    pfun = "pHSVASIQ",
-                    type = "Continuous",
-                    y = y,
-                    mu = mu,
-                    sigma = sigma,
-                    tau = tau
+                    pfun = "pHSVASIQ", type = "Continuous", y = y,
+                    mu = mu, sigma = sigma, tau = tau
                 )
             ),
             mu.initial = expression({

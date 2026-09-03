@@ -43,7 +43,7 @@
 #' \deqn{r_i^q=\Phi^{-1}(U_i)}
 #' and
 #' \deqn{r_i^{CS}=-\log(1-U_i).}
-#' For adjusted families, \eqn{U_i} is randomized over the relevant jump of
+#' For augmented families, \eqn{U_i} is randomized over the relevant jump of
 #' the fitted distribution at zero or one, so the reported residuals inherit
 #' whatever randomization \code{residuals()} applies for those families; the
 #' Cox--Snell residual is then also randomized at boundary observations and

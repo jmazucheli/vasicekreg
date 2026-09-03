@@ -1,10 +1,10 @@
 #' @name OANVASIM
 #' @aliases OANVASIM d1NVASIM p1NVASIM q1NVASIM r1NVASIM dOANVASIM pOANVASIM qOANVASIM rOANVASIM
 #'
-#' @title One-adjusted N-Vasicek distribution with mean parameterization
+#' @title One-augmented normal-kernel Vasicek-type distribution
 #'
 #' @description
-#' Defines a one-adjusted normal-kernel Vasicek distribution for responses
+#' Defines a one-augmented normal-kernel Vasicek-type distribution for responses
 #' in \eqn{(0,1]}. The parameter \eqn{\nu} is the probability at one.
 #' Conditional on an observation in \eqn{(0,1)}, the distribution is
 #' \code{NVASIM} with mean \eqn{\mu} and shape parameter \eqn{\sigma}.
@@ -33,7 +33,7 @@
 #'
 #' @details
 #' Let \eqn{Y_c\sim\mathrm{NVASIM}(\mu,\sigma)} and let
-#' \eqn{0<\nu<1}. The BEOI-type one-adjusted distribution is defined by
+#' \eqn{0<\nu<1}. The BEOI-type one-augmented distribution is defined by
 #' \deqn{P(Y=1)=\nu}
 #' and
 #' \deqn{f_Y(y)=(1-\nu)f_{Y_c}(y\mid\mu,\sigma),\quad 0<y<1.}
@@ -259,7 +259,7 @@ OANVASIM <- function(mu.link = "logit", sigma.link = "logit",
 
     structure(
         list(
-            family = c("OANVASIM", "One-adjusted N-VasicekM"),
+            family = c("OANVASIM", "One-augmented normal-kernel Vasicek-type mean"),
             parameters = list(mu = TRUE, sigma = TRUE, nu = TRUE),
             nopar = 3,
             # Point mass at one plus a continuous component; no random effects.
@@ -403,6 +403,5 @@ OANVASIM <- function(mu.link = "logit", sigma.link = "logit",
         class = c("gamlss.family", "family")
     )
 }
-
 
 

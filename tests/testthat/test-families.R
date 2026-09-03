@@ -173,7 +173,7 @@ test_that("LVASIQ fits an intercept-only GAMLSS model", {
 })
 
 
-test_that("boundary-adjusted families support likelihood-based covariance", {
+test_that("boundary-augmented families support likelihood-based covariance", {
     set.seed(20260809)
     control <- gamlss::gamlss.control(n.cyc = 75, trace = FALSE)
 

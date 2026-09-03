@@ -6,7 +6,7 @@
 \alias{pLVASIQ}
 \alias{qLVASIQ}
 \alias{rLVASIQ}
-\title{L-Vasicek distribution (logistic kernel) with quantile parameterization}
+\title{Logistic-kernel Vasicek-type distribution with quantile parameterization}
 \usage{
 dLVASIQ(x, mu, sigma, tau = 0.5, log = FALSE)
 
@@ -23,7 +23,7 @@ LVASIQ(mu.link = "logit", sigma.link = "logit")
 
 \item{mu}{Vector of \eqn{\tau}-quantiles, \eqn{0<\mu<1}.}
 
-\item{sigma}{Vector of dispersion values, \eqn{0<\sigma<1}.}
+\item{sigma}{Vector of shape parameter values, \eqn{0<\sigma<1}.}
 
 \item{tau}{Scalar in \eqn{(0,1)} fixing which quantile \eqn{\mu} represents.
 In the \code{LVASIQ()} GAMLSS family, it is not a function argument and
@@ -51,13 +51,13 @@ scale, as appropriate.}
 deviates. \code{LVASIQ()} returns a \code{gamlss.family} object.
 }
 \description{
-The function \code{LVASIQ()} defines the logistic-kernel Vasicek
+The function \code{LVASIQ()} defines the logistic-kernel Vasicek-type
 distribution as a \code{gamlss.family} object for conditional quantile
 regression. The functions \code{dLVASIQ}, \code{pLVASIQ},
 \code{qLVASIQ}, and \code{rLVASIQ} give the density, distribution
 function, quantile function, and random generation. The parameter
 \eqn{\mu} is the conditional \eqn{\tau}-th quantile
-(\eqn{0<\mu<1}), \eqn{\sigma} is a dispersion parameter
+(\eqn{0<\mu<1}), \eqn{\sigma} is a shape parameter
 (\eqn{0<\sigma<1}), and \eqn{\tau\in(0,1)} is fixed by the user.
 For GAMLSS fitting, \code{tau} must be defined as a scalar variable in
 the global environment before \code{LVASIQ()} is evaluated.

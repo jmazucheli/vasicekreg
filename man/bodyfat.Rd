@@ -3,16 +3,19 @@
 \docType{data}
 \name{bodyfat}
 \alias{bodyfat}
-\title{Percentage of Body Fat Dataset}
+\title{Body Fat Proportions Dataset}
 \format{
-A data frame with 298 observations and 9 variables:
+A data frame with 298 observations and 10 variables. The five
+body-fat responses are proportions in \eqn{(0,1)} (for example, 0.163
+represents 16.3 percent):
 
 \itemize{
-  \item \code{ARMS}: arms fat percentage.
-  \item \code{LEGS}: legs fat percentage.
-  \item \code{BODY}: body fat percentage.
-  \item \code{ANDROID}: android fat percentage.
-  \item \code{GYNECOID}: gynoid fat percentage.
+  \item \code{ID}: individual identifier.
+  \item \code{ARMS}: arms fat proportion.
+  \item \code{LEGS}: legs fat proportion.
+  \item \code{BODY}: body fat proportion.
+  \item \code{ANDROID}: android fat proportion.
+  \item \code{GYNECOID}: gynoid fat proportion.
   \item \code{AGE}: age of individuals.
   \item \code{BMI}: body mass index.
   \item \code{SEX}: 1 for female and 2 for male.
@@ -24,7 +27,7 @@ A data frame with 298 observations and 9 variables:
 bodyfat
 }
 \description{
-Percentage of body fat measurements from individuals
+Body fat proportions from individuals
 assisted in a public hospital in Curitiba, Paraná, Brazil.
 }
 \examples{

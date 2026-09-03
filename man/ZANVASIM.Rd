@@ -10,7 +10,7 @@
 \alias{pZANVASIM}
 \alias{qZANVASIM}
 \alias{rZANVASIM}
-\title{Zero-adjusted N-Vasicek distribution with mean parameterization}
+\title{Zero-augmented normal-kernel Vasicek-type distribution}
 \usage{
 d0NVASIM(x, mu = 0.5, sigma = 0.5, nu = 0.1, log = FALSE)
 
@@ -75,14 +75,14 @@ probabilities, quantiles, and random observations, respectively.
 convention.
 }
 \description{
-Defines a zero-adjusted normal-kernel Vasicek distribution for responses
+Defines a zero-augmented normal-kernel Vasicek-type distribution for responses
 in \eqn{[0,1)}. The parameter \eqn{\nu} is the probability of a structural
 zero. Conditional on a positive response, the distribution is
 \code{NVASIM} with mean \eqn{\mu} and shape parameter \eqn{\sigma}.
 }
 \details{
 Let \eqn{Y_+\sim\mathrm{NVASIM}(\mu,\sigma)} and let
-\eqn{0<\nu<1}. The zero-adjusted distribution is defined by
+\eqn{0<\nu<1}. The zero-augmented distribution is defined by
 \deqn{P(Y=0)=\nu}
 and
 \deqn{f_Y(y)=(1-\nu)f_{Y_+}(y\mid\mu,\sigma),\quad 0<y<1.}

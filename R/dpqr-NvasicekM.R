@@ -6,7 +6,7 @@
 #' @name NVASIM
 #' @aliases dNVASIM pNVASIM qNVASIM rNVASIM
 #'
-#' @title N-Vasicek distribution (normal kernel) with mean parameterization
+#' @title Normal-kernel Vasicek-type distribution with mean parameterization
 #'
 #' @description
 #' Defines the normal-kernel Vasicek distribution under a mean
@@ -90,14 +90,14 @@
 #' \deqn{F(x\mid \mu ,\sigma )=\Phi \left( \frac{\Phi ^{-1}\left( x\right) \sqrt{1-\sigma }-\Phi ^{-1}\left( \mu \right) }{\sqrt{\sigma }}\right)}
 #' 
 #' Quantile function
-#' \deqn{Q(\tau \mid \mu ,\sigma )=F^{-1}(\tau \mid \mu ,\sigma )=\Phi \left(\frac{\Phi ^{-1}\left(\mu\right) +\Phi ^{-1}\left( \tau \right) \sqrt{\sigma }}{\sqrt{1-\sigma }}\right) }
+#' \deqn{Q(p \mid \mu ,\sigma )=F^{-1}(p \mid \mu ,\sigma )=\Phi \left(\frac{\Phi ^{-1}\left(\mu\right) +\Phi ^{-1}\left( p \right) \sqrt{\sigma }}{\sqrt{1-\sigma }}\right) }
 #' 
 #' Expected value
 #' \deqn{E(X) = \mu} 
 #' 
 #' Variance
 #' \deqn{Var(X) = \Phi_2\left ( \Phi^{-1}(\mu),\Phi^{-1}(\mu),\sigma \right )-\mu^2}
-#' where \eqn{(x, \mu, \sigma, \tau) \in (0,1)} and \eqn{\Phi_2(\cdot)} is the probability distribution function for the standard bivariate normal distribution with correlation \eqn{\sigma}.
+#' where \eqn{(x, \mu, \sigma, p) \in (0,1)} and \eqn{\Phi_2(\cdot)} is the cumulative distribution function for the standard bivariate normal distribution with correlation \eqn{\sigma}.
 #'
 #' @examples
 #'
@@ -196,7 +196,7 @@ NVASIM <- function (mu.link = "logit", sigma.link = "logit")
 {
     mstats <- checklink("mu.link", "NVASIM", substitute(mu.link), c("logit", "probit", "cloglog", "cauchit", "log", "own"))
     dstats <- checklink("sigma.link", "NVASIM", substitute(sigma.link), c("logit", "probit", "cloglog", "cauchit", "log", "own"))
-    structure(list(family = c("NVASIM", "N-VasicekM"),
+    structure(list(family = c("NVASIM", "Normal-kernel Vasicek-type mean"),
                    parameters = list(mu = TRUE, sigma = TRUE), nopar = 2, type = "Continuous", mu.link = as.character(substitute(mu.link)),
                    sigma.link = as.character(substitute(sigma.link)), mu.linkfun = mstats$linkfun, sigma.linkfun = dstats$linkfun, mu.linkinv = mstats$linkinv,
                    sigma.linkinv = dstats$linkinv, mu.dr = mstats$mu.eta, sigma.dr = dstats$mu.eta,

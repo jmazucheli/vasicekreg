@@ -21,7 +21,13 @@ exact boundary values.
 | `OANVASIM` | Standard normal | `(0, 1]` | One-augmented mean | `mu = E(Y | Y < 1)` |
 | `ZOANVASIM` | Standard normal | `[0, 1]` | Zero-and-one-augmented | `mu = E(Y | 0 < Y < 1)` |
 
-For all seven families, `sigma` lies in `(0, 1)` and controls dispersion.
+The documentation uses *augmented* for boundary mixtures and *Vasicek-type*
+for the kernel-based constructions. The established exported names are kept
+for backward compatibility and retain the familiar GAMLSS abbreviations `ZA`
+and `OA`, historically read as zero- and one-adjusted.
+
+For all seven families, `sigma` is a shape parameter in `(0, 1)` that
+controls dispersion.
 For `ZANVASIM`, `nu = P(Y = 0)` and the marginal mean is
 `E(Y) = (1 - nu) * mu`.
 For `OANVASIM`, `nu = P(Y = 1)` and the marginal mean is
@@ -142,7 +148,7 @@ Here `mu` is the conditional mean of the positive component. The fitted
 marginal mean is `(1 - fitted(fit_zero, what = "nu")) *
 fitted(fit_zero, what = "mu")`.
 
-## GAMLSS one-adjusted and zero-and-one-adjusted regression
+## GAMLSS one-augmented and zero-and-one-augmented regression
 
 ```r
 dat_one <- data.frame(
@@ -181,11 +187,28 @@ probabilities while retaining logit links for both boundary parameters. Here
 `tau` is a model parameter and is unrelated to the global quantile level used
 by `NVASIQ()`, `LVASIQ()`, and `HSVASIQ()`.
 
+The included `aep` data provide a real example with both boundary values:
+
+```r
+data("aep", package = "vasicekreg")
+aep$inappropriate <- with(aep, noinap / los)
+
+fit_aep <- gamlss(
+  inappropriate ~ sex + ward + year + age + loglos,
+  sigma.formula = ~ loglos,
+  nu.formula = ~ loglos,
+  tau.formula = ~ loglos,
+  family = ZOANVASIM(),
+  data = aep,
+  control = gamlss.control(n.cyc = 200, trace = FALSE)
+)
+```
+
 ## GAMLSS quantile regression
 
-For `NVASIQ()`, `LVASIQ()`, and `HSVASIQ()`, the quantile level must be defined as a scalar
-variable named `tau` in the global environment. It is not passed as an
-argument to the GAMLSS family constructor.
+For `NVASIQ()`, `LVASIQ()`, and `HSVASIQ()`, the quantile level must be defined
+as a scalar variable named `tau` in the global environment. It is not passed
+as an argument to the GAMLSS family constructor.
 
 ### Normal kernel
 
@@ -288,7 +311,7 @@ residuals. In every bootstrap replication, a new response is generated under
 the fitted model, the same GAMLSS model is re-estimated, and the residuals are
 recalculated and ordered. This accounts for parameter-estimation variability.
 
-For adjusted families, the probability integral transform is randomized over
+For augmented families, the probability integral transform is randomized over
 the fitted CDF jump at zero and/or one. Quantile residuals are compared with
 the standard normal distribution, whereas Cox--Snell residuals are compared
 with the unit-mean exponential distribution. Cox--Snell residuals are
@@ -327,7 +350,7 @@ C++ routines through `Rcpp`. Random generation for `NVASIM` and `NVASIQ`
 uses inverse transformation with the corresponding compiled quantile
 functions, whereas `rLVASIQ()` and `rHSVASIQ()` call compiled
 random-generation routines directly.
-The boundary-adjusted functions reuse the compiled `NVASIM` functions and
+The boundary-augmented functions reuse the compiled `NVASIM` functions and
 add the required point masses in R.
 
 The GAMLSS family definitions and analytical log-likelihood derivatives are
@@ -344,7 +367,7 @@ Rscript -e 'testthat::test_local(path = ".", reporter = "summary")'
 
 cd ..
 R CMD build vasicekreg
-R CMD check vasicekreg_1.1.0.tar.gz
+R CMD check vasicekreg_1.2.0.tar.gz
 ```
 
 ## Citation
@@ -401,7 +424,7 @@ citation("vasicekreg")
   Statistical Software*, **23**(7), 1--46.
   [doi:10.18637/jss.v023.i07](https://doi.org/10.18637/jss.v023.i07)
 
-### Boundary-adjusted distributions
+### Boundary-augmented distributions
 
 - Ospina, R., and Ferrari, S. L. P. (2010). Inflated beta distributions.
   *Statistical Papers*, **51**(1), 111--126.
@@ -429,7 +452,7 @@ citation("vasicekreg")
 
 ### Computational implementation
 
-- Eddelbuettel, D., and FranÃ§ois, R. (2011). Rcpp: Seamless R and C++
+- Eddelbuettel, D., and François, R. (2011). Rcpp: Seamless R and C++
   integration. *Journal of Statistical Software*, **40**(8), 1--18.
   [doi:10.18637/jss.v040.i08](https://doi.org/10.18637/jss.v040.i08)
 

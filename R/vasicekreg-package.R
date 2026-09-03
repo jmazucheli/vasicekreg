@@ -25,7 +25,12 @@
 #'   \item \code{ZOANVASIM}: point masses at zero and one and a continuous
 #'   component on \eqn{(0,1)}.
 #' }
-#' The parameter \eqn{\sigma\in(0,1)} controls dispersion in the continuous
+#' The documentation uses \emph{augmented} for these boundary mixtures and
+#' \emph{Vasicek-type} for kernel-based constructions. The established family
+#' names are retained for backward compatibility and follow familiar GAMLSS
+#' abbreviations in which \code{ZA} and \code{OA} historically denote
+#' zero- and one-adjusted families.
+#' The shape parameter \eqn{\sigma\in(0,1)} controls dispersion in the continuous
 #' Vasicek component. The corresponding \code{d}, \code{p}, \code{q}, and
 #' \code{r} functions provide density or probability mass values, cumulative
 #' probabilities, quantiles, and random observations, respectively.
@@ -58,12 +63,12 @@
 #' interpreted as the mean.
 #'
 #' \code{\link[vasicekreg]{ZANVASIM}}:
-#' Zero-adjusted normal-kernel mean family. Here
+#' Zero-augmented normal-kernel mean family. Here
 #' \eqn{\nu=P(Y=0)}, \eqn{\mu=E(Y\mid Y>0)}, and the marginal mean is
 #' \eqn{E(Y)=(1-\nu)\mu}.
 #'
 #' \code{\link[vasicekreg]{OANVASIM}}:
-#' One-adjusted normal-kernel mean family. Here
+#' One-augmented normal-kernel mean family. Here
 #' \eqn{\nu=P(Y=1)}, \eqn{\mu=E(Y\mid Y<1)}, and the marginal mean is
 #' \eqn{E(Y)=\nu+(1-\nu)\mu}. The parameters \eqn{\mu} and \eqn{\nu}
 #' therefore have the same interpretations as their counterparts in the
@@ -72,7 +77,7 @@
 #' compared directly between these families.
 #'
 #' \code{\link[vasicekreg]{ZOANVASIM}}:
-#' Zero-and-one-adjusted normal-kernel mean family. Here
+#' Zero-and-one-augmented normal-kernel mean family. Here
 #' \eqn{\nu=P(Y=0)}, \eqn{\tau=P(Y=1\mid Y>0)}, and
 #' \eqn{\mu=E(Y\mid 0<Y<1)}. Consequently,
 #' \eqn{P(Y=1)=(1-\nu)\tau} and
@@ -82,7 +87,7 @@
 #' \code{qNVASIM}, \code{dNVASIQ}, \code{pNVASIQ}, \code{qNVASIQ},
 #' \code{dLVASIQ}, \code{pLVASIQ}, \code{qLVASIQ},
 #' \code{dHSVASIQ}, \code{pHSVASIQ}, and \code{qHSVASIQ} call compiled
-#' \proglang{C++} routines through \pkg{Rcpp}. The boundary-adjusted
+#' \proglang{C++} routines through \pkg{Rcpp}. The boundary-augmented
 #' distribution functions are implemented in \proglang{R} and reuse the
 #' compiled \code{NVASIM} functions for their continuous component.
 #' Parameter validation, the GAMLSS family definitions, and all
@@ -91,12 +96,11 @@
 #' objects are obtained by numerical quadrature because these moments have no
 #' closed-form expressions.
 #'
-#' For the distribution functions associated with \code{NVASIQ} and
+#' For the distribution functions associated with \code{NVASIQ},
 #' \code{LVASIQ}, and \code{HSVASIQ}, \code{tau} is supplied as an argument.
-#' For GAMLSS fitting, \code{NVASIQ()}, \code{LVASIQ()}, and
-#' \code{HSVASIQ()} require \code{tau} to be defined as a scalar variable in
-#' the global environment. The same value must be retained when residuals or
-#' other post-fit quantities are computed. This fixed
+#' For GAMLSS fitting, these family constructors require \code{tau} to be
+#' defined as a scalar variable in the global environment. The same value must
+#' be retained when residuals or other post-fit quantities are computed. This fixed
 #' quantile level is distinct from the parameter \code{tau} in
 #' \code{ZOANVASIM()}, which represents the conditional probability at one
 #' among nonzero observations.

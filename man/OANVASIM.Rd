@@ -10,7 +10,7 @@
 \alias{pOANVASIM}
 \alias{qOANVASIM}
 \alias{rOANVASIM}
-\title{One-adjusted N-Vasicek distribution with mean parameterization}
+\title{One-augmented normal-kernel Vasicek-type distribution}
 \usage{
 d1NVASIM(x, mu = 0.5, sigma = 0.5, nu = 0.1, log = FALSE)
 
@@ -75,14 +75,14 @@ probabilities, quantiles, and random observations, respectively.
 convention.
 }
 \description{
-Defines a one-adjusted normal-kernel Vasicek distribution for responses
+Defines a one-augmented normal-kernel Vasicek-type distribution for responses
 in \eqn{(0,1]}. The parameter \eqn{\nu} is the probability at one.
 Conditional on an observation in \eqn{(0,1)}, the distribution is
 \code{NVASIM} with mean \eqn{\mu} and shape parameter \eqn{\sigma}.
 }
 \details{
 Let \eqn{Y_c\sim\mathrm{NVASIM}(\mu,\sigma)} and let
-\eqn{0<\nu<1}. The BEOI-type one-adjusted distribution is defined by
+\eqn{0<\nu<1}. The BEOI-type one-augmented distribution is defined by
 \deqn{P(Y=1)=\nu}
 and
 \deqn{f_Y(y)=(1-\nu)f_{Y_c}(y\mid\mu,\sigma),\quad 0<y<1.}

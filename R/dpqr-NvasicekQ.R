@@ -6,10 +6,10 @@
 #' @name NVASIQ
 #' @aliases NVASIQ dNVASIQ pNVASIQ qNVASIQ rNVASIQ
 #'
-#' @title N-Vasicek distribution (normal kernel) with quantile parameterization
+#' @title Normal-kernel Vasicek-type distribution with quantile parameterization
 #'
 #' @description
-#' The function \code{NVASIQ()} defines the normal-kernel Vasicek
+#' The function \code{NVASIQ()} defines the normal-kernel Vasicek-type
 #' distribution as a \code{gamlss.family} object. In this parameterization,
 #' \eqn{\mu} corresponds to the fixed \eqn{\tau}-th quantile and
 #' \eqn{\sigma} is a shape parameter. For GAMLSS fitting, \code{tau} must
@@ -73,7 +73,7 @@
 #'
 #' @return
 #' \code{NVASIQ()} returns a \code{gamlss.family} object that can be used
-#' to fit a Vasicek distribution using the \code{\link[gamlss]{gamlss}}
+#' to fit a Vasicek-type distribution using the \code{\link[gamlss]{gamlss}}
 #' function.
 #'
 #' @note
@@ -223,7 +223,7 @@ NVASIQ <- function(mu.link = "logit", sigma.link = "logit") {
     dstats <- checklink("sigma.link", "NVASIQ", substitute(sigma.link),
                         c("logit", "probit", "cloglog", "cauchit", "log", "own"))
     structure(
-        list(family     = c("NVASIQ", "N-VasicekQ"),
+        list(family     = c("NVASIQ", "Normal-kernel Vasicek-type quantile"),
              parameters = list(mu = TRUE, sigma = TRUE),
              nopar      = 2,
              type       = "Continuous",
@@ -359,5 +359,3 @@ NVASIQ <- function(mu.link = "logit", sigma.link = "logit") {
         class = c("gamlss.family", "family")
     )
 }
-
-

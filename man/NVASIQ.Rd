@@ -6,7 +6,7 @@
 \alias{pNVASIQ}
 \alias{qNVASIQ}
 \alias{rNVASIQ}
-\title{N-Vasicek distribution (normal kernel) with quantile parameterization}
+\title{Normal-kernel Vasicek-type distribution with quantile parameterization}
 \usage{
 dNVASIQ(x, mu, sigma, tau = 0.5, log = FALSE)
 
@@ -46,11 +46,11 @@ is taken to be the number required.}
 }
 \value{
 \code{NVASIQ()} returns a \code{gamlss.family} object that can be used
-to fit a Vasicek distribution using the \code{\link[gamlss]{gamlss}}
+to fit a Vasicek-type distribution using the \code{\link[gamlss]{gamlss}}
 function.
 }
 \description{
-The function \code{NVASIQ()} defines the normal-kernel Vasicek
+The function \code{NVASIQ()} defines the normal-kernel Vasicek-type
 distribution as a \code{gamlss.family} object. In this parameterization,
 \eqn{\mu} corresponds to the fixed \eqn{\tau}-th quantile and
 \eqn{\sigma} is a shape parameter. For GAMLSS fitting, \code{tau} must

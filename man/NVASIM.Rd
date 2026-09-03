@@ -6,7 +6,7 @@
 \alias{pNVASIM}
 \alias{qNVASIM}
 \alias{rNVASIM}
-\title{N-Vasicek distribution (normal kernel) with mean parameterization}
+\title{Normal-kernel Vasicek-type distribution with mean parameterization}
 \usage{
 dNVASIM(x, mu, sigma, log = FALSE)
 
@@ -66,14 +66,14 @@ Cumulative distribution function
 \deqn{F(x\mid \mu ,\sigma )=\Phi \left( \frac{\Phi ^{-1}\left( x\right) \sqrt{1-\sigma }-\Phi ^{-1}\left( \mu \right) }{\sqrt{\sigma }}\right)}
 
 Quantile function
-\deqn{Q(\tau \mid \mu ,\sigma )=F^{-1}(\tau \mid \mu ,\sigma )=\Phi \left(\frac{\Phi ^{-1}\left(\mu\right) +\Phi ^{-1}\left( \tau \right) \sqrt{\sigma }}{\sqrt{1-\sigma }}\right) }
+\deqn{Q(p \mid \mu ,\sigma )=F^{-1}(p \mid \mu ,\sigma )=\Phi \left(\frac{\Phi ^{-1}\left(\mu\right) +\Phi ^{-1}\left( p \right) \sqrt{\sigma }}{\sqrt{1-\sigma }}\right) }
 
 Expected value
 \deqn{E(X) = \mu} 
 
 Variance
 \deqn{Var(X) = \Phi_2\left ( \Phi^{-1}(\mu),\Phi^{-1}(\mu),\sigma \right )-\mu^2}
-where \eqn{(x, \mu, \sigma, \tau) \in (0,1)} and \eqn{\Phi_2(\cdot)} is the probability distribution function for the standard bivariate normal distribution with correlation \eqn{\sigma}.
+where \eqn{(x, \mu, \sigma, p) \in (0,1)} and \eqn{\Phi_2(\cdot)} is the cumulative distribution function for the standard bivariate normal distribution with correlation \eqn{\sigma}.
 }
 \note{
 In the \code{NVASIM()} parameterization, \eqn{\mu} corresponds to the
