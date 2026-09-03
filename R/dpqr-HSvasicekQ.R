@@ -1,4 +1,4 @@
-#' Hyperbolic-secant-kernel Vasicek quantile distribution
+﻿#' Hyperbolic-secant-kernel Vasicek quantile distribution
 #'
 #' @description
 #' \code{HSVASIQ()} defines the hyperbolic-secant-kernel Vasicek distribution
@@ -75,6 +75,11 @@
 #' Dunn, P. K. and Smyth, G. K. (1996). Randomized quantile residuals.
 #' \emph{Journal of Computational and Graphical Statistics}, \bold{5}(3),
 #' 236--244.
+#'
+#' Fischer, M. J., Hui, A. and Hösle, S. (2017). wHS-type distributions
+#' with application to finance. \emph{Journal of Statistics and Management
+#' Systems}, \bold{20}(1), 67--89.
+#' \doi{10.1080/09720510.2016.1190575}
 #'
 #' Mazucheli, J., Alves, B., Korkmaz, M. C. and Leiva, V. (2022).
 #' Vasicek quantile and mean regression models for bounded data:

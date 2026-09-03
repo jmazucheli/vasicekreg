@@ -1,4 +1,4 @@
-# vasicekreg
+﻿# vasicekreg
 
 [![CRAN status](https://www.r-pkg.org/badges/version/vasicekreg)](https://CRAN.R-project.org/package=vasicekreg)
 
@@ -359,17 +359,28 @@ citation("vasicekreg")
 
 ### Vasicek distribution and regression
 
-- Vasicek, O. A. (1987). *Probability of Loss on Loan Portfolio*. KMV
-  Corporation.
+- Fischer, M. J., Hui, A. and Hösle, S. (2017). wHS-type distributions
+  with application to finance. *Journal of Statistics and Management
+  Systems*, **20**(1), 67--89.
+  [doi:10.1080/09720510.2016.1190575](https://doi.org/10.1080/09720510.2016.1190575)
 
-- Vasicek, O. A. (2002). The distribution of loan portfolio value.
-  *Risk*, **15**(12), 160--162.
+- Mazucheli, J. and Alves, B. (2026a). A hyperbolic-secant-kernel Vasicek-type quantile regression for rates and proportions. *Under review*.
+
+- Mazucheli, J. and Alves, B. (2026b). A logistic-kernel Vasicek-type quantile regression for rates and proportions. *Under review*.
+
+- Mazucheli, J. and Alves, B. (2026c). Augmented Vasicek mean regression models for rates and proportions. *Under review*.
 
 - Mazucheli, J., Alves, B., Korkmaz, M. Ç., and Leiva, V. (2022).
   Vasicek quantile and mean regression models for bounded data: New
   formulation, mathematical derivations, and numerical applications.
   *Mathematics*, **10**, 1389.
   [doi:10.3390/math10091389](https://doi.org/10.3390/math10091389)
+
+- Vasicek, O. A. (1987). *Probability of Loss on Loan Portfolio*. KMV
+  Corporation.
+
+- Vasicek, O. A. (2002). The distribution of loan portfolio value.
+  *Risk*, **15**(12), 160--162.
 
 - Witzany, J. (2013). A note on the Vasicek's model with the logistic
   distribution. *Ekonomický časopis (Journal of Economics)*, **61**(10),
@@ -414,14 +425,9 @@ citation("vasicekreg")
   approach. *Journal of Applied Statistics*, **38**(10), 2089--2097.
   [doi:10.1080/02664763.2010.545115](https://doi.org/10.1080/02664763.2010.545115)
 
-- Moral, R. A., Hinde, J., and Demétrio, C. G. B. (2017). Half-normal
-  plots and overdispersed models in R: The hnp package. *Journal of
-  Statistical Software*, **81**(10), 1--23.
-  [doi:10.18637/jss.v081.i10](https://doi.org/10.18637/jss.v081.i10)
-
 ### Computational implementation
 
-- Eddelbuettel, D., and François, R. (2011). Rcpp: Seamless R and C++
+- Eddelbuettel, D., and FranÃ§ois, R. (2011). Rcpp: Seamless R and C++
   integration. *Journal of Statistical Software*, **40**(8), 1--18.
   [doi:10.18637/jss.v040.i08](https://doi.org/10.18637/jss.v040.i08)
 
