@@ -359,6 +359,8 @@ citation("vasicekreg")
 
 ### Vasicek distribution and regression
 
+- Alves, B., Mazucheli, J., Leiva, V., and Bustillos, F. (2026). Vasicek mean regression: Estimation and diagnostics. *Under review*.
+
 - Fischer, M. J., Hui, A. and Hösle, S. (2017). wHS-type distributions
   with application to finance. *Journal of Statistics and Management
   Systems*, **20**(1), 67--89.
