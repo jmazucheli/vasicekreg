@@ -27,6 +27,7 @@ Description: Provides density, cumulative distribution, quantile, and
     <doi:10.1111/j.1467-9876.2005.00510.x>). Some functions are written in
     'C++' using 'Rcpp', developed by Eddelbuettel and Francois (2011,
     <doi:10.18637/jss.v040.i08>).
+URL: https://jmazucheli.github.io/vasicekreg/
 License: MIT + file LICENSE
 Encoding: UTF-8
 ByteCompile: yes
