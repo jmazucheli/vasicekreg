@@ -49,76 +49,74 @@ test_that("NVASIQ analytical derivatives agree with numerical derivatives", {
     y <- 0.37
     mu <- 0.69
     sigma <- 0.37
-    tau <- 0.81
-    loglik <- function(m, s) dNVASIQ(y, m, s, tau = tau, log = TRUE)
+    quantile <- 0.81
+    loglik <- function(m, s) {
+        dNVASIQ(y, m, s, quantile = quantile, log = TRUE)
+    }
+    family <- NVASIQ(quantile = quantile)
 
-    with_global_tau(tau, {
-        family <- NVASIQ()
-
-        expect_equal(
-            family$dldm(y, mu, sigma),
-            first_derivative(function(m) loglik(m, sigma), mu),
-            tolerance = 1e-5
-        )
-        expect_equal(
-            family$d2ldm2(y, mu, sigma),
-            second_derivative(function(m) loglik(m, sigma), mu),
-            tolerance = 1e-4
-        )
-        expect_equal(
-            family$dldd(y, mu, sigma),
-            first_derivative(function(s) loglik(mu, s), sigma),
-            tolerance = 1e-5
-        )
-        expect_equal(
-            family$d2ldd2(y, mu, sigma),
-            second_derivative(function(s) loglik(mu, s), sigma),
-            tolerance = 1e-4
-        )
-        expect_equal(
-            family$d2ldmdd(y, mu, sigma),
-            cross_derivative(loglik, mu, sigma),
-            tolerance = 1e-4
-        )
-    })
+    expect_equal(
+        family$dldm(y, mu, sigma),
+        first_derivative(function(m) loglik(m, sigma), mu),
+        tolerance = 1e-5
+    )
+    expect_equal(
+        family$d2ldm2(y, mu, sigma),
+        second_derivative(function(m) loglik(m, sigma), mu),
+        tolerance = 1e-4
+    )
+    expect_equal(
+        family$dldd(y, mu, sigma),
+        first_derivative(function(s) loglik(mu, s), sigma),
+        tolerance = 1e-5
+    )
+    expect_equal(
+        family$d2ldd2(y, mu, sigma),
+        second_derivative(function(s) loglik(mu, s), sigma),
+        tolerance = 1e-4
+    )
+    expect_equal(
+        family$d2ldmdd(y, mu, sigma),
+        cross_derivative(loglik, mu, sigma),
+        tolerance = 1e-4
+    )
 })
 
 test_that("LVASIQ analytical derivatives agree with numerical derivatives", {
     y <- 0.37
     mu <- 0.69
     sigma <- 0.37
-    tau <- 0.81
-    loglik <- function(m, s) dLVASIQ(y, m, s, tau = tau, log = TRUE)
+    quantile <- 0.81
+    loglik <- function(m, s) {
+        dLVASIQ(y, m, s, quantile = quantile, log = TRUE)
+    }
+    family <- LVASIQ(quantile = quantile)
 
-    with_global_tau(tau, {
-        family <- LVASIQ()
-
-        expect_equal(
-            family$dldm(y, mu, sigma),
-            first_derivative(function(m) loglik(m, sigma), mu),
-            tolerance = 1e-5
-        )
-        expect_equal(
-            family$d2ldm2(y, mu, sigma),
-            second_derivative(function(m) loglik(m, sigma), mu),
-            tolerance = 1e-4
-        )
-        expect_equal(
-            family$dldd(y, mu, sigma),
-            first_derivative(function(s) loglik(mu, s), sigma),
-            tolerance = 1e-5
-        )
-        expect_equal(
-            family$d2ldd2(y, mu, sigma),
-            second_derivative(function(s) loglik(mu, s), sigma),
-            tolerance = 1e-4
-        )
-        expect_equal(
-            family$d2ldmdd(y, mu, sigma),
-            cross_derivative(loglik, mu, sigma),
-            tolerance = 1e-4
-        )
-    })
+    expect_equal(
+        family$dldm(y, mu, sigma),
+        first_derivative(function(m) loglik(m, sigma), mu),
+        tolerance = 1e-5
+    )
+    expect_equal(
+        family$d2ldm2(y, mu, sigma),
+        second_derivative(function(m) loglik(m, sigma), mu),
+        tolerance = 1e-4
+    )
+    expect_equal(
+        family$dldd(y, mu, sigma),
+        first_derivative(function(s) loglik(mu, s), sigma),
+        tolerance = 1e-5
+    )
+    expect_equal(
+        family$d2ldd2(y, mu, sigma),
+        second_derivative(function(s) loglik(mu, s), sigma),
+        tolerance = 1e-4
+    )
+    expect_equal(
+        family$d2ldmdd(y, mu, sigma),
+        cross_derivative(loglik, mu, sigma),
+        tolerance = 1e-4
+    )
 })
 
 test_that("ZANVASIM analytical derivatives agree with its log-likelihood", {

@@ -46,9 +46,9 @@
 #' The conditional mean and variance do not have elementary closed forms and
 #' are evaluated by numerical integration of the quantile function.
 #'
-#' For GAMLSS fitting, \code{tau} must be defined as a scalar variable in the
-#' global environment before \code{HSVASIQ()} is evaluated. It must retain the
-#' same value when residuals or other post-fit quantities are computed.
+#' The fixed level is supplied through the \code{quantile} argument. It is
+#' stored in the family definition and embedded as a numeric literal in the
+#' family components used by GAMLSS; no global variable is required.
 #'
 #' @param x Vector of quantiles in \eqn{(0,1)}.
 #' @param q Vector of values in \eqn{[0,1]} at which the cumulative
@@ -58,8 +58,8 @@
 #' @param mu Vector of conditional \eqn{\tau}-th quantiles,
 #'   \eqn{0<\mu<1}.
 #' @param sigma Vector of shape parameter values, \eqn{0<\sigma<1}.
-#' @param tau Scalar in \eqn{(0,1)} fixing the quantile represented by
-#'   \eqn{\mu}. For \code{HSVASIQ()}, it must be defined globally.
+#' @param quantile Fixed quantile level \eqn{\tau\in(0,1)} represented by
+#'   \eqn{\mu}, used in the distribution functions and in \code{HSVASIQ()}.
 #' @param mu.link Link function for \eqn{\mu}.
 #' @param sigma.link Link function for \eqn{\sigma}.
 #' @param lower.tail Logical; if \code{TRUE}, probabilities are
@@ -93,101 +93,71 @@
 #'
 #' @examples
 #' set.seed(123)
-#' y <- rHSVASIQ(500, mu = 0.60, sigma = 0.30, tau = 0.25)
+#' y <- rHSVASIQ(500, mu = 0.60, sigma = 0.30, quantile = 0.25)
 #'
-#' tau <- 0.25
 #' fit <- gamlss::gamlss(
 #'     y ~ 1,
 #'     sigma.formula = ~ 1,
-#'     family = HSVASIQ(),
+#'     family = HSVASIQ(quantile = 0.25),
 #'     control = gamlss::gamlss.control(trace = FALSE)
 #' )
 #' fitted(fit, what = "mu")[1]
-#' rm(tau)
 #'
 #' @name HSVASIQ
 #' @aliases HSVASIQ dHSVASIQ pHSVASIQ qHSVASIQ rHSVASIQ
 #' @importFrom gamlss gamlss
 #' @importFrom gamlss.dist checklink
 #' @export
-dHSVASIQ <- function(x, mu, sigma, tau = 0.5, log = FALSE) {
+dHSVASIQ <- function(x, mu, sigma, quantile = 0.5, log = FALSE) {
     .check_unit_interval(x, "x")
     .check_unit_interval(mu, "mu")
     .check_unit_interval(sigma, "sigma")
-    .check_unit_interval(tau, "tau")
-    if (length(tau) != 1L) {
-        stop("'tau' must be a single number in (0, 1).", call. = FALSE)
-    }
+    quantile <- .check_fixed_quantile(quantile)
     .check_scalar_logical(log, "log")
-    cpp_dHSVASIQ(x, mu, sigma, tau, log)
+    cpp_dHSVASIQ(x, mu, sigma, quantile, log)
 }
 
 #' @rdname HSVASIQ
 #' @export
-pHSVASIQ <- function(q, mu, sigma, tau = 0.5,
+pHSVASIQ <- function(q, mu, sigma, quantile = 0.5,
                      lower.tail = TRUE, log.p = FALSE) {
     .check_unit_interval(q, "q", closed = TRUE)
     .check_unit_interval(mu, "mu")
     .check_unit_interval(sigma, "sigma")
-    .check_unit_interval(tau, "tau")
-    if (length(tau) != 1L) {
-        stop("'tau' must be a single number in (0, 1).", call. = FALSE)
-    }
+    quantile <- .check_fixed_quantile(quantile)
     .check_scalar_logical(lower.tail, "lower.tail")
     .check_scalar_logical(log.p, "log.p")
-    cpp_pHSVASIQ(q, mu, sigma, tau, lower.tail, log.p)
+    cpp_pHSVASIQ(q, mu, sigma, quantile, lower.tail, log.p)
 }
 
 #' @rdname HSVASIQ
 #' @export
-qHSVASIQ <- function(p, mu, sigma, tau = 0.5,
+qHSVASIQ <- function(p, mu, sigma, quantile = 0.5,
                      lower.tail = TRUE, log.p = FALSE) {
     .check_probability(p, log.p)
     .check_unit_interval(mu, "mu")
     .check_unit_interval(sigma, "sigma")
-    .check_unit_interval(tau, "tau")
-    if (length(tau) != 1L) {
-        stop("'tau' must be a single number in (0, 1).", call. = FALSE)
-    }
+    quantile <- .check_fixed_quantile(quantile)
     .check_scalar_logical(lower.tail, "lower.tail")
     .check_scalar_logical(log.p, "log.p")
-    cpp_qHSVASIQ(p, mu, sigma, tau, lower.tail, log.p)
+    cpp_qHSVASIQ(p, mu, sigma, quantile, lower.tail, log.p)
 }
 
 #' @rdname HSVASIQ
 #' @export
-rHSVASIQ <- function(n, mu, sigma, tau = 0.5) {
+rHSVASIQ <- function(n, mu, sigma, quantile = 0.5) {
     n <- .n_random(n)
     .check_unit_interval(mu, "mu")
     .check_unit_interval(sigma, "sigma")
-    .check_unit_interval(tau, "tau")
-    if (length(tau) != 1L) {
-        stop("'tau' must be a single number in (0, 1).", call. = FALSE)
-    }
-    cpp_rHSVASIQ(n, mu, sigma, tau)
+    quantile <- .check_fixed_quantile(quantile)
+    cpp_rHSVASIQ(n, mu, sigma, quantile)
 }
 
 #' @rdname HSVASIQ
 #' @export
-HSVASIQ <- function(mu.link = "logit", sigma.link = "logit") {
-    if (!exists("tau", envir = .GlobalEnv, inherits = FALSE)) {
-        stop(
-            "For HSVASIQ(), define a global scalar 'tau' in (0, 1).",
-            call. = FALSE
-        )
-    }
-    tau <- get("tau", envir = .GlobalEnv, inherits = FALSE)
-    if (!is.numeric(tau) || length(tau) != 1L ||
-        is.na(tau) || !is.finite(tau) || tau <= 0 || tau >= 1) {
-        stop(
-            paste(
-                "For HSVASIQ(), global 'tau' must be a single number",
-                "that is finite and strictly between 0 and 1."
-            ),
-            call. = FALSE
-        )
-    }
-    tau <- as.numeric(tau)
+HSVASIQ <- function(quantile = 0.50, mu.link = "logit",
+                    sigma.link = "logit") {
+    quantile <- .check_fixed_quantile(quantile, "HSVASIQ")
 
     mstats <- checklink(
         "mu.link", "HSVASIQ", substitute(mu.link),
@@ -204,6 +174,7 @@ HSVASIQ <- function(mu.link = "logit", sigma.link = "logit") {
             parameters = list(mu = TRUE, sigma = TRUE),
             nopar = 2,
             type = "Continuous",
+            quantile = quantile,
             mu.link = as.character(substitute(mu.link)),
             sigma.link = as.character(substitute(sigma.link)),
             mu.linkfun = mstats$linkfun,
@@ -212,49 +183,49 @@ HSVASIQ <- function(mu.link = "logit", sigma.link = "logit") {
             sigma.linkinv = dstats$linkinv,
             mu.dr = mstats$mu.eta,
             sigma.dr = dstats$mu.eta,
-            dldm = function(y, mu, sigma) {
+            dldm = eval(substitute(function(y, mu, sigma) {
                 a <- sqrt((1 - sigma) / sigma)
                 g <- pi / sin(pi * mu)
                 d <- log(tan(pi * y / 2)) - log(tan(pi * mu / 2))
-                z <- a * d + log(tan(pi * tau / 2))
+                z <- a * d + log(tan(pi * QUANTILE / 2))
                 a * g * tanh(z)
-            },
-            d2ldm2 = function(y, mu, sigma) {
+            }, list(QUANTILE = quantile))),
+            d2ldm2 = eval(substitute(function(y, mu, sigma) {
                 a <- sqrt((1 - sigma) / sigma)
                 g <- pi / sin(pi * mu)
                 d <- log(tan(pi * y / 2)) - log(tan(pi * mu / 2))
-                z <- a * d + log(tan(pi * tau / 2))
+                z <- a * d + log(tan(pi * QUANTILE / 2))
                 hyperbolic_tangent <- tanh(z)
                 squared_sech <- 1 / cosh(z)^2
                 g^2 * (
                     -a * cos(pi * mu) * hyperbolic_tangent -
                         a^2 * squared_sech
                 )
-            },
-            dldd = function(y, mu, sigma) {
+            }, list(QUANTILE = quantile))),
+            dldd = eval(substitute(function(y, mu, sigma) {
                 a <- sqrt((1 - sigma) / sigma)
                 b <- 1 / (2 * sigma * (1 - sigma))
                 d <- log(tan(pi * y / 2)) - log(tan(pi * mu / 2))
-                z <- a * d + log(tan(pi * tau / 2))
+                z <- a * d + log(tan(pi * QUANTILE / 2))
                 b * (a * d * tanh(z) - 1)
-            },
-            d2ldmdd = function(y, mu, sigma) {
+            }, list(QUANTILE = quantile))),
+            d2ldmdd = eval(substitute(function(y, mu, sigma) {
                 a <- sqrt((1 - sigma) / sigma)
                 b <- 1 / (2 * sigma * (1 - sigma))
                 g <- pi / sin(pi * mu)
                 d <- log(tan(pi * y / 2)) - log(tan(pi * mu / 2))
-                z <- a * d + log(tan(pi * tau / 2))
+                z <- a * d + log(tan(pi * QUANTILE / 2))
                 hyperbolic_tangent <- tanh(z)
                 squared_sech <- 1 / cosh(z)^2
                 -a * b * g * (
                     hyperbolic_tangent + a * d * squared_sech
                 )
-            },
-            d2ldd2 = function(y, mu, sigma) {
+            }, list(QUANTILE = quantile))),
+            d2ldd2 = eval(substitute(function(y, mu, sigma) {
                 a <- sqrt((1 - sigma) / sigma)
                 b <- 1 / (2 * sigma * (1 - sigma))
                 d <- log(tan(pi * y / 2)) - log(tan(pi * mu / 2))
-                z <- a * d + log(tan(pi * tau / 2))
+                z <- a * d + log(tan(pi * QUANTILE / 2))
                 hyperbolic_tangent <- tanh(z)
                 squared_sech <- 1 / cosh(z)^2
                 b^2 * (
@@ -262,29 +233,35 @@ HSVASIQ <- function(mu.link = "logit", sigma.link = "logit") {
                         (3 - 4 * sigma) * a * d * hyperbolic_tangent -
                         a^2 * d^2 * squared_sech
                 )
-            },
-            G.dev.incr = function(y, mu, sigma, w, ...) {
-                -2 * dHSVASIQ(y, mu, sigma, tau, log = TRUE)
-            },
-            rqres = expression(
+            }, list(QUANTILE = quantile))),
+            G.dev.incr = eval(substitute(
+                function(y, mu, sigma, w, ...) {
+                    -2 * dHSVASIQ(
+                        y, mu, sigma, quantile = QUANTILE, log = TRUE
+                    )
+                },
+                list(QUANTILE = quantile)
+            )),
+            rqres = as.expression(substitute(
                 rqres(
                     pfun = "pHSVASIQ", type = "Continuous", y = y,
-                    mu = mu, sigma = sigma, tau = tau
-                )
-            ),
-            mu.initial = expression({
+                    mu = mu, sigma = sigma, quantile = QUANTILE
+                ),
+                list(QUANTILE = quantile)
+            )),
+            mu.initial = as.expression(substitute({
                 mu0 <- as.numeric(
-                    stats::quantile(y, probs = tau, names = FALSE)
+                    stats::quantile(y, probs = QUANTILE, names = FALSE)
                 )
                 mu <- (y + mu0) / 2
-            }),
+            }, list(QUANTILE = quantile))),
             sigma.initial = expression({
                 sigma <- rep(0.5, length(y))
             }),
             mu.valid = function(mu) all(mu > 0 & mu < 1),
             sigma.valid = function(sigma) all(sigma > 0 & sigma < 1),
             y.valid = function(y) all(y > 0 & y < 1),
-            mean = function(mu, sigma) {
+            mean = eval(substitute(function(mu, sigma) {
                 n <- max(length(mu), length(sigma))
                 mu <- rep_len(mu, n)
                 sigma <- rep_len(sigma, n)
@@ -296,7 +273,7 @@ HSVASIQ <- function(mu.link = "logit", sigma.link = "logit") {
                             log(tan(pi * mu[i] / 2)) +
                             scale * (
                                 log(tan(pi * p / 2)) -
-                                log(tan(pi * tau / 2))
+                                log(tan(pi * QUANTILE / 2))
                             )
                         2 * atan(exp(linear_predictor)) / pi
                     }
@@ -305,8 +282,8 @@ HSVASIQ <- function(mu.link = "logit", sigma.link = "logit") {
                         subdivisions = 200L, rel.tol = 1e-8
                     )$value
                 }, numeric(1))
-            },
-            variance = function(mu, sigma) {
+            }, list(QUANTILE = quantile))),
+            variance = eval(substitute(function(mu, sigma) {
                 n <- max(length(mu), length(sigma))
                 mu <- rep_len(mu, n)
                 sigma <- rep_len(sigma, n)
@@ -318,7 +295,7 @@ HSVASIQ <- function(mu.link = "logit", sigma.link = "logit") {
                             log(tan(pi * mu[i] / 2)) +
                             scale * (
                                 log(tan(pi * p / 2)) -
-                                log(tan(pi * tau / 2))
+                                log(tan(pi * QUANTILE / 2))
                             )
                         2 * atan(exp(linear_predictor)) / pi
                     }
@@ -333,7 +310,7 @@ HSVASIQ <- function(mu.link = "logit", sigma.link = "logit") {
                     )$value
                     max(value, 0)
                 }, numeric(1))
-            }
+            }, list(QUANTILE = quantile)))
         ),
         class = c("gamlss.family", "family")
     )

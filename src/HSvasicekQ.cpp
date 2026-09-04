@@ -46,30 +46,30 @@ inline void check_len_(const int len, const int n, const char* name) {
 }
 
 inline double logpdf_hsvasique(const double x, const double mu,
-                               const double sigma, const double tau) {
+                               const double sigma, const double quantile) {
     if (!(x > 0.0 && x < 1.0)) return R_NegInf;
     if (!(mu > 0.0 && mu < 1.0)) return NA_REAL;
     if (!(sigma > 0.0 && sigma < 1.0)) return NA_REAL;
 
     const double a = std::sqrt((1.0 - sigma) / sigma);
     const double qx = qhs_(x);
-    const double z = a * (qx - qhs_(mu)) + qhs_(tau);
+    const double z = a * (qx - qhs_(mu)) + qhs_(quantile);
     return std::log(a) + logh_(z) - logh_(qx);
 }
 
 inline double logcdf_hsvasique(const double x, const double mu,
-                               const double sigma, const double tau,
+                               const double sigma, const double quantile,
                                const bool lower_tail) {
     if (x <= 0.0) return lower_tail ? R_NegInf : 0.0;
     if (x >= 1.0) return lower_tail ? 0.0 : R_NegInf;
 
     const double a = std::sqrt((1.0 - sigma) / sigma);
-    const double z = a * (qhs_(x) - qhs_(mu)) + qhs_(tau);
+    const double z = a * (qhs_(x) - qhs_(mu)) + qhs_(quantile);
     return logH_(z, lower_tail);
 }
 
 inline double quantile_hsvasique(const double p, const double mu,
-                                 const double sigma, const double tau,
+                                 const double sigma, const double quantile,
                                  const bool lower_tail,
                                  const bool log_p) {
     double probability;
@@ -91,7 +91,7 @@ inline double quantile_hsvasique(const double p, const double mu,
     if (probability >= 1.0) return 1.0;
 
     const double scale = std::sqrt(sigma / (1.0 - sigma));
-    const double value = qhs_(mu) + scale * (qhs_(probability) - qhs_(tau));
+    const double value = qhs_(mu) + scale * (qhs_(probability) - qhs_(quantile));
     return H_(value);
 }
 
@@ -101,19 +101,19 @@ inline double quantile_hsvasique(const double p, const double mu,
 NumericVector cpp_dHSVASIQ(const NumericVector x,
                            const NumericVector mu,
                            const NumericVector sigma,
-                           const double tau = 0.5,
+                           const double quantile = 0.5,
                            const bool logprob = false) {
     const int n = x.length();
     const int nm = mu.length();
     const int ns = sigma.length();
     check_len_(nm, n, "mu");
     check_len_(ns, n, "sigma");
-    if (!(tau > 0.0 && tau < 1.0)) Rcpp::stop("'tau' must be in (0, 1).");
+    if (!(quantile > 0.0 && quantile < 1.0)) Rcpp::stop("'quantile' must be in (0, 1).");
 
     NumericVector out(n);
     for (int i = 0; i < n; ++i) {
         const double value = logpdf_hsvasique(
-            x[i], mu[nm == 1 ? 0 : i], sigma[ns == 1 ? 0 : i], tau
+            x[i], mu[nm == 1 ? 0 : i], sigma[ns == 1 ? 0 : i], quantile
         );
         out[i] = logprob ? value : std::exp(value);
     }
@@ -124,7 +124,7 @@ NumericVector cpp_dHSVASIQ(const NumericVector x,
 NumericVector cpp_pHSVASIQ(const NumericVector q,
                            const NumericVector mu,
                            const NumericVector sigma,
-                           const double tau = 0.5,
+                           const double quantile = 0.5,
                            const bool lower_tail = true,
                            const bool log_p = false) {
     const int n = q.length();
@@ -132,12 +132,12 @@ NumericVector cpp_pHSVASIQ(const NumericVector q,
     const int ns = sigma.length();
     check_len_(nm, n, "mu");
     check_len_(ns, n, "sigma");
-    if (!(tau > 0.0 && tau < 1.0)) Rcpp::stop("'tau' must be in (0, 1).");
+    if (!(quantile > 0.0 && quantile < 1.0)) Rcpp::stop("'quantile' must be in (0, 1).");
 
     NumericVector out(n);
     for (int i = 0; i < n; ++i) {
         const double value = logcdf_hsvasique(
-            q[i], mu[nm == 1 ? 0 : i], sigma[ns == 1 ? 0 : i], tau,
+            q[i], mu[nm == 1 ? 0 : i], sigma[ns == 1 ? 0 : i], quantile,
             lower_tail
         );
         out[i] = log_p ? value : std::exp(value);
@@ -149,7 +149,7 @@ NumericVector cpp_pHSVASIQ(const NumericVector q,
 NumericVector cpp_qHSVASIQ(const NumericVector p,
                            const NumericVector mu,
                            const NumericVector sigma,
-                           const double tau = 0.5,
+                           const double quantile = 0.5,
                            const bool lower_tail = true,
                            const bool log_p = false) {
     const int n = p.length();
@@ -157,12 +157,12 @@ NumericVector cpp_qHSVASIQ(const NumericVector p,
     const int ns = sigma.length();
     check_len_(nm, n, "mu");
     check_len_(ns, n, "sigma");
-    if (!(tau > 0.0 && tau < 1.0)) Rcpp::stop("'tau' must be in (0, 1).");
+    if (!(quantile > 0.0 && quantile < 1.0)) Rcpp::stop("'quantile' must be in (0, 1).");
 
     NumericVector out(n);
     for (int i = 0; i < n; ++i) {
         out[i] = quantile_hsvasique(
-            p[i], mu[nm == 1 ? 0 : i], sigma[ns == 1 ? 0 : i], tau,
+            p[i], mu[nm == 1 ? 0 : i], sigma[ns == 1 ? 0 : i], quantile,
             lower_tail, log_p
         );
     }
@@ -173,18 +173,18 @@ NumericVector cpp_qHSVASIQ(const NumericVector p,
 NumericVector cpp_rHSVASIQ(const int n,
                            const NumericVector mu,
                            const NumericVector sigma,
-                           const double tau = 0.5) {
+                           const double quantile = 0.5) {
     const int nm = mu.length();
     const int ns = sigma.length();
     check_len_(nm, n, "mu");
     check_len_(ns, n, "sigma");
-    if (!(tau > 0.0 && tau < 1.0)) Rcpp::stop("'tau' must be in (0, 1).");
+    if (!(quantile > 0.0 && quantile < 1.0)) Rcpp::stop("'quantile' must be in (0, 1).");
 
     NumericVector out(n);
     for (int i = 0; i < n; ++i) {
         out[i] = quantile_hsvasique(
             R::runif(0.0, 1.0), mu[nm == 1 ? 0 : i],
-            sigma[ns == 1 ? 0 : i], tau, true, false
+            sigma[ns == 1 ? 0 : i], quantile, true, false
         );
     }
     return out;

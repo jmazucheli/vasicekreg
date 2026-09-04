@@ -32,23 +32,36 @@ test_that("NVASIQ distribution functions preserve the selected quantile", {
     p <- c(1e-8, 0.10, 0.50, 0.90, 1 - 1e-8)
     mu <- 0.63
     sigma <- 0.27
-    tau <- 0.20
+    quantile <- 0.20
 
-    expect_equal(qNVASIQ(tau, mu, sigma, tau), mu, tolerance = 1e-12)
     expect_equal(
-        pNVASIQ(qNVASIQ(p, mu, sigma, tau), mu, sigma, tau),
+        qNVASIQ(quantile, mu, sigma, quantile = quantile),
+        mu,
+        tolerance = 1e-12
+    )
+    expect_equal(
+        pNVASIQ(
+            qNVASIQ(p, mu, sigma, quantile = quantile),
+            mu, sigma, quantile = quantile
+        ),
         p,
         tolerance = 1e-10
     )
     expect_equal(
-        qNVASIQ(log(p), mu, sigma, tau, log.p = TRUE),
-        qNVASIQ(p, mu, sigma, tau),
+        qNVASIQ(log(p), mu, sigma, quantile = quantile, log.p = TRUE),
+        qNVASIQ(p, mu, sigma, quantile = quantile),
         tolerance = 1e-12
     )
-    expect_equal(pNVASIQ(c(0, 1), mu, sigma, tau), c(0, 1))
-    expect_equal(qNVASIQ(c(0, 1), mu, sigma, tau), c(0, 1))
     expect_equal(
-        integrate(function(x) dNVASIQ(x, mu, sigma, tau), 0, 1)$value,
+        pNVASIQ(c(0, 1), mu, sigma, quantile = quantile), c(0, 1)
+    )
+    expect_equal(
+        qNVASIQ(c(0, 1), mu, sigma, quantile = quantile), c(0, 1)
+    )
+    expect_equal(
+        integrate(
+            function(x) dNVASIQ(x, mu, sigma, quantile = quantile), 0, 1
+        )$value,
         1,
         tolerance = 1e-7
     )
@@ -58,23 +71,36 @@ test_that("logistic-kernel distribution functions are mutually consistent", {
     p <- c(1e-8, 0.10, 0.50, 0.90, 1 - 1e-8)
     mu <- 0.63
     sigma <- 0.27
-    tau <- 0.20
+    quantile <- 0.20
 
-    expect_equal(qLVASIQ(tau, mu, sigma, tau), mu, tolerance = 1e-12)
     expect_equal(
-        pLVASIQ(qLVASIQ(p, mu, sigma, tau), mu, sigma, tau),
+        qLVASIQ(quantile, mu, sigma, quantile = quantile),
+        mu,
+        tolerance = 1e-12
+    )
+    expect_equal(
+        pLVASIQ(
+            qLVASIQ(p, mu, sigma, quantile = quantile),
+            mu, sigma, quantile = quantile
+        ),
         p,
         tolerance = 1e-10
     )
     expect_equal(
-        qLVASIQ(log(p), mu, sigma, tau, log.p = TRUE),
-        qLVASIQ(p, mu, sigma, tau),
+        qLVASIQ(log(p), mu, sigma, quantile = quantile, log.p = TRUE),
+        qLVASIQ(p, mu, sigma, quantile = quantile),
         tolerance = 1e-12
     )
-    expect_equal(pLVASIQ(c(0, 1), mu, sigma, tau), c(0, 1))
-    expect_equal(qLVASIQ(c(0, 1), mu, sigma, tau), c(0, 1))
     expect_equal(
-        integrate(function(x) dLVASIQ(x, mu, sigma, tau), 0, 1)$value,
+        pLVASIQ(c(0, 1), mu, sigma, quantile = quantile), c(0, 1)
+    )
+    expect_equal(
+        qLVASIQ(c(0, 1), mu, sigma, quantile = quantile), c(0, 1)
+    )
+    expect_equal(
+        integrate(
+            function(x) dLVASIQ(x, mu, sigma, quantile = quantile), 0, 1
+        )$value,
         1,
         tolerance = 1e-6
     )

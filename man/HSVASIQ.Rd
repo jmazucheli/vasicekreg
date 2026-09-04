@@ -8,15 +8,15 @@
 \alias{rHSVASIQ}
 \title{Hyperbolic-secant-kernel Vasicek-type quantile distribution}
 \usage{
-dHSVASIQ(x, mu, sigma, tau = 0.5, log = FALSE)
+dHSVASIQ(x, mu, sigma, quantile = 0.5, log = FALSE)
 
-pHSVASIQ(q, mu, sigma, tau = 0.5, lower.tail = TRUE, log.p = FALSE)
+pHSVASIQ(q, mu, sigma, quantile = 0.5, lower.tail = TRUE, log.p = FALSE)
 
-qHSVASIQ(p, mu, sigma, tau = 0.5, lower.tail = TRUE, log.p = FALSE)
+qHSVASIQ(p, mu, sigma, quantile = 0.5, lower.tail = TRUE, log.p = FALSE)
 
-rHSVASIQ(n, mu, sigma, tau = 0.5)
+rHSVASIQ(n, mu, sigma, quantile = 0.5)
 
-HSVASIQ(mu.link = "logit", sigma.link = "logit")
+HSVASIQ(quantile = 0.5, mu.link = "logit", sigma.link = "logit")
 }
 \arguments{
 \item{x}{Vector of quantiles in \eqn{(0,1)}.}
@@ -26,8 +26,8 @@ HSVASIQ(mu.link = "logit", sigma.link = "logit")
 
 \item{sigma}{Vector of shape parameter values, \eqn{0<\sigma<1}.}
 
-\item{tau}{Scalar in \eqn{(0,1)} fixing the quantile represented by
-\eqn{\mu}. For \code{HSVASIQ()}, it must be defined globally.}
+\item{quantile}{Fixed quantile level \eqn{\tau\in(0,1)} represented by
+\eqn{\mu}, used in the distribution functions and in \code{HSVASIQ()}.}
 
 \item{log}{Logical; if \code{TRUE}, returns the log-density.}
 
@@ -99,23 +99,21 @@ and
 The conditional mean and variance do not have elementary closed forms and
 are evaluated by numerical integration of the quantile function.
 
-For GAMLSS fitting, \code{tau} must be defined as a scalar variable in the
-global environment before \code{HSVASIQ()} is evaluated. It must retain the
-same value when residuals or other post-fit quantities are computed.
+The fixed level is supplied through the \code{quantile} argument. It is
+stored in the family definition and embedded as a numeric literal in the
+family components used by GAMLSS; no global variable is required.
 }
 \examples{
 set.seed(123)
-y <- rHSVASIQ(500, mu = 0.60, sigma = 0.30, tau = 0.25)
+y <- rHSVASIQ(500, mu = 0.60, sigma = 0.30, quantile = 0.25)
 
-tau <- 0.25
 fit <- gamlss::gamlss(
     y ~ 1,
     sigma.formula = ~ 1,
-    family = HSVASIQ(),
+    family = HSVASIQ(quantile = 0.25),
     control = gamlss::gamlss.control(trace = FALSE)
 )
 fitted(fit, what = "mu")[1]
-rm(tau)
 
 }
 \references{

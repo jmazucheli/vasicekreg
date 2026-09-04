@@ -14,9 +14,9 @@ exact boundary values.
 | Family | Kernel | Response range | Parameterization | Interpretation of `mu` |
 |---|---|---|---|---|
 | `NVASIM` | Standard normal | `(0, 1)` | Mean | `mu = E(Y)` |
-| `NVASIQ` | Standard normal | `(0, 1)` | Quantile | `mu = Q_Y(tau)` |
-| `LVASIQ` | Logistic | `(0, 1)` | Quantile | `mu = Q_Y(tau)` |
-| `HSVASIQ` | Hyperbolic secant | `(0, 1)` | Quantile | `mu = Q_Y(tau)` |
+| `NVASIQ` | Standard normal | `(0, 1)` | Quantile | `mu = Q_Y(quantile)` |
+| `LVASIQ` | Logistic | `(0, 1)` | Quantile | `mu = Q_Y(quantile)` |
+| `HSVASIQ` | Hyperbolic secant | `(0, 1)` | Quantile | `mu = Q_Y(quantile)` |
 | `ZANVASIM` | Standard normal | `[0, 1)` | Zero-augmented mean | `mu = E(Y | Y > 0)` |
 | `OANVASIM` | Standard normal | `(0, 1]` | One-augmented mean | `mu = E(Y | Y < 1)` |
 | `ZOANVASIM` | Standard normal | `[0, 1]` | Zero-and-one-augmented | `mu = E(Y | 0 < Y < 1)` |
@@ -96,16 +96,17 @@ pNVASIM(q = 0.50, mu = 0.50, sigma = 0.25)
 qNVASIM(p = 0.50, mu = 0.50, sigma = 0.25)
 ```
 
-For the quantile parameterizations, `tau` is supplied directly to the
-distribution functions:
+For the quantile parameterizations, the fixed level is supplied through the
+`quantile` argument:
 
 ```r
-qNVASIQ(p = 0.25, mu = 0.60, sigma = 0.25, tau = 0.25)
-qLVASIQ(p = 0.25, mu = 0.60, sigma = 0.25, tau = 0.25)
-qHSVASIQ(p = 0.25, mu = 0.60, sigma = 0.25, tau = 0.25)
+qNVASIQ(p = 0.25, mu = 0.60, sigma = 0.25, quantile = 0.25)
+qLVASIQ(p = 0.25, mu = 0.60, sigma = 0.25, quantile = 0.25)
+qHSVASIQ(p = 0.25, mu = 0.60, sigma = 0.25, quantile = 0.25)
 ```
 
-All three calls return `mu = 0.60` because `mu` represents the `tau`-th quantile.
+All three calls return `mu = 0.60` because `mu` represents the quantile at
+the fixed level `quantile = 0.25`.
 
 ## GAMLSS mean regression
 
@@ -197,8 +198,8 @@ fit_boundary <- gamlss(
 For `ZOANVASIM`, `p0 = nu`, `p1 = (1 - nu) * tau`, and
 `pc = (1 - nu) * (1 - tau)`. This parameterization guarantees valid
 probabilities while retaining logit links for both boundary parameters. Here
-`tau` is a model parameter and is unrelated to the global quantile level used
-by `NVASIQ()`, `LVASIQ()`, and `HSVASIQ()`.
+Here `tau` is an estimated model parameter and is unrelated to the fixed
+`quantile` argument of `NVASIQ()`, `LVASIQ()`, and `HSVASIQ()`.
 
 The included `aep` data provide a real example with both boundary values:
 
@@ -219,9 +220,10 @@ fit_aep <- gamlss(
 
 ## GAMLSS quantile regression
 
-For `NVASIQ()`, `LVASIQ()`, and `HSVASIQ()`, the quantile level must be defined
-as a scalar variable named `tau` in the global environment. It is not passed
-as an argument to the GAMLSS family constructor.
+For `NVASIQ()`, `LVASIQ()`, and `HSVASIQ()`, the fixed quantile level is passed
+directly to the family constructor through `quantile`. Each fitted object is
+self-contained, so models at different levels can coexist without changing
+global variables.
 
 ### Normal kernel
 
@@ -230,14 +232,14 @@ library(gamlss)
 library(vasicekreg)
 
 set.seed(123)
-tau <- 0.50
+quantile_level <- 0.50
 
 dat_normal <- data.frame(
   y = rNVASIQ(
     n = 300,
     mu = 0.60,
     sigma = 0.25,
-    tau = tau
+    quantile = quantile_level
   )
 )
 
@@ -245,6 +247,7 @@ fit_normal <- gamlss(
   y ~ 1,
   data = dat_normal,
   family = NVASIQ(
+    quantile = quantile_level,
     mu.link = "logit",
     sigma.link = "logit"
   ),
@@ -258,14 +261,14 @@ fitted(fit_normal, what = "mu")[1]
 
 ```r
 set.seed(123)
-tau <- 0.25
+quantile_level <- 0.25
 
 dat_logistic <- data.frame(
   y = rLVASIQ(
     n = 300,
     mu = 0.60,
     sigma = 0.25,
-    tau = tau
+    quantile = quantile_level
   )
 )
 
@@ -273,6 +276,7 @@ fit_logistic <- gamlss(
   y ~ 1,
   data = dat_logistic,
   family = LVASIQ(
+    quantile = quantile_level,
     mu.link = "logit",
     sigma.link = "logit"
   ),
@@ -286,14 +290,14 @@ fitted(fit_logistic, what = "mu")[1]
 
 ```r
 set.seed(123)
-tau <- 0.25
+quantile_level <- 0.25
 
 dat_hs <- data.frame(
   y = rHSVASIQ(
     n = 300,
     mu = 0.60,
     sigma = 0.25,
-    tau = tau
+    quantile = quantile_level
   )
 )
 
@@ -302,6 +306,7 @@ fit_hs <- gamlss(
   sigma.formula = ~ 1,
   data = dat_hs,
   family = HSVASIQ(
+    quantile = quantile_level,
     mu.link = "logit",
     sigma.link = "logit"
   ),
@@ -311,10 +316,13 @@ fit_hs <- gamlss(
 fitted(fit_hs, what = "mu")[1]
 ```
 
-The global value of `tau` must remain equal to the quantile level associated
-with the fitted model when residuals or other post-fit quantities are
-computed. Reset `tau` before working with a model fitted at another quantile
-level.
+The fixed level is embedded in the family and residual definitions.
+`vasicek_envelope()` also inserts that stored value into every bootstrap refit,
+so it does not depend on a global variable or on a symbol used in the original
+family call. The generic `update()` method retains the usual R call semantics;
+when direct later use of `update()` is planned, use a literal level in the
+original call (for example, `NVASIQ(quantile = 0.25)`) or keep the referenced
+symbol available and unchanged.
 
 ## Simulated residual envelopes
 

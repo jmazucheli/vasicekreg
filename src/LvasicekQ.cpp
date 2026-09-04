@@ -6,7 +6,7 @@
 //        ATENCAO: alpha e' um parametro de LOCACAO, NAO a media. Sob o nucleo
 //        logistico E[Y] != alpha em geral (a identidade E[Y]=alpha so vale no
 //        nucleo NORMAL). Use a camada por quantil abaixo para regressao.
-//    (B) QUANTIL           (mu, theta; tau fixo): mu e' o tau-esimo quantil
+//    (B) QUANTIL           (mu, theta; quantile fixo): mu e' o quantile-esimo quantil
 //        condicional exato. E' a parametrizacao recomendada para regressao
 //        (analoga a NVASIQ do vasicekreg, porem com nucleo logistico).
 //
@@ -18,7 +18,7 @@
 //    QF:   Q(p) = Lambda( ( logit(alpha) + sqrt(theta)*logit(p) ) / sqrt(1-theta) )
 //
 //  Mapa de reparametrizacao (quantil -> locacao), fechado, sem raiz numerica:
-//    logit(alpha) = sqrt(1-theta)*logit(mu) - sqrt(theta)*logit(tau)
+//    logit(alpha) = sqrt(1-theta)*logit(mu) - sqrt(theta)*logit(quantile)
 // =============================================================================
 
 #include <Rcpp.h>
@@ -102,12 +102,12 @@ inline double invcdf_lvasicek(double p, double alpha, double theta,
 }
 
 // -----------------------------------------------------------------------------
-// Reparametrizacao quantil -> locacao:  alpha(mu, theta, tau)
+// Reparametrizacao quantil -> locacao:  alpha(mu, theta, quantile)
 // -----------------------------------------------------------------------------
-inline double alpha_from_mu(double mu, double theta, double tau) {
+inline double alpha_from_mu(double mu, double theta, double quantile) {
     const double s1t = std::sqrt(1.0 - theta);
     const double st  = std::sqrt(theta);
-    const double log_alpha = s1t * logit_(mu) - st * logit_(tau); // = logit(alpha)
+    const double log_alpha = s1t * logit_(mu) - st * logit_(quantile); // = logit(alpha)
     return Lambda_(log_alpha);
 }
 
@@ -203,25 +203,25 @@ NumericVector cpp_rlvasicek(const int n,
 }
 
 // =============================================================================
-//  EXPORTS — Parametrizacao por QUANTIL (mu, theta; tau fixo)
-//  mu = tau-esimo quantil condicional exato. Recomendada para regressao.
+//  EXPORTS — Parametrizacao por QUANTIL (mu, theta; quantile fixo)
+//  mu = quantil condicional exato de ordem quantile. Recomendada para regressao.
 // =============================================================================
 
 // [[Rcpp::export]]
 NumericVector cpp_dLVASIQ(const NumericVector x,
                           const NumericVector mu,
                           const NumericVector theta,
-                          const double tau = 0.5,
+                          const double quantile = 0.5,
                           const bool logprob = false) {
     const int n = x.length();
     const int nm = mu.length(), nt = theta.length();
     check_len(nm, n, "mu"); check_len(nt, n, "theta");
-    if (!(tau > 0.0 && tau < 1.0)) Rcpp::stop("tau deve estar em (0,1).");
+    if (!(quantile > 0.0 && quantile < 1.0)) Rcpp::stop("'quantile' must be in (0, 1).");
 
     NumericVector out(n);
     for (int i = 0; i < n; ++i) {
         double th = theta[nt == 1 ? 0 : i];
-        double a  = alpha_from_mu(mu[nm == 1 ? 0 : i], th, tau);
+        double a  = alpha_from_mu(mu[nm == 1 ? 0 : i], th, quantile);
         out[i] = logpdf_lvasicek(x[i], a, th);
     }
     if (logprob) return out;
@@ -232,18 +232,18 @@ NumericVector cpp_dLVASIQ(const NumericVector x,
 NumericVector cpp_pLVASIQ(const NumericVector x,
                           const NumericVector mu,
                           const NumericVector theta,
-                          const double tau = 0.5,
+                          const double quantile = 0.5,
                           const bool lowertail = true,
                           const bool logprob = false) {
     const int n = x.length();
     const int nm = mu.length(), nt = theta.length();
     check_len(nm, n, "mu"); check_len(nt, n, "theta");
-    if (!(tau > 0.0 && tau < 1.0)) Rcpp::stop("tau deve estar em (0,1).");
+    if (!(quantile > 0.0 && quantile < 1.0)) Rcpp::stop("'quantile' must be in (0, 1).");
 
     NumericVector out(n);
     for (int i = 0; i < n; ++i) {
         double th = theta[nt == 1 ? 0 : i];
-        double a  = alpha_from_mu(mu[nm == 1 ? 0 : i], th, tau);
+        double a  = alpha_from_mu(mu[nm == 1 ? 0 : i], th, quantile);
         double lp = logcdf_lvasicek(x[i], a, th, lowertail);
         out[i] = logprob ? lp : std::exp(lp);
     }
@@ -254,18 +254,18 @@ NumericVector cpp_pLVASIQ(const NumericVector x,
 NumericVector cpp_qLVASIQ(const NumericVector p,
                           const NumericVector mu,
                           const NumericVector theta,
-                          const double tau = 0.5,
+                          const double quantile = 0.5,
                           const bool lowertail = true,
                           const bool logprob = false) {
     const int n = p.length();
     const int nm = mu.length(), nt = theta.length();
     check_len(nm, n, "mu"); check_len(nt, n, "theta");
-    if (!(tau > 0.0 && tau < 1.0)) Rcpp::stop("tau deve estar em (0,1).");
+    if (!(quantile > 0.0 && quantile < 1.0)) Rcpp::stop("'quantile' must be in (0, 1).");
 
     NumericVector out(n);
     for (int i = 0; i < n; ++i) {
         double th = theta[nt == 1 ? 0 : i];
-        double a  = alpha_from_mu(mu[nm == 1 ? 0 : i], th, tau);
+        double a  = alpha_from_mu(mu[nm == 1 ? 0 : i], th, quantile);
         out[i] = invcdf_lvasicek(
             p[i], a, th, lowertail, logprob
         );
@@ -277,15 +277,15 @@ NumericVector cpp_qLVASIQ(const NumericVector p,
 NumericVector cpp_rLVASIQ(const int n,
                           const NumericVector mu,
                           const NumericVector theta,
-                          const double tau = 0.5) {
+                          const double quantile = 0.5) {
     const int nm = mu.length(), nt = theta.length();
     check_len(nm, n, "mu"); check_len(nt, n, "theta");
-    if (!(tau > 0.0 && tau < 1.0)) Rcpp::stop("tau deve estar em (0,1).");
+    if (!(quantile > 0.0 && quantile < 1.0)) Rcpp::stop("'quantile' must be in (0, 1).");
 
     NumericVector out(n);
     for (int i = 0; i < n; ++i) {
         double th = theta[nt == 1 ? 0 : i];
-        double a  = alpha_from_mu(mu[nm == 1 ? 0 : i], th, tau);
+        double a  = alpha_from_mu(mu[nm == 1 ? 0 : i], th, quantile);
         double u  = R::runif(0.0, 1.0);
         out[i] = invcdf_lvasicek(u, a, th);
     }

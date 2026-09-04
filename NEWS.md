@@ -1,5 +1,24 @@
 # vasicekreg 1.2.0 (2026-09-03)
 
+## Self-contained quantile families
+
+- Renamed the fixed quantile-level argument from `tau` to `quantile` in
+  `NVASIQ`, `LVASIQ`, and `HSVASIQ`, including their `d`, `p`, `q`, and `r`
+  functions and compiled interfaces.
+- Removed the dependency of the three quantile-family constructors on a
+  global `tau` object. The fixed level is now passed directly, for example as
+  `NVASIQ(quantile = 0.25)`, stored in the family definition, and embedded as
+  a numeric literal in the derivative, deviance, initial-value, residual, and
+  conditional-moment components of the family object.
+- Updated `vasicek_envelope()` to recover the fixed level from the fitted
+  model and use it in bootstrap simulation and refitting. Models fitted at
+  different quantile levels can therefore coexist safely in one session.
+- Added tests for independence from global variables, simultaneous fits at
+  different levels, serialization, automatic refitting, and fixed-level
+  envelope simulation.
+- Retained `tau` unchanged as the estimated conditional probability at one
+  among nonzero observations in `ZOANVASIM`.
+
 ## Interface and documentation review
 
 - Updated the package title and description to cover distribution functions,
@@ -29,7 +48,7 @@
 ## Hyperbolic-secant-kernel quantile regression
 
 - Added the `HSVASIQ()` GAMLSS family for conditional quantile regression
-  with a hyperbolic-secant kernel and fixed global quantile level `tau`.
+  with a hyperbolic-secant kernel and a user-specified fixed quantile level.
 - Added compiled `dHSVASIQ()`, `pHSVASIQ()`, `qHSVASIQ()`, and
   `rHSVASIQ()` functions, including stable log-probability and tail
   calculations.
@@ -39,7 +58,7 @@
   functions for the GAMLSS family.
 - Extended `vasicek_envelope()` to fitted `HSVASIQ` models.
 - Corrected parametric-envelope simulation for quantile families so the
-  global fixed quantile level `tau` is passed to their random generators.
+  fixed level stored in the fitted model is passed to their random generators.
 - Added documentation and tests for distribution identities, normalization,
   fixed-quantile preservation, vectorization, analytical derivatives,
   conditional moments, random generation, and GAMLSS fitting.

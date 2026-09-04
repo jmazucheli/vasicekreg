@@ -16,8 +16,7 @@
 #' \eqn{\mu} is the conditional \eqn{\tau}-th quantile
 #' (\eqn{0<\mu<1}), \eqn{\sigma} is a shape parameter
 #' (\eqn{0<\sigma<1}), and \eqn{\tau\in(0,1)} is fixed by the user.
-#' For GAMLSS fitting, \code{tau} must be defined as a scalar variable in
-#' the global environment before \code{LVASIQ()} is evaluated.
+#' The fixed level is supplied through the \code{quantile} argument.
 #'
 #' @details
 #' Let
@@ -112,9 +111,8 @@
 #' @param n Number of observations.
 #' @param mu Vector of \eqn{\tau}-quantiles, \eqn{0<\mu<1}.
 #' @param sigma Vector of shape parameter values, \eqn{0<\sigma<1}.
-#' @param tau Scalar in \eqn{(0,1)} fixing which quantile \eqn{\mu} represents.
-#' In the \code{LVASIQ()} GAMLSS family, it is not a function argument and
-#' must be defined globally.
+#' @param quantile Fixed quantile level \eqn{\tau\in(0,1)} represented by
+#'   \eqn{\mu}, used in the distribution functions and in \code{LVASIQ()}.
 #' @param mu.link Link function for the \eqn{\mu} parameter.
 #' @param sigma.link Link function for the \eqn{\sigma} parameter.
 #' @param lower.tail Logical; if \code{TRUE}, probabilities are \eqn{P(X\le x)}.
@@ -129,118 +127,90 @@
 #' deviates. \code{LVASIQ()} returns a \code{gamlss.family} object.
 #'
 #' @note
-#' The global variable \code{tau} must remain equal to the quantile level
-#' associated with a fitted model when residuals or other post-fit quantities
-#' are computed.
+#' The level supplied through \code{quantile} is stored in the family
+#' definition and embedded as a numeric literal in the family components
+#' used by GAMLSS; no global variable is required.
 #'
 #' @examples
 #' set.seed(123)
-#' x <- rLVASIQ(n = 1000, mu = 0.50, sigma = 0.25, tau = 0.5)
+#' x <- rLVASIQ(n = 1000, mu = 0.50, sigma = 0.25, quantile = 0.5)
 #' S <- seq(min(x), max(x), length.out = 1000)
 #'
 #' hist(x, prob = TRUE, main = "Logistic-kernel Vasicek-type")
-#' lines(S, dLVASIQ(x = S, mu = 0.50, sigma = 0.25, tau = 0.5), col = 2)
+#' lines(S, dLVASIQ(x = S, mu = 0.50, sigma = 0.25, quantile = 0.5), col = 2)
 #'
 #' plot(ecdf(x))
-#' lines(S, pLVASIQ(q = S, mu = 0.50, sigma = 0.25, tau = 0.5), col = 2)
+#' lines(S, pLVASIQ(q = S, mu = 0.50, sigma = 0.25, quantile = 0.5), col = 2)
 #'
 #' data <- data.frame(
-#'     y = rLVASIQ(n = 100, mu = 0.50, sigma = 0.25, tau = 0.50)
+#'   y = rLVASIQ(n = 100, mu = 0.50, sigma = 0.25, quantile = 0.50)
 #' )
-#' tau <- 0.50
 #' fit <- gamlss::gamlss(
 #'     y ~ 1,
 #'     data = data,
-#'     family = LVASIQ(mu.link = "logit", sigma.link = "logit")
+#'     family = LVASIQ(
+#'       quantile = 0.50, mu.link = "logit", sigma.link = "logit"
+#'     )
 #' )
 #' fitted(fit, what = "mu")[1:5]
-#' rm(tau)
 #'
 NULL
 
 ##################################################
 #' @rdname LVASIQ
 #' @export
-dLVASIQ <- function(x, mu, sigma, tau = 0.5, log = FALSE) {
+dLVASIQ <- function(x, mu, sigma, quantile = 0.5, log = FALSE) {
     .check_unit_interval(x, "x")
     .check_unit_interval(mu, "mu")
     .check_unit_interval(sigma, "sigma")
-    .check_unit_interval(tau, "tau")
-    if (length(tau) != 1L) {
-        stop("'tau' must be a single number in (0, 1).", call. = FALSE)
-    }
+    quantile <- .check_fixed_quantile(quantile)
     .check_scalar_logical(log, "log")
-    cpp_dLVASIQ(x, mu, sigma, tau, log)
+    cpp_dLVASIQ(x, mu, sigma, quantile, log)
 }
 
 ##################################################
 #' @rdname LVASIQ
 #' @export
-pLVASIQ <- function(q, mu, sigma, tau = 0.5, lower.tail = TRUE, log.p = FALSE) {
+pLVASIQ <- function(q, mu, sigma, quantile = 0.5, lower.tail = TRUE, log.p = FALSE) {
     .check_unit_interval(q, "q", closed = TRUE)
     .check_unit_interval(mu, "mu")
     .check_unit_interval(sigma, "sigma")
-    .check_unit_interval(tau, "tau")
-    if (length(tau) != 1L) {
-        stop("'tau' must be a single number in (0, 1).", call. = FALSE)
-    }
+    quantile <- .check_fixed_quantile(quantile)
     .check_scalar_logical(lower.tail, "lower.tail")
     .check_scalar_logical(log.p, "log.p")
-    cpp_pLVASIQ(q, mu, sigma, tau, lower.tail, log.p)
+    cpp_pLVASIQ(q, mu, sigma, quantile, lower.tail, log.p)
 }
 
 ##################################################
 #' @rdname LVASIQ
 #' @export
-qLVASIQ <- function(p, mu, sigma, tau = 0.5, lower.tail = TRUE, log.p = FALSE) {
+qLVASIQ <- function(p, mu, sigma, quantile = 0.5, lower.tail = TRUE, log.p = FALSE) {
     .check_probability(p, log.p)
     .check_unit_interval(mu, "mu")
     .check_unit_interval(sigma, "sigma")
-    .check_unit_interval(tau, "tau")
-    if (length(tau) != 1L) {
-        stop("'tau' must be a single number in (0, 1).", call. = FALSE)
-    }
+    quantile <- .check_fixed_quantile(quantile)
     .check_scalar_logical(lower.tail, "lower.tail")
     .check_scalar_logical(log.p, "log.p")
-    cpp_qLVASIQ(p, mu, sigma, tau, lower.tail, log.p)
+    cpp_qLVASIQ(p, mu, sigma, quantile, lower.tail, log.p)
 }
 
 ##################################################
 #' @rdname LVASIQ
 #' @export
-rLVASIQ <- function(n, mu, sigma, tau = 0.5) {
+rLVASIQ <- function(n, mu, sigma, quantile = 0.5) {
     n <- .n_random(n)
     .check_unit_interval(mu, "mu")
     .check_unit_interval(sigma, "sigma")
-    .check_unit_interval(tau, "tau")
-    if (length(tau) != 1L) {
-        stop("'tau' must be a single number in (0, 1).", call. = FALSE)
-    }
-    cpp_rLVASIQ(n, mu, sigma, tau)
+    quantile <- .check_fixed_quantile(quantile)
+    cpp_rLVASIQ(n, mu, sigma, quantile)
 }
 
 ##################################################
 #' @rdname LVASIQ
 #' @export
-LVASIQ <- function(mu.link = "logit", sigma.link = "logit") {
-    if (!exists("tau", envir = .GlobalEnv, inherits = FALSE)) {
-        stop(
-            "For LVASIQ(), define a global scalar 'tau' in (0, 1).",
-            call. = FALSE
-        )
-    }
-    tau <- get("tau", envir = .GlobalEnv, inherits = FALSE)
-    if (!is.numeric(tau) || length(tau) != 1L ||
-        is.na(tau) || !is.finite(tau) || tau <= 0 || tau >= 1) {
-        stop(
-            paste(
-                "For LVASIQ(), global 'tau' must be a single number",
-                "that is finite and strictly between 0 and 1."
-            ),
-            call. = FALSE
-        )
-    }
-    tau <- as.numeric(tau)
+LVASIQ <- function(quantile = 0.50, mu.link = "logit",
+                   sigma.link = "logit") {
+    quantile <- .check_fixed_quantile(quantile, "LVASIQ")
 
     mstats <- checklink(
         "mu.link", "LVASIQ", substitute(mu.link),
@@ -257,6 +227,7 @@ LVASIQ <- function(mu.link = "logit", sigma.link = "logit") {
             parameters = list(mu = TRUE, sigma = TRUE),
             nopar = 2,
             type = "Continuous",
+            quantile = quantile,
             mu.link = as.character(substitute(mu.link)),
             sigma.link = as.character(substitute(sigma.link)),
             mu.linkfun = mstats$linkfun,
@@ -265,20 +236,20 @@ LVASIQ <- function(mu.link = "logit", sigma.link = "logit") {
             sigma.linkinv = dstats$linkinv,
             mu.dr = mstats$mu.eta,
             sigma.dr = dstats$mu.eta,
-            dldm = function(y, mu, sigma) {
+            dldm = eval(substitute(function(y, mu, sigma) {
                 a <- sqrt((1 - sigma) / sigma)
                 g <- 1 / (mu * (1 - mu))
                 d <- stats::qlogis(y) - stats::qlogis(mu)
-                z <- a * d + stats::qlogis(tau)
+                z <- a * d + stats::qlogis(QUANTILE)
                 prob <- stats::plogis(z)
 
                 -a * g * (1 - 2 * prob)
-            },
-            d2ldm2 = function(y, mu, sigma) {
+            }, list(QUANTILE = quantile))),
+            d2ldm2 = eval(substitute(function(y, mu, sigma) {
                 a <- sqrt((1 - sigma) / sigma)
                 g <- 1 / (mu * (1 - mu))
                 d <- stats::qlogis(y) - stats::qlogis(mu)
-                z <- a * d + stats::qlogis(tau)
+                z <- a * d + stats::qlogis(QUANTILE)
                 prob <- stats::plogis(z)
                 kernel <- prob * (1 - prob)
 
@@ -286,34 +257,34 @@ LVASIQ <- function(mu.link = "logit", sigma.link = "logit") {
                     a * (1 - 2 * mu) * (1 - 2 * prob) -
                         2 * a^2 * kernel
                 )
-            },
-            dldd = function(y, mu, sigma) {
+            }, list(QUANTILE = quantile))),
+            dldd = eval(substitute(function(y, mu, sigma) {
                 a <- sqrt((1 - sigma) / sigma)
                 b <- 1 / (2 * sigma * (1 - sigma))
                 d <- stats::qlogis(y) - stats::qlogis(mu)
-                z <- a * d + stats::qlogis(tau)
+                z <- a * d + stats::qlogis(QUANTILE)
                 prob <- stats::plogis(z)
 
                 -b * (1 + a * d * (1 - 2 * prob))
-            },
-            d2ldmdd = function(y, mu, sigma) {
+            }, list(QUANTILE = quantile))),
+            d2ldmdd = eval(substitute(function(y, mu, sigma) {
                 a <- sqrt((1 - sigma) / sigma)
                 b <- 1 / (2 * sigma * (1 - sigma))
                 g <- 1 / (mu * (1 - mu))
                 d <- stats::qlogis(y) - stats::qlogis(mu)
-                z <- a * d + stats::qlogis(tau)
+                z <- a * d + stats::qlogis(QUANTILE)
                 prob <- stats::plogis(z)
                 kernel <- prob * (1 - prob)
 
                 a * b * g * (
                     (1 - 2 * prob) - 2 * a * d * kernel
                 )
-            },
-            d2ldd2 = function(y, mu, sigma) {
+            }, list(QUANTILE = quantile))),
+            d2ldd2 = eval(substitute(function(y, mu, sigma) {
                 a <- sqrt((1 - sigma) / sigma)
                 b <- 1 / (2 * sigma * (1 - sigma))
                 d <- stats::qlogis(y) - stats::qlogis(mu)
-                z <- a * d + stats::qlogis(tau)
+                z <- a * d + stats::qlogis(QUANTILE)
                 prob <- stats::plogis(z)
                 kernel <- prob * (1 - prob)
 
@@ -322,29 +293,35 @@ LVASIQ <- function(mu.link = "logit", sigma.link = "logit") {
                         a * d * (3 - 4 * sigma) * (1 - 2 * prob) -
                         2 * a^2 * d^2 * kernel
                 )
-            },
-            G.dev.incr = function(y, mu, sigma, w, ...) {
-                -2 * dLVASIQ(y, mu, sigma, tau, log = TRUE)
-            },
-            rqres = expression(
+            }, list(QUANTILE = quantile))),
+            G.dev.incr = eval(substitute(
+                function(y, mu, sigma, w, ...) {
+                    -2 * dLVASIQ(
+                        y, mu, sigma, quantile = QUANTILE, log = TRUE
+                    )
+                },
+                list(QUANTILE = quantile)
+            )),
+            rqres = as.expression(substitute(
                 rqres(
                     pfun = "pLVASIQ", type = "Continuous", y = y,
-                    mu = mu, sigma = sigma, tau = tau
-                )
-            ),
-            mu.initial = expression({
+                    mu = mu, sigma = sigma, quantile = QUANTILE
+                ),
+                list(QUANTILE = quantile)
+            )),
+            mu.initial = as.expression(substitute({
                 mu0 <- as.numeric(
-                    stats::quantile(y, probs = tau, names = FALSE)
+                    stats::quantile(y, probs = QUANTILE, names = FALSE)
                 )
                 mu <- (y + mu0) / 2
-            }),
+            }, list(QUANTILE = quantile))),
             sigma.initial = expression({
                 sigma <- rep(0.5, length(y))
             }),
             mu.valid = function(mu) all(mu > 0 & mu < 1),
             sigma.valid = function(sigma) all(sigma > 0 & sigma < 1),
             y.valid = function(y) all(y > 0 & y < 1),
-            mean = function(mu, sigma) {
+            mean = eval(substitute(function(mu, sigma) {
                 n <- max(length(mu), length(sigma))
                 mu <- rep_len(mu, n)
                 sigma <- rep_len(sigma, n)
@@ -355,7 +332,7 @@ LVASIQ <- function(mu.link = "logit", sigma.link = "logit") {
                         stats::plogis(
                             stats::qlogis(mu[i]) +
                                 scale * (
-                                    stats::qlogis(p) - stats::qlogis(tau)
+                                    stats::qlogis(p) - stats::qlogis(QUANTILE)
                                 )
                         )
                     }
@@ -367,8 +344,8 @@ LVASIQ <- function(mu.link = "logit", sigma.link = "logit") {
                         rel.tol = 1e-8
                     )$value
                 }, numeric(1))
-            },
-            variance = function(mu, sigma) {
+            }, list(QUANTILE = quantile))),
+            variance = eval(substitute(function(mu, sigma) {
                 n <- max(length(mu), length(sigma))
                 mu <- rep_len(mu, n)
                 sigma <- rep_len(sigma, n)
@@ -379,7 +356,7 @@ LVASIQ <- function(mu.link = "logit", sigma.link = "logit") {
                         stats::plogis(
                             stats::qlogis(mu[i]) +
                                 scale * (
-                                    stats::qlogis(p) - stats::qlogis(tau)
+                                    stats::qlogis(p) - stats::qlogis(QUANTILE)
                                 )
                         )
                     }
@@ -400,7 +377,7 @@ LVASIQ <- function(mu.link = "logit", sigma.link = "logit") {
 
                     max(variance, 0)
                 }, numeric(1))
-            }
+            }, list(QUANTILE = quantile)))
         ),
         class = c("gamlss.family", "family")
     )

@@ -73,6 +73,12 @@
 #' \code{nsim} successful samples are obtained or \code{max.attempts} is
 #' reached. The simulation uses fitted values for every distribution
 #' parameter, so covariate-dependent parameters are retained. Automatic
+#' simulation and refitting of \code{NVASIQ}, \code{LVASIQ}, and
+#' \code{HSVASIQ} recover the fixed level embedded in the fitted object; no
+#' global quantile-level variable is consulted. Consequently, fitted models
+#' at different quantile levels can be used in the same R session safely.
+#'
+#' Automatic
 #' refitting assumes that \code{data} contains exactly the observations used
 #' by the original fit; if rows were dropped for missing values or via
 #' \code{subset}, supply a matching \code{data} or a custom \code{refit}.
@@ -350,23 +356,90 @@ vasicek_envelope <- function(
     arguments$n <- length(arguments[[1L]])
     quantile_families <- c("NVASIQ", "LVASIQ", "HSVASIQ")
     if (family_name %in% quantile_families) {
-        if (!exists("tau", envir = .GlobalEnv, inherits = FALSE)) {
-            stop(
-                "A global scalar 'tau' is required to simulate from ",
-                family_name, "."
-            )
-        }
-        tau <- get("tau", envir = .GlobalEnv, inherits = FALSE)
-        if (!is.numeric(tau) || length(tau) != 1L ||
-            !is.finite(tau) || tau <= 0 || tau >= 1) {
-            stop("Global 'tau' must be a finite scalar in (0, 1).")
-        }
-        arguments$tau <- as.numeric(tau)
+        arguments$quantile <- .envelope_fixed_quantile(object)
     }
     arguments <- arguments[
-        c("n", parameters, if (family_name %in% quantile_families) "tau")
+        c(
+            "n", parameters,
+            if (family_name %in% quantile_families) "quantile"
+        )
     ]
     do.call(random_function, arguments)
+}
+
+.envelope_fixed_quantile <- function(object) {
+    rqres <- object$rqres
+    if (is.expression(rqres) && length(rqres) == 1L) {
+        rqres <- rqres[[1L]]
+    }
+    if (!is.call(rqres)) {
+        stop(
+            "The fixed quantile level cannot be recovered from the fitted model.",
+            call. = FALSE
+        )
+    }
+    quantile <- as.list(rqres)$quantile
+    if (is.null(quantile)) {
+        stop(
+            "The fixed quantile level is absent from the fitted model. ",
+            "Refit it with the current quantile-family implementation.",
+            call. = FALSE
+        )
+    }
+    .check_fixed_quantile(quantile)
+}
+
+.envelope_embed_quantile_call <- function(object) {
+    family_name <- as.character(object$family[1L])
+    quantile_families <- c("NVASIQ", "LVASIQ", "HSVASIQ")
+    if (!family_name %in% quantile_families) {
+        return(object)
+    }
+
+    quantile <- .envelope_fixed_quantile(object)
+    family_call <- object$call$family
+    if (is.symbol(family_call) && identical(as.character(family_call), family_name)) {
+        object$call$family <- as.call(list(
+            as.name(family_name), quantile = quantile
+        ))
+        return(object)
+    }
+    if (is.character(family_call) && length(family_call) == 1L &&
+        identical(family_call, family_name)) {
+        object$call$family <- as.call(list(
+            as.name(family_name), quantile = quantile
+        ))
+        return(object)
+    }
+    if (is.call(family_call)) {
+        family_function <- get(
+            family_name, envir = asNamespace("vasicekreg"), inherits = FALSE
+        )
+        matched_call <- tryCatch(
+            match.call(
+                definition = family_function,
+                call = family_call,
+                expand.dots = FALSE
+            ),
+            error = function(e) NULL
+        )
+        if (is.null(matched_call)) {
+            stop(
+                "The family call cannot be reconstructed automatically. ",
+                "Supply a custom 'refit' function.",
+                call. = FALSE
+            )
+        }
+        matched_call$quantile <- quantile
+        object$call$family <- matched_call
+        return(object)
+    }
+
+    stop(
+        "The family call cannot be reconstructed automatically. ",
+        "Supply a custom 'refit' function.",
+        call. = FALSE
+    )
 }
 
 .envelope_refit <- function(object, y, data) {
@@ -394,7 +467,26 @@ vasicek_envelope <- function(
     }
     bootstrap_data <- data
     bootstrap_data[[response_name]] <- y
-    suppressWarnings(stats::update(object, data = bootstrap_data, trace = FALSE))
+
+    # Store formulas and the fixed quantile directly in the copied call. This
+    # prevents update.gamlss() from depending on temporary symbols that may
+    # have existed only inside the function that created the original fit.
+    for (parameter in object$parameters) {
+        formula_name <- if (identical(parameter, "mu")) {
+            "formula"
+        } else {
+            paste0(parameter, ".formula")
+        }
+        object$call[[formula_name]] <- stats::formula(object, what = parameter)
+    }
+    object <- .envelope_embed_quantile_call(object)
+
+    suppressWarnings(stats::update(
+        object,
+        data = bootstrap_data,
+        control = object$control,
+        trace = FALSE
+    ))
 }
 
 #' @rdname vasicek_envelope

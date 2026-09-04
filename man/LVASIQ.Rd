@@ -8,15 +8,15 @@
 \alias{rLVASIQ}
 \title{Logistic-kernel Vasicek-type distribution with quantile parameterization}
 \usage{
-dLVASIQ(x, mu, sigma, tau = 0.5, log = FALSE)
+dLVASIQ(x, mu, sigma, quantile = 0.5, log = FALSE)
 
-pLVASIQ(q, mu, sigma, tau = 0.5, lower.tail = TRUE, log.p = FALSE)
+pLVASIQ(q, mu, sigma, quantile = 0.5, lower.tail = TRUE, log.p = FALSE)
 
-qLVASIQ(p, mu, sigma, tau = 0.5, lower.tail = TRUE, log.p = FALSE)
+qLVASIQ(p, mu, sigma, quantile = 0.5, lower.tail = TRUE, log.p = FALSE)
 
-rLVASIQ(n, mu, sigma, tau = 0.5)
+rLVASIQ(n, mu, sigma, quantile = 0.5)
 
-LVASIQ(mu.link = "logit", sigma.link = "logit")
+LVASIQ(quantile = 0.5, mu.link = "logit", sigma.link = "logit")
 }
 \arguments{
 \item{x}{Vector of quantiles in \eqn{(0,1)}.}
@@ -25,9 +25,8 @@ LVASIQ(mu.link = "logit", sigma.link = "logit")
 
 \item{sigma}{Vector of shape parameter values, \eqn{0<\sigma<1}.}
 
-\item{tau}{Scalar in \eqn{(0,1)} fixing which quantile \eqn{\mu} represents.
-In the \code{LVASIQ()} GAMLSS family, it is not a function argument and
-must be defined globally.}
+\item{quantile}{Fixed quantile level \eqn{\tau\in(0,1)} represented by
+\eqn{\mu}, used in the distribution functions and in \code{LVASIQ()}.}
 
 \item{log}{Logical; if \code{TRUE}, the log-density is returned.}
 
@@ -62,8 +61,7 @@ function, quantile function, and random generation. The parameter
 \eqn{\mu} is the conditional \eqn{\tau}-th quantile
 (\eqn{0<\mu<1}), \eqn{\sigma} is a shape parameter
 (\eqn{0<\sigma<1}), and \eqn{\tau\in(0,1)} is fixed by the user.
-For GAMLSS fitting, \code{tau} must be defined as a scalar variable in
-the global environment before \code{LVASIQ()} is evaluated.
+The fixed level is supplied through the \code{quantile} argument.
 }
 \details{
 Let
@@ -137,32 +135,32 @@ components of the family object use numerical quadrature because the
 corresponding moments do not have elementary closed forms.
 }
 \note{
-The global variable \code{tau} must remain equal to the quantile level
-associated with a fitted model when residuals or other post-fit quantities
-are computed.
+The level supplied through \code{quantile} is stored in the family
+definition and embedded as a numeric literal in the family components
+used by GAMLSS; no global variable is required.
 }
 \examples{
 set.seed(123)
-x <- rLVASIQ(n = 1000, mu = 0.50, sigma = 0.25, tau = 0.5)
+x <- rLVASIQ(n = 1000, mu = 0.50, sigma = 0.25, quantile = 0.5)
 S <- seq(min(x), max(x), length.out = 1000)
 
 hist(x, prob = TRUE, main = "Logistic-kernel Vasicek-type")
-lines(S, dLVASIQ(x = S, mu = 0.50, sigma = 0.25, tau = 0.5), col = 2)
+lines(S, dLVASIQ(x = S, mu = 0.50, sigma = 0.25, quantile = 0.5), col = 2)
 
 plot(ecdf(x))
-lines(S, pLVASIQ(q = S, mu = 0.50, sigma = 0.25, tau = 0.5), col = 2)
+lines(S, pLVASIQ(q = S, mu = 0.50, sigma = 0.25, quantile = 0.5), col = 2)
 
 data <- data.frame(
-    y = rLVASIQ(n = 100, mu = 0.50, sigma = 0.25, tau = 0.50)
+  y = rLVASIQ(n = 100, mu = 0.50, sigma = 0.25, quantile = 0.50)
 )
-tau <- 0.50
 fit <- gamlss::gamlss(
     y ~ 1,
     data = data,
-    family = LVASIQ(mu.link = "logit", sigma.link = "logit")
+    family = LVASIQ(
+      quantile = 0.50, mu.link = "logit", sigma.link = "logit"
+    )
 )
 fitted(fit, what = "mu")[1:5]
-rm(tau)
 
 }
 \references{

@@ -11,12 +11,12 @@ inline void check_len_quant(int len, int n, const char* name)
 
 // log-pdf Vasicek - quant parameterization
 
-inline double logpdf_NvasicekQ(double x, double mu, double theta, double tau)
+inline double logpdf_NvasicekQ(double x, double mu, double theta, double quantile)
 {
     double qnormmu = R::qnorm(mu, 0.0, 1.0, TRUE, FALSE);
-    double qnormtau = R::qnorm(tau, 0.0, 1.0, TRUE, FALSE);
+    double qnorm_quantile = R::qnorm(quantile, 0.0, 1.0, TRUE, FALSE);
     double qnormx = R::qnorm(x, 0.0, 1.0, TRUE, FALSE);
-    double qnormalpha = -sqrt(theta) * qnormtau +
+    double qnormalpha = -sqrt(theta) * qnorm_quantile +
         qnormmu * sqrt(0.1e1 - theta);
     double t2 = 0.1e1 - theta;
     double t3 = log(t2);
@@ -31,16 +31,16 @@ inline double logpdf_NvasicekQ(double x, double mu, double theta, double tau)
 NumericVector cpp_dNVASIQ(const NumericVector x,
                                const NumericVector mu,
                                const NumericVector theta,
-                               const NumericVector tau,
+                               const double quantile,
                                const bool logprob = false)
 {
     const int n = x.length(); 
     const int nmu = mu.length(); 
     const int ntheta = theta.length();
-    const int ntau = tau.length();
     check_len_quant(nmu, n, "mu");
     check_len_quant(ntheta, n, "sigma");
-    check_len_quant(ntau, n, "tau");
+    if (!(quantile > 0.0 && quantile < 1.0))
+        Rcpp::stop("'quantile' must be in (0, 1).");
     NumericVector out(n);
     
     for(int i = 0; i < n; i++)
@@ -48,7 +48,7 @@ NumericVector cpp_dNVASIQ(const NumericVector x,
             x[i],
             mu[nmu == 1 ? 0 : i],
             theta[ntheta == 1 ? 0 : i],
-            tau[ntau == 1 ? 0 : i]
+            quantile
         );
     
     if(logprob) return(out); else return(Rcpp::exp(out));
@@ -56,13 +56,13 @@ NumericVector cpp_dNVASIQ(const NumericVector x,
 
 // cdf Vasicek - quant parameterization
 
-inline double cdf_NvasicekQ(double x, double mu, double theta, double tau,
+inline double cdf_NvasicekQ(double x, double mu, double theta, double quantile,
                                bool lowertail, bool logprob)
 {
     double qnormmu = R::qnorm(mu, 0.0, 1.0, TRUE, FALSE);
-    double qnormtau = R::qnorm(tau, 0.0, 1.0, TRUE, FALSE);
+    double qnorm_quantile = R::qnorm(quantile, 0.0, 1.0, TRUE, FALSE);
     double qnormx = R::qnorm(x, 0.0, 1.0, TRUE, FALSE);
-    double qnormalpha = -sqrt(theta) * qnormtau +
+    double qnormalpha = -sqrt(theta) * qnorm_quantile +
         qnormmu * sqrt(0.1e1 - theta);
     return(R::pnorm(
         (sqrt(0.1e1 - theta) * qnormx - qnormalpha) / sqrt(theta),
@@ -74,17 +74,17 @@ inline double cdf_NvasicekQ(double x, double mu, double theta, double tau,
 NumericVector cpp_pNVASIQ(const NumericVector x,
                                const NumericVector mu,
                                const NumericVector theta,
-                               const NumericVector tau,
+                               const double quantile,
                                const bool lowertail = true,
                                const bool logprob = false)
 {
     const int n = x.length(); 
     const int nmu = mu.length(); 
     const int ntheta = theta.length();
-    const int ntau = tau.length();
     check_len_quant(nmu, n, "mu");
     check_len_quant(ntheta, n, "sigma");
-    check_len_quant(ntau, n, "tau");
+    if (!(quantile > 0.0 && quantile < 1.0))
+        Rcpp::stop("'quantile' must be in (0, 1).");
     NumericVector out(n);
     
     for(int i = 0; i < n; i++)
@@ -92,7 +92,7 @@ NumericVector cpp_pNVASIQ(const NumericVector x,
             x[i],
             mu[nmu == 1 ? 0 : i],
             theta[ntheta == 1 ? 0 : i],
-            tau[ntau == 1 ? 0 : i],
+            quantile,
             lowertail,
             logprob
         );
@@ -103,12 +103,12 @@ NumericVector cpp_pNVASIQ(const NumericVector x,
 // inv-cdf NvasicekQ
 
 inline double invcdf_NvasicekQ(double p, double mu, double theta,
-                                  double tau, bool lowertail, bool logprob)
+                                  double quantile, bool lowertail, bool logprob)
 {
     double qnormx = R::qnorm(p, 0.0, 1.0, lowertail, logprob);
     double qnormmu = R::qnorm(mu, 0.0, 1.0, TRUE, FALSE);
-    double qnormtau = R::qnorm(tau, 0.0, 1.0, TRUE, FALSE);
-    double qnormalpha = -sqrt(theta) * qnormtau +
+    double qnorm_quantile = R::qnorm(quantile, 0.0, 1.0, TRUE, FALSE);
+    double qnormalpha = -sqrt(theta) * qnorm_quantile +
         qnormmu * sqrt(0.1e1 - theta);
     return(R::pnorm((qnormalpha + sqrt(theta) * qnormx) / sqrt(0.1e1 - theta),0.0, 1.0, TRUE, FALSE)); 
 }
@@ -117,17 +117,17 @@ inline double invcdf_NvasicekQ(double p, double mu, double theta,
 NumericVector cpp_qNVASIQ(const NumericVector x,
                                 const NumericVector mu,
                                 const NumericVector theta,
-                                const NumericVector tau,
+                                const double quantile,
                                 const bool lowertail = true,
                                 const bool logprob = false)
 {
     const int n = x.length(); 
     const int nmu = mu.length(); 
     const int ntheta = theta.length();
-    const int ntau = tau.length();
     check_len_quant(nmu, n, "mu");
     check_len_quant(ntheta, n, "sigma");
-    check_len_quant(ntau, n, "tau");
+    if (!(quantile > 0.0 && quantile < 1.0))
+        Rcpp::stop("'quantile' must be in (0, 1).");
     NumericVector out(n);
     
     for(int i = 0; i < n; i++)
@@ -135,7 +135,7 @@ NumericVector cpp_qNVASIQ(const NumericVector x,
             x[i],
             mu[nmu == 1 ? 0 : i],
             theta[ntheta == 1 ? 0 : i],
-            tau[ntau == 1 ? 0 : i],
+            quantile,
             lowertail,
             logprob
         );

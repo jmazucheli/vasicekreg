@@ -16,7 +16,7 @@ test_that("quantile-family analytical derivatives agree on a parameter grid", {
         y = c(0.20, 0.70),
         mu = c(0.35, 0.65),
         sigma = c(0.25, 0.60),
-        tau = c(0.20, 0.75)
+        quantile = c(0.20, 0.75)
     )
     specifications <- list(
         NVASIQ = list(family = NVASIQ, density = dNVASIQ),
@@ -27,47 +27,46 @@ test_that("quantile-family analytical derivatives agree on a parameter grid", {
     for (specification in specifications) {
         for (row in seq_len(nrow(parameter_grid))) {
             values <- parameter_grid[row, ]
-            with_global_tau(values$tau, {
-                family <- specification$family()
-                loglik <- function(mu, sigma) {
-                    specification$density(
-                        values$y, mu, sigma, values$tau, log = TRUE
-                    )
-                }
-                expect_equal(
-                    family$dldm(values$y, values$mu, values$sigma),
-                    grid_first_derivative(
-                        function(mu) loglik(mu, values$sigma), values$mu
-                    ),
-                    tolerance = 2e-5
+            family <- specification$family(quantile = values$quantile)
+            loglik <- function(mu, sigma) {
+                specification$density(
+                    values$y, mu, sigma,
+                    quantile = values$quantile, log = TRUE
                 )
-                expect_equal(
-                    family$dldd(values$y, values$mu, values$sigma),
-                    grid_first_derivative(
-                        function(sigma) loglik(values$mu, sigma), values$sigma
-                    ),
-                    tolerance = 2e-5
-                )
-                expect_equal(
-                    family$d2ldm2(values$y, values$mu, values$sigma),
-                    grid_second_derivative(
-                        function(mu) loglik(mu, values$sigma), values$mu
-                    ),
-                    tolerance = 3e-4
-                )
-                expect_equal(
-                    family$d2ldd2(values$y, values$mu, values$sigma),
-                    grid_second_derivative(
-                        function(sigma) loglik(values$mu, sigma), values$sigma
-                    ),
-                    tolerance = 3e-4
-                )
-                expect_equal(
-                    family$d2ldmdd(values$y, values$mu, values$sigma),
-                    grid_cross_derivative(loglik, values$mu, values$sigma),
-                    tolerance = 3e-4
-                )
-            })
+            }
+            expect_equal(
+                family$dldm(values$y, values$mu, values$sigma),
+                grid_first_derivative(
+                    function(mu) loglik(mu, values$sigma), values$mu
+                ),
+                tolerance = 2e-5
+            )
+            expect_equal(
+                family$dldd(values$y, values$mu, values$sigma),
+                grid_first_derivative(
+                    function(sigma) loglik(values$mu, sigma), values$sigma
+                ),
+                tolerance = 2e-5
+            )
+            expect_equal(
+                family$d2ldm2(values$y, values$mu, values$sigma),
+                grid_second_derivative(
+                    function(mu) loglik(mu, values$sigma), values$mu
+                ),
+                tolerance = 3e-4
+            )
+            expect_equal(
+                family$d2ldd2(values$y, values$mu, values$sigma),
+                grid_second_derivative(
+                    function(sigma) loglik(values$mu, sigma), values$sigma
+                ),
+                tolerance = 3e-4
+            )
+            expect_equal(
+                family$d2ldmdd(values$y, values$mu, values$sigma),
+                grid_cross_derivative(loglik, values$mu, values$sigma),
+                tolerance = 3e-4
+            )
         }
     }
 })

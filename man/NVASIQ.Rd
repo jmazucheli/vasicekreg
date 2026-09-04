@@ -8,15 +8,15 @@
 \alias{rNVASIQ}
 \title{Normal-kernel Vasicek-type distribution with quantile parameterization}
 \usage{
-dNVASIQ(x, mu, sigma, tau = 0.5, log = FALSE)
+dNVASIQ(x, mu, sigma, quantile = 0.5, log = FALSE)
 
-pNVASIQ(q, mu, sigma, tau = 0.5, lower.tail = TRUE, log.p = FALSE)
+pNVASIQ(q, mu, sigma, quantile = 0.5, lower.tail = TRUE, log.p = FALSE)
 
-qNVASIQ(p, mu, sigma, tau = 0.5, lower.tail = TRUE, log.p = FALSE)
+qNVASIQ(p, mu, sigma, quantile = 0.5, lower.tail = TRUE, log.p = FALSE)
 
-rNVASIQ(n, mu, sigma, tau = 0.5)
+rNVASIQ(n, mu, sigma, quantile = 0.5)
 
-NVASIQ(mu.link = "logit", sigma.link = "logit")
+NVASIQ(quantile = 0.5, mu.link = "logit", sigma.link = "logit")
 }
 \arguments{
 \item{x}{Vector of quantiles in the interval \eqn{(0,1)}.}
@@ -25,9 +25,8 @@ NVASIQ(mu.link = "logit", sigma.link = "logit")
 
 \item{sigma}{Vector of shape parameter values.}
 
-\item{tau}{Quantile level \eqn{\tau} used in the \eqn{d}, \eqn{p},
-\eqn{q}, and \eqn{r} functions. In the \code{NVASIQ()} GAMLSS family,
-it is not a function argument and must be defined globally.}
+\item{quantile}{Fixed quantile level \eqn{\tau\in(0,1)} used in the
+distribution functions and in the \code{NVASIQ()} GAMLSS family.}
 
 \item{log, log.p}{Logical; if \code{TRUE}, probabilities are returned
 on the log scale.}
@@ -56,9 +55,8 @@ function.
 The function \code{NVASIQ()} defines the normal-kernel Vasicek-type
 distribution as a \code{gamlss.family} object. In this parameterization,
 \eqn{\mu} corresponds to the fixed \eqn{\tau}-th quantile and
-\eqn{\sigma} is a shape parameter. For GAMLSS fitting, \code{tau} must
-be defined as a scalar variable in the global environment before
-\code{NVASIQ()} is evaluated. The functions
+\eqn{\sigma} is a shape parameter. The fixed level is supplied through
+the \code{quantile} argument. The functions
 \code{dNVASIQ}, \code{pNVASIQ}, \code{qNVASIQ}, and \code{rNVASIQ} define
 the density, distribution function, quantile function, and random
 generation for the Vasicek distribution, respectively.
@@ -76,37 +74,41 @@ Cumulative distribution function:
 \Phi\left(\frac{\sqrt{1-\sigma}\left(\Phi^{-1}(x)-\Phi^{-1}(\mu)\right)
 - \sqrt{\sigma}\,\Phi^{-1}(\tau)}{\sqrt{\sigma}}\right).}
 
-where \eqn{0 < (x, \mu, \tau, \sigma) < 1}, \eqn{\mu} is the
-\eqn{\tau}-th quantile, and \eqn{\sigma} is the shape parameter.
+where \eqn{0<x<1}, \eqn{0<\mu<1}, \eqn{0<\sigma<1}, and
+\eqn{0<\tau<1}; \eqn{\mu} is the \eqn{\tau}-th quantile and
+\eqn{\sigma} is the shape parameter.
 }
 \note{
 For \code{NVASIQ()}, \eqn{\mu} corresponds to the \eqn{\tau}-th quantile
-and \eqn{\sigma} is a shape parameter. The global variable \code{tau}
-must remain set to the quantile level associated with a fitted model
-when residuals or other post-fit quantities are computed.
+and \eqn{\sigma} is a shape parameter. The level supplied through
+\code{quantile} is stored in the family definition and embedded as a
+numeric literal in the family components used by GAMLSS; no global
+variable is required.
 }
 \examples{
 set.seed(123)
-x <- rNVASIQ(n = 1000, mu = 0.50, sigma = 0.69, tau = 0.50)
+x <- rNVASIQ(n = 1000, mu = 0.50, sigma = 0.69, quantile = 0.50)
 R <- range(x)
 S <- seq(from = R[1], to = R[2], length.out = 1000)
 
 hist(x, prob = TRUE, main = "Vasicek")
-lines(S, dNVASIQ(x = S, mu = 0.50, sigma = 0.69, tau = 0.50), col = 2)
+lines(S, dNVASIQ(x = S, mu = 0.50, sigma = 0.69, quantile = 0.50), col = 2)
 
 plot(ecdf(x))
-lines(S, pNVASIQ(q = S, mu = 0.50, sigma = 0.69, tau = 0.50), col = 2)
+lines(S, pNVASIQ(q = S, mu = 0.50, sigma = 0.69, quantile = 0.50), col = 2)
 
 plot(quantile(x, probs = S), type = "l")
-lines(qNVASIQ(p = S, mu = 0.50, sigma = 0.69, tau = 0.50), col = 2)
+lines(qNVASIQ(p = S, mu = 0.50, sigma = 0.69, quantile = 0.50), col = 2)
 
 library(gamlss)
 set.seed(123)
-data <- data.frame(y = rNVASIQ(n = 100, mu = 0.50, sigma = 0.69, tau = 0.50))
+data <- data.frame(
+  y = rNVASIQ(n = 100, mu = 0.50, sigma = 0.69, quantile = 0.50)
+)
 
-tau <- 0.5
 fit <- gamlss(y ~ 1, data = data,
-              family = NVASIQ(mu.link = "logit",
+              family = NVASIQ(quantile = 0.50,
+                             mu.link = "logit",
                              sigma.link = "logit"))
 1 / (1 + exp(-fit$mu.coefficients))
 1 / (1 + exp(-fit$sigma.coefficients))
@@ -117,18 +119,18 @@ x <- rbinom(n, size = 1, prob = 0.5)
 eta <- 0.5 + 1 * x
 mu <- 1 / (1 + exp(-eta))
 sigma <- 0.5
-y <- rNVASIQ(n, mu, sigma, tau = 0.5)
+y <- rNVASIQ(n, mu, sigma, quantile = 0.5)
 data <- data.frame(y, x)
 
-tau <- 0.5
-fit <- gamlss(y ~ x, data = data, family = NVASIQ)
+fit <- gamlss(
+  y ~ x, data = data, family = NVASIQ(quantile = 0.50)
+)
 
-fittaus <- lapply(c(0.10, 0.25, 0.50, 0.75, 0.90), function(Tau) {
-  tau <<- Tau
-  gamlss(y ~ x, data = data, family = NVASIQ)
+fitquantiles <- lapply(c(0.10, 0.25, 0.50, 0.75, 0.90), function(level) {
+  gamlss(y ~ x, data = data, family = NVASIQ(quantile = level))
 })
 
-sapply(fittaus, summary)
+lapply(fitquantiles, summary)
 }
 \references{
 Hastie, T. J. and Tibshirani, R. J. (1990).

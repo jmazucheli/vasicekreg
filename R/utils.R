@@ -47,6 +47,20 @@
     invisible(TRUE)
 }
 
+.check_fixed_quantile <- function(quantile, family = NULL) {
+    prefix <- if (is.null(family)) "" else paste0("For ", family, "(), ")
+    if (!is.numeric(quantile) || length(quantile) != 1L ||
+        is.na(quantile) || !is.finite(quantile) ||
+        quantile <= 0 || quantile >= 1) {
+        stop(
+            prefix,
+            "'quantile' must be a single finite number strictly between 0 and 1.",
+            call. = FALSE
+        )
+    }
+    as.numeric(quantile)
+}
+
 .n_random <- function(n) {
     if (length(n) > 1L) {
         return(length(n))
