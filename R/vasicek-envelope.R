@@ -74,7 +74,7 @@
 #' reached. The simulation uses fitted values for every distribution
 #' parameter, so covariate-dependent parameters are retained. Automatic
 #' simulation and refitting of \code{NVASIQ}, \code{LVASIQ}, and
-#' \code{HSVASIQ} recover the fixed level embedded in the fitted object; no
+#' \code{HVASIQ} recover the fixed level embedded in the fitted object; no
 #' global quantile-level variable is consulted. Consequently, fitted models
 #' at different quantile levels can be used in the same R session safely.
 #'
@@ -132,7 +132,7 @@ vasicek_envelope <- function(
         stop("'object' must inherit from class 'gamlss'.", call. = FALSE)
     }
     supported <- c(
-        "NVASIM", "NVASIQ", "LVASIQ", "HSVASIQ", "ZANVASIM", "OANVASIM",
+        "NVASIM", "NVASIQ", "LVASIQ", "HVASIQ", "ZANVASIM", "OANVASIM",
         "ZOANVASIM"
     )
     family_name <- as.character(object$family[1L])
@@ -339,7 +339,7 @@ vasicek_envelope <- function(
         NVASIM = c("mu", "sigma"),
         NVASIQ = c("mu", "sigma"),
         LVASIQ = c("mu", "sigma"),
-        HSVASIQ = c("mu", "sigma"),
+        HVASIQ = c("mu", "sigma"),
         ZANVASIM = c("mu", "sigma", "nu"),
         OANVASIM = c("mu", "sigma", "nu"),
         ZOANVASIM = c("mu", "sigma", "nu", "tau")
@@ -354,7 +354,7 @@ vasicek_envelope <- function(
     })
     names(arguments) <- parameters
     arguments$n <- length(arguments[[1L]])
-    quantile_families <- c("NVASIQ", "LVASIQ", "HSVASIQ")
+    quantile_families <- c("NVASIQ", "LVASIQ", "HVASIQ")
     if (family_name %in% quantile_families) {
         arguments$quantile <- .envelope_fixed_quantile(object)
     }
@@ -391,7 +391,7 @@ vasicek_envelope <- function(
 
 .envelope_embed_quantile_call <- function(object) {
     family_name <- as.character(object$family[1L])
-    quantile_families <- c("NVASIQ", "LVASIQ", "HSVASIQ")
+    quantile_families <- c("NVASIQ", "LVASIQ", "HVASIQ")
     if (!family_name %in% quantile_families) {
         return(object)
     }

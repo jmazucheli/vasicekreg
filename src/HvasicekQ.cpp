@@ -98,7 +98,7 @@ inline double quantile_hsvasique(const double p, const double mu,
 } // namespace
 
 // [[Rcpp::export]]
-NumericVector cpp_dHSVASIQ(const NumericVector x,
+NumericVector cpp_dHVASIQ(const NumericVector x,
                            const NumericVector mu,
                            const NumericVector sigma,
                            const double quantile = 0.5,
@@ -121,7 +121,7 @@ NumericVector cpp_dHSVASIQ(const NumericVector x,
 }
 
 // [[Rcpp::export]]
-NumericVector cpp_pHSVASIQ(const NumericVector q,
+NumericVector cpp_pHVASIQ(const NumericVector q,
                            const NumericVector mu,
                            const NumericVector sigma,
                            const double quantile = 0.5,
@@ -146,7 +146,7 @@ NumericVector cpp_pHSVASIQ(const NumericVector q,
 }
 
 // [[Rcpp::export]]
-NumericVector cpp_qHSVASIQ(const NumericVector p,
+NumericVector cpp_qHVASIQ(const NumericVector p,
                            const NumericVector mu,
                            const NumericVector sigma,
                            const double quantile = 0.5,
@@ -170,7 +170,7 @@ NumericVector cpp_qHSVASIQ(const NumericVector p,
 }
 
 // [[Rcpp::export]]
-NumericVector cpp_rHSVASIQ(const int n,
+NumericVector cpp_rHVASIQ(const int n,
                            const NumericVector mu,
                            const NumericVector sigma,
                            const double quantile = 0.5) {

@@ -3,7 +3,7 @@
 ## Self-contained quantile families
 
 - Renamed the fixed quantile-level argument from `tau` to `quantile` in
-  `NVASIQ`, `LVASIQ`, and `HSVASIQ`, including their `d`, `p`, `q`, and `r`
+  `NVASIQ`, `LVASIQ`, and `HVASIQ`, including their `d`, `p`, `q`, and `r`
   functions and compiled interfaces.
 - Removed the dependency of the three quantile-family constructors on a
   global `tau` object. The fixed level is now passed directly, for example as
@@ -22,7 +22,7 @@
 ## Interface and documentation review
 
 - Updated the package title and description to cover distribution functions,
-  Vasicek-type models, and the hyperbolic-secant kernel and `HSVASIQ` family.
+  Vasicek-type models, and the hyperbolic-secant kernel and `HVASIQ` family.
 - Standardized boundary terminology as "augmented" and kernel terminology as
   "Vasicek-type" throughout the current documentation.
 - Corrected the `bodyfat` documentation: it contains 10 variables, and its five
@@ -47,16 +47,16 @@
 
 ## Hyperbolic-secant-kernel quantile regression
 
-- Added the `HSVASIQ()` GAMLSS family for conditional quantile regression
+- Added the `HVASIQ()` GAMLSS family for conditional quantile regression
   with a hyperbolic-secant kernel and a user-specified fixed quantile level.
-- Added compiled `dHSVASIQ()`, `pHSVASIQ()`, `qHSVASIQ()`, and
-  `rHSVASIQ()` functions, including stable log-probability and tail
+- Added compiled `dHVASIQ()`, `pHVASIQ()`, `qHVASIQ()`, and
+  `rHVASIQ()` functions, including stable log-probability and tail
   calculations.
 - Implemented closed-form first, second, and cross log-likelihood derivatives
   with respect to `mu` and `sigma`.
 - Added randomized quantile residual support and numerical conditional-moment
   functions for the GAMLSS family.
-- Extended `vasicek_envelope()` to fitted `HSVASIQ` models.
+- Extended `vasicek_envelope()` to fitted `HVASIQ` models.
 - Corrected parametric-envelope simulation for quantile families so the
   fixed level stored in the fitted model is passed to their random generators.
 - Added documentation and tests for distribution identities, normalization,

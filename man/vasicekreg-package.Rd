@@ -16,7 +16,7 @@ families are available:
   \eqn{\mu=Q_Y(\tau)} for a fixed \eqn{\tau\in(0,1)}.
   \item \code{LVASIQ}: logistic kernel with quantile parameterization, where
   \eqn{\mu=Q_Y(\tau)} for a fixed \eqn{\tau\in(0,1)}.
-  \item \code{HSVASIQ}: hyperbolic-secant kernel with quantile
+  \item \code{HVASIQ}: hyperbolic-secant kernel with quantile
   parameterization, where \eqn{\mu=Q_Y(\tau)} for a fixed
   \eqn{\tau\in(0,1)}.
 }
@@ -69,7 +69,7 @@ quantile level \eqn{\tau}, covariates describe the conditional
 family is not provided because the mean has no closed-form expression and
 does not equal \eqn{\mu} under this parameterization.
 
-\code{\link[vasicekreg]{HSVASIQ}}:
+\code{\link[vasicekreg]{HVASIQ}}:
 Hyperbolic-secant-kernel quantile parameterization and GAMLSS family. For a
 fixed quantile level \eqn{\tau}, covariates describe the conditional
 \eqn{\tau}-th quantile through \eqn{\mu}. Its conditional mean and
@@ -100,18 +100,18 @@ Zero-and-one-augmented normal-kernel mean family. Here
 The distribution functions \code{dNVASIM}, \code{pNVASIM},
 \code{qNVASIM}, \code{dNVASIQ}, \code{pNVASIQ}, \code{qNVASIQ},
 \code{dLVASIQ}, \code{pLVASIQ}, \code{qLVASIQ},
-\code{dHSVASIQ}, \code{pHSVASIQ}, and \code{qHSVASIQ} call compiled
+\code{dHVASIQ}, \code{pHVASIQ}, and \code{qHVASIQ} call compiled
 \proglang{C++} routines through \pkg{Rcpp}. The boundary-augmented
 distribution functions are implemented in \proglang{R} and reuse the
 compiled \code{NVASIM} functions for their continuous component.
 Parameter validation, the GAMLSS family definitions, and all
 log-likelihood derivatives are implemented in \proglang{R}. The mean and
-variance components of the \code{LVASIQ()} and \code{HSVASIQ()} family
+variance components of the \code{LVASIQ()} and \code{HVASIQ()} family
 objects are obtained by numerical quadrature because these moments have no
 closed-form expressions.
 
 For the distribution functions and GAMLSS constructors associated with
-\code{NVASIQ}, \code{LVASIQ}, and \code{HSVASIQ}, the fixed quantile level
+\code{NVASIQ}, \code{LVASIQ}, and \code{HVASIQ}, the fixed quantile level
 is supplied through the \code{quantile} argument. It is stored in the
 family definition and embedded in the residual expression, so no global
 variable is required. This fixed quantile level is distinct from the

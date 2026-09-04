@@ -134,7 +134,7 @@ Failed or nonconverged re-fits are discarded and replaced until
 reached. The simulation uses fitted values for every distribution
 parameter, so covariate-dependent parameters are retained. Automatic
 simulation and refitting of \code{NVASIQ}, \code{LVASIQ}, and
-\code{HSVASIQ} recover the fixed level embedded in the fitted object; no
+\code{HVASIQ} recover the fixed level embedded in the fitted object; no
 global quantile-level variable is consulted. Consequently, fitted models
 at different quantile levels can be used in the same R session safely.
 

@@ -10,9 +10,9 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
-// cpp_dHSVASIQ
-NumericVector cpp_dHSVASIQ(const NumericVector x, const NumericVector mu, const NumericVector sigma, const double quantile, const bool logprob);
-RcppExport SEXP _vasicekreg_cpp_dHSVASIQ(SEXP xSEXP, SEXP muSEXP, SEXP sigmaSEXP, SEXP quantileSEXP, SEXP logprobSEXP) {
+// cpp_dHVASIQ
+NumericVector cpp_dHVASIQ(const NumericVector x, const NumericVector mu, const NumericVector sigma, const double quantile, const bool logprob);
+RcppExport SEXP _vasicekreg_cpp_dHVASIQ(SEXP xSEXP, SEXP muSEXP, SEXP sigmaSEXP, SEXP quantileSEXP, SEXP logprobSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -21,13 +21,13 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const NumericVector >::type sigma(sigmaSEXP);
     Rcpp::traits::input_parameter< const double >::type quantile(quantileSEXP);
     Rcpp::traits::input_parameter< const bool >::type logprob(logprobSEXP);
-    rcpp_result_gen = Rcpp::wrap(cpp_dHSVASIQ(x, mu, sigma, quantile, logprob));
+    rcpp_result_gen = Rcpp::wrap(cpp_dHVASIQ(x, mu, sigma, quantile, logprob));
     return rcpp_result_gen;
 END_RCPP
 }
-// cpp_pHSVASIQ
-NumericVector cpp_pHSVASIQ(const NumericVector q, const NumericVector mu, const NumericVector sigma, const double quantile, const bool lower_tail, const bool log_p);
-RcppExport SEXP _vasicekreg_cpp_pHSVASIQ(SEXP qSEXP, SEXP muSEXP, SEXP sigmaSEXP, SEXP quantileSEXP, SEXP lower_tailSEXP, SEXP log_pSEXP) {
+// cpp_pHVASIQ
+NumericVector cpp_pHVASIQ(const NumericVector q, const NumericVector mu, const NumericVector sigma, const double quantile, const bool lower_tail, const bool log_p);
+RcppExport SEXP _vasicekreg_cpp_pHVASIQ(SEXP qSEXP, SEXP muSEXP, SEXP sigmaSEXP, SEXP quantileSEXP, SEXP lower_tailSEXP, SEXP log_pSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -37,13 +37,13 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const double >::type quantile(quantileSEXP);
     Rcpp::traits::input_parameter< const bool >::type lower_tail(lower_tailSEXP);
     Rcpp::traits::input_parameter< const bool >::type log_p(log_pSEXP);
-    rcpp_result_gen = Rcpp::wrap(cpp_pHSVASIQ(q, mu, sigma, quantile, lower_tail, log_p));
+    rcpp_result_gen = Rcpp::wrap(cpp_pHVASIQ(q, mu, sigma, quantile, lower_tail, log_p));
     return rcpp_result_gen;
 END_RCPP
 }
-// cpp_qHSVASIQ
-NumericVector cpp_qHSVASIQ(const NumericVector p, const NumericVector mu, const NumericVector sigma, const double quantile, const bool lower_tail, const bool log_p);
-RcppExport SEXP _vasicekreg_cpp_qHSVASIQ(SEXP pSEXP, SEXP muSEXP, SEXP sigmaSEXP, SEXP quantileSEXP, SEXP lower_tailSEXP, SEXP log_pSEXP) {
+// cpp_qHVASIQ
+NumericVector cpp_qHVASIQ(const NumericVector p, const NumericVector mu, const NumericVector sigma, const double quantile, const bool lower_tail, const bool log_p);
+RcppExport SEXP _vasicekreg_cpp_qHVASIQ(SEXP pSEXP, SEXP muSEXP, SEXP sigmaSEXP, SEXP quantileSEXP, SEXP lower_tailSEXP, SEXP log_pSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -53,13 +53,13 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const double >::type quantile(quantileSEXP);
     Rcpp::traits::input_parameter< const bool >::type lower_tail(lower_tailSEXP);
     Rcpp::traits::input_parameter< const bool >::type log_p(log_pSEXP);
-    rcpp_result_gen = Rcpp::wrap(cpp_qHSVASIQ(p, mu, sigma, quantile, lower_tail, log_p));
+    rcpp_result_gen = Rcpp::wrap(cpp_qHVASIQ(p, mu, sigma, quantile, lower_tail, log_p));
     return rcpp_result_gen;
 END_RCPP
 }
-// cpp_rHSVASIQ
-NumericVector cpp_rHSVASIQ(const int n, const NumericVector mu, const NumericVector sigma, const double quantile);
-RcppExport SEXP _vasicekreg_cpp_rHSVASIQ(SEXP nSEXP, SEXP muSEXP, SEXP sigmaSEXP, SEXP quantileSEXP) {
+// cpp_rHVASIQ
+NumericVector cpp_rHVASIQ(const int n, const NumericVector mu, const NumericVector sigma, const double quantile);
+RcppExport SEXP _vasicekreg_cpp_rHVASIQ(SEXP nSEXP, SEXP muSEXP, SEXP sigmaSEXP, SEXP quantileSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -67,7 +67,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const NumericVector >::type mu(muSEXP);
     Rcpp::traits::input_parameter< const NumericVector >::type sigma(sigmaSEXP);
     Rcpp::traits::input_parameter< const double >::type quantile(quantileSEXP);
-    rcpp_result_gen = Rcpp::wrap(cpp_rHSVASIQ(n, mu, sigma, quantile));
+    rcpp_result_gen = Rcpp::wrap(cpp_rHVASIQ(n, mu, sigma, quantile));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -295,10 +295,10 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_vasicekreg_cpp_dHSVASIQ", (DL_FUNC) &_vasicekreg_cpp_dHSVASIQ, 5},
-    {"_vasicekreg_cpp_pHSVASIQ", (DL_FUNC) &_vasicekreg_cpp_pHSVASIQ, 6},
-    {"_vasicekreg_cpp_qHSVASIQ", (DL_FUNC) &_vasicekreg_cpp_qHSVASIQ, 6},
-    {"_vasicekreg_cpp_rHSVASIQ", (DL_FUNC) &_vasicekreg_cpp_rHSVASIQ, 4},
+    {"_vasicekreg_cpp_dHVASIQ", (DL_FUNC) &_vasicekreg_cpp_dHVASIQ, 5},
+    {"_vasicekreg_cpp_pHVASIQ", (DL_FUNC) &_vasicekreg_cpp_pHVASIQ, 6},
+    {"_vasicekreg_cpp_qHVASIQ", (DL_FUNC) &_vasicekreg_cpp_qHVASIQ, 6},
+    {"_vasicekreg_cpp_rHVASIQ", (DL_FUNC) &_vasicekreg_cpp_rHVASIQ, 4},
     {"_vasicekreg_cpp_dlvasicek", (DL_FUNC) &_vasicekreg_cpp_dlvasicek, 4},
     {"_vasicekreg_cpp_plvasicek", (DL_FUNC) &_vasicekreg_cpp_plvasicek, 5},
     {"_vasicekreg_cpp_qlvasicek", (DL_FUNC) &_vasicekreg_cpp_qlvasicek, 5},

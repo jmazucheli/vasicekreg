@@ -1,10 +1,10 @@
 #' Hyperbolic-secant-kernel Vasicek-type quantile distribution
 #'
 #' @description
-#' \code{HSVASIQ()} defines the hyperbolic-secant-kernel Vasicek-type distribution
+#' \code{HVASIQ()} defines the hyperbolic-secant-kernel Vasicek-type distribution
 #' as a \code{gamlss.family} object for conditional quantile regression.
-#' The functions \code{dHSVASIQ()}, \code{pHSVASIQ()}, \code{qHSVASIQ()}, and
-#' \code{rHSVASIQ()} provide the density, distribution function, quantile
+#' The functions \code{dHVASIQ()}, \code{pHVASIQ()}, \code{qHVASIQ()}, and
+#' \code{rHVASIQ()} provide the density, distribution function, quantile
 #' function, and random generation.
 #'
 #' @details
@@ -59,7 +59,7 @@
 #'   \eqn{0<\mu<1}.
 #' @param sigma Vector of shape parameter values, \eqn{0<\sigma<1}.
 #' @param quantile Fixed quantile level \eqn{\tau\in(0,1)} represented by
-#'   \eqn{\mu}, used in the distribution functions and in \code{HSVASIQ()}.
+#'   \eqn{\mu}, used in the distribution functions and in \code{HVASIQ()}.
 #' @param mu.link Link function for \eqn{\mu}.
 #' @param sigma.link Link function for \eqn{\sigma}.
 #' @param lower.tail Logical; if \code{TRUE}, probabilities are
@@ -69,9 +69,9 @@
 #'   returned on the logarithmic scale.
 #'
 #' @return
-#' \code{dHSVASIQ()} returns the density, \code{pHSVASIQ()} the distribution
-#' function, \code{qHSVASIQ()} the quantile function, and \code{rHSVASIQ()}
-#' random deviates. \code{HSVASIQ()} returns a \code{gamlss.family} object.
+#' \code{dHVASIQ()} returns the density, \code{pHVASIQ()} the distribution
+#' function, \code{qHVASIQ()} the quantile function, and \code{rHVASIQ()}
+#' random deviates. \code{HVASIQ()} returns a \code{gamlss.family} object.
 #'
 #' @references
 #' Dunn, P. K. and Smyth, G. K. (1996). Randomized quantile residuals.
@@ -93,33 +93,33 @@
 #'
 #' @examples
 #' set.seed(123)
-#' y <- rHSVASIQ(500, mu = 0.60, sigma = 0.30, quantile = 0.25)
+#' y <- rHVASIQ(500, mu = 0.60, sigma = 0.30, quantile = 0.25)
 #'
 #' fit <- gamlss::gamlss(
 #'     y ~ 1,
 #'     sigma.formula = ~ 1,
-#'     family = HSVASIQ(quantile = 0.25),
+#'     family = HVASIQ(quantile = 0.25),
 #'     control = gamlss::gamlss.control(trace = FALSE)
 #' )
 #' fitted(fit, what = "mu")[1]
 #'
-#' @name HSVASIQ
-#' @aliases HSVASIQ dHSVASIQ pHSVASIQ qHSVASIQ rHSVASIQ
+#' @name HVASIQ
+#' @aliases HVASIQ dHVASIQ pHVASIQ qHVASIQ rHVASIQ
 #' @importFrom gamlss gamlss
 #' @importFrom gamlss.dist checklink
 #' @export
-dHSVASIQ <- function(x, mu, sigma, quantile = 0.5, log = FALSE) {
+dHVASIQ <- function(x, mu, sigma, quantile = 0.5, log = FALSE) {
     .check_unit_interval(x, "x")
     .check_unit_interval(mu, "mu")
     .check_unit_interval(sigma, "sigma")
     quantile <- .check_fixed_quantile(quantile)
     .check_scalar_logical(log, "log")
-    cpp_dHSVASIQ(x, mu, sigma, quantile, log)
+    cpp_dHVASIQ(x, mu, sigma, quantile, log)
 }
 
-#' @rdname HSVASIQ
+#' @rdname HVASIQ
 #' @export
-pHSVASIQ <- function(q, mu, sigma, quantile = 0.5,
+pHVASIQ <- function(q, mu, sigma, quantile = 0.5,
                      lower.tail = TRUE, log.p = FALSE) {
     .check_unit_interval(q, "q", closed = TRUE)
     .check_unit_interval(mu, "mu")
@@ -127,12 +127,12 @@ pHSVASIQ <- function(q, mu, sigma, quantile = 0.5,
     quantile <- .check_fixed_quantile(quantile)
     .check_scalar_logical(lower.tail, "lower.tail")
     .check_scalar_logical(log.p, "log.p")
-    cpp_pHSVASIQ(q, mu, sigma, quantile, lower.tail, log.p)
+    cpp_pHVASIQ(q, mu, sigma, quantile, lower.tail, log.p)
 }
 
-#' @rdname HSVASIQ
+#' @rdname HVASIQ
 #' @export
-qHSVASIQ <- function(p, mu, sigma, quantile = 0.5,
+qHVASIQ <- function(p, mu, sigma, quantile = 0.5,
                      lower.tail = TRUE, log.p = FALSE) {
     .check_probability(p, log.p)
     .check_unit_interval(mu, "mu")
@@ -140,37 +140,37 @@ qHSVASIQ <- function(p, mu, sigma, quantile = 0.5,
     quantile <- .check_fixed_quantile(quantile)
     .check_scalar_logical(lower.tail, "lower.tail")
     .check_scalar_logical(log.p, "log.p")
-    cpp_qHSVASIQ(p, mu, sigma, quantile, lower.tail, log.p)
+    cpp_qHVASIQ(p, mu, sigma, quantile, lower.tail, log.p)
 }
 
-#' @rdname HSVASIQ
+#' @rdname HVASIQ
 #' @export
-rHSVASIQ <- function(n, mu, sigma, quantile = 0.5) {
+rHVASIQ <- function(n, mu, sigma, quantile = 0.5) {
     n <- .n_random(n)
     .check_unit_interval(mu, "mu")
     .check_unit_interval(sigma, "sigma")
     quantile <- .check_fixed_quantile(quantile)
-    cpp_rHSVASIQ(n, mu, sigma, quantile)
+    cpp_rHVASIQ(n, mu, sigma, quantile)
 }
 
-#' @rdname HSVASIQ
+#' @rdname HVASIQ
 #' @export
-HSVASIQ <- function(quantile = 0.50, mu.link = "logit",
+HVASIQ <- function(quantile = 0.50, mu.link = "logit",
                     sigma.link = "logit") {
-    quantile <- .check_fixed_quantile(quantile, "HSVASIQ")
+    quantile <- .check_fixed_quantile(quantile, "HVASIQ")
 
     mstats <- checklink(
-        "mu.link", "HSVASIQ", substitute(mu.link),
+        "mu.link", "HVASIQ", substitute(mu.link),
         c("logit", "probit", "cloglog", "cauchit", "log", "own")
     )
     dstats <- checklink(
-        "sigma.link", "HSVASIQ", substitute(sigma.link),
+        "sigma.link", "HVASIQ", substitute(sigma.link),
         c("logit", "probit", "cloglog", "cauchit", "log", "own")
     )
 
     structure(
         list(
-            family = c("HSVASIQ", "Hyperbolic-secant-kernel Vasicek-type quantile"),
+            family = c("HVASIQ", "Hyperbolic-secant-kernel Vasicek-type quantile"),
             parameters = list(mu = TRUE, sigma = TRUE),
             nopar = 2,
             type = "Continuous",
@@ -236,7 +236,7 @@ HSVASIQ <- function(quantile = 0.50, mu.link = "logit",
             }, list(QUANTILE = quantile))),
             G.dev.incr = eval(substitute(
                 function(y, mu, sigma, w, ...) {
-                    -2 * dHSVASIQ(
+                    -2 * dHVASIQ(
                         y, mu, sigma, quantile = QUANTILE, log = TRUE
                     )
                 },
@@ -244,7 +244,7 @@ HSVASIQ <- function(quantile = 0.50, mu.link = "logit",
             )),
             rqres = as.expression(substitute(
                 rqres(
-                    pfun = "pHSVASIQ", type = "Continuous", y = y,
+                    pfun = "pHVASIQ", type = "Continuous", y = y,
                     mu = mu, sigma = sigma, quantile = QUANTILE
                 ),
                 list(QUANTILE = quantile)

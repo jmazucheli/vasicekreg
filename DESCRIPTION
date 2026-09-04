@@ -20,7 +20,7 @@ Description: Provides density, cumulative distribution, quantile, and
     use fixed-quantile parameterizations. Zero-augmented, one-augmented, and
     zero-and-one-augmented extensions of the normal-kernel mean
     parameterization are also provided for responses that include boundary
-    values. The corresponding 'NVASIM', 'NVASIQ', 'LVASIQ', 'HSVASIQ',
+    values. The corresponding 'NVASIM', 'NVASIQ', 'LVASIQ', 'HVASIQ',
     'ZANVASIM', 'OANVASIM', and 'ZOANVASIM' families are available for fitting
     Generalized Additive Models for Location, Scale and Shape (GAMLSS),
     as introduced by Rigby and Stasinopoulos (2005,

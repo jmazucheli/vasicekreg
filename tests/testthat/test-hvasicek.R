@@ -11,46 +11,46 @@ hs_cross_derivative <- function(f, x, y, h = 1e-4) {
          f(x - h, y + h) + f(x - h, y - h)) / (4 * h^2)
 }
 
-test_that("HSVASIQ distribution functions are mutually consistent", {
+test_that("HVASIQ distribution functions are mutually consistent", {
     p <- c(1e-8, 0.10, 0.50, 0.90, 1 - 1e-8)
     mu <- 0.63
     sigma <- 0.27
     quantile <- 0.20
 
-    expect_equal(qHSVASIQ(quantile, mu, sigma, quantile), mu, tolerance = 1e-12)
+    expect_equal(qHVASIQ(quantile, mu, sigma, quantile), mu, tolerance = 1e-12)
     expect_equal(
-        pHSVASIQ(qHSVASIQ(p, mu, sigma, quantile), mu, sigma, quantile),
+        pHVASIQ(qHVASIQ(p, mu, sigma, quantile), mu, sigma, quantile),
         p,
         tolerance = 1e-9
     )
     expect_equal(
-        qHSVASIQ(log(p), mu, sigma, quantile, log.p = TRUE),
-        qHSVASIQ(p, mu, sigma, quantile),
+        qHVASIQ(log(p), mu, sigma, quantile, log.p = TRUE),
+        qHVASIQ(p, mu, sigma, quantile),
         tolerance = 1e-12
     )
     expect_equal(
-        qHSVASIQ(log(p), mu, sigma, quantile,
+        qHVASIQ(log(p), mu, sigma, quantile,
                  lower.tail = FALSE, log.p = TRUE),
-        qHSVASIQ(p, mu, sigma, quantile, lower.tail = FALSE),
+        qHVASIQ(p, mu, sigma, quantile, lower.tail = FALSE),
         tolerance = 1e-12
     )
-    expect_equal(pHSVASIQ(c(0, 1), mu, sigma, quantile), c(0, 1))
-    expect_equal(qHSVASIQ(c(0, 1), mu, sigma, quantile), c(0, 1))
+    expect_equal(pHVASIQ(c(0, 1), mu, sigma, quantile), c(0, 1))
+    expect_equal(qHVASIQ(c(0, 1), mu, sigma, quantile), c(0, 1))
     expect_equal(
-        integrate(function(x) dHSVASIQ(x, mu, sigma, quantile), 0, 1)$value,
+        integrate(function(x) dHVASIQ(x, mu, sigma, quantile), 0, 1)$value,
         1,
         tolerance = 1e-6
     )
 })
 
-test_that("HSVASIQ analytical derivatives agree with numerical derivatives", {
+test_that("HVASIQ analytical derivatives agree with numerical derivatives", {
     y <- 0.37
     mu <- 0.69
     sigma <- 0.37
     quantile <- 0.81
-    loglik <- function(m, s) dHSVASIQ(y, m, s, quantile, log = TRUE)
+    loglik <- function(m, s) dHVASIQ(y, m, s, quantile, log = TRUE)
 
-    family <- HSVASIQ(quantile = quantile)
+    family <- HVASIQ(quantile = quantile)
     expect_equal(
         family$dldm(y, mu, sigma),
         hs_first_derivative(function(m) loglik(m, sigma), mu),
@@ -78,19 +78,19 @@ test_that("HSVASIQ analytical derivatives agree with numerical derivatives", {
     )
 })
 
-test_that("HSVASIQ family moments agree with quantile integration", {
+test_that("HVASIQ family moments agree with quantile integration", {
     mu <- 0.63
     sigma <- 0.27
     quantile <- 0.20
 
-    family <- HSVASIQ(quantile = quantile)
+    family <- HVASIQ(quantile = quantile)
     numerical_mean <- integrate(
-        function(p) qHSVASIQ(p, mu, sigma, quantile),
+        function(p) qHVASIQ(p, mu, sigma, quantile),
         0, 1, subdivisions = 200L, rel.tol = 1e-8
     )$value
     numerical_variance <- integrate(
         function(p) {
-            (qHSVASIQ(p, mu, sigma, quantile) - numerical_mean)^2
+            (qHVASIQ(p, mu, sigma, quantile) - numerical_mean)^2
         },
         0, 1, subdivisions = 200L, rel.tol = 1e-8
     )$value
@@ -105,30 +105,30 @@ test_that("HSVASIQ family moments agree with quantile integration", {
     expect_identical(family$rqres[[1]][["quantile"]], quantile)
 })
 
-test_that("HSVASIQ follows vectorization and random-generation conventions", {
-    expect_length(rHSVASIQ(5, 0.5, 0.3, 0.5), 5)
-    expect_length(rHSVASIQ(c(4, 8), 0.5, 0.3, 0.5), 2)
+test_that("HVASIQ follows vectorization and random-generation conventions", {
+    expect_length(rHVASIQ(5, 0.5, 0.3, 0.5), 5)
+    expect_length(rHVASIQ(c(4, 8), 0.5, 0.3, 0.5), 2)
     expect_error(
-        dHSVASIQ(c(0.2, 0.4, 0.6), 0.5, c(0.3, 0.7), 0.5)
+        dHVASIQ(c(0.2, 0.4, 0.6), 0.5, c(0.3, 0.7), 0.5)
     )
 })
 
-test_that("HSVASIQ requires a valid fixed quantile level", {
-    expect_error(HSVASIQ(quantile = 0), "strictly between")
-    expect_error(HSVASIQ(quantile = 1), "strictly between")
-    expect_error(HSVASIQ(quantile = c(0.25, 0.75)), "single finite number")
+test_that("HVASIQ requires a valid fixed quantile level", {
+    expect_error(HVASIQ(quantile = 0), "strictly between")
+    expect_error(HVASIQ(quantile = 1), "strictly between")
+    expect_error(HVASIQ(quantile = c(0.25, 0.75)), "single finite number")
 })
 
-test_that("HSVASIQ fits an intercept-only GAMLSS model", {
+test_that("HVASIQ fits an intercept-only GAMLSS model", {
     set.seed(20260902)
     quantile <- 0.25
-    y <- rHSVASIQ(120, mu = 0.55, sigma = 0.25, quantile = quantile)
+    y <- rHVASIQ(120, mu = 0.55, sigma = 0.25, quantile = quantile)
     control <- gamlss::gamlss.control(n.cyc = 75, trace = FALSE)
 
     fit <- gamlss::gamlss(
         y ~ 1,
         sigma.formula = ~ 1,
-        family = HSVASIQ(quantile = quantile),
+        family = HVASIQ(quantile = quantile),
         control = control
     )
 
@@ -140,15 +140,15 @@ test_that("HSVASIQ fits an intercept-only GAMLSS model", {
     )
 })
 
-test_that("envelope simulation retains the fixed HSVASIQ quantile level", {
+test_that("envelope simulation retains the fixed HVASIQ quantile level", {
     set.seed(20260902)
     quantile <- 0.25
-    y <- rHSVASIQ(60, mu = 0.55, sigma = 0.25, quantile = quantile)
+    y <- rHVASIQ(60, mu = 0.55, sigma = 0.25, quantile = quantile)
 
     fit <- gamlss::gamlss(
         y ~ 1,
         sigma.formula = ~ 1,
-        family = HSVASIQ(quantile = quantile),
+        family = HVASIQ(quantile = quantile),
         control = gamlss::gamlss.control(n.cyc = 75, trace = FALSE)
     )
     fitted_mu <- as.numeric(fitted(fit, what = "mu"))
@@ -157,7 +157,7 @@ test_that("envelope simulation retains the fixed HSVASIQ quantile level", {
     set.seed(91)
     simulated <- .envelope_simulate_response(fit)
     set.seed(91)
-    expected <- rHSVASIQ(
+    expected <- rHVASIQ(
         length(y), fitted_mu, fitted_sigma, quantile = quantile
     )
 

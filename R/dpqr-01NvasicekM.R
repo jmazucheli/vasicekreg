@@ -24,7 +24,7 @@
 #' @param tau Conditional probability at one among nonzero observations,
 #'   \eqn{\tau=P(Y=1\mid Y>0)}, in \eqn{(0,1)}. This parameter is unrelated
 #'   to the fixed quantile level used by \code{NVASIQ()}, \code{LVASIQ()},
-#'   and \code{HSVASIQ()}.
+#'   and \code{HVASIQ()}.
 #' @param log Logical; if \code{TRUE}, log probabilities or log densities are
 #'   returned.
 #' @param lower.tail Logical; if \code{TRUE}, probabilities are

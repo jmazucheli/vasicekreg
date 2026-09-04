@@ -81,7 +81,7 @@ fit_hsk <- lapply(quantile_levels, function(level) {
   gamlss(
     ARMS ~ AGE + BMI + SEX + IPAQ,
     data = bodyfat,
-    family = HSVASIQ(
+    family = HVASIQ(
       quantile = level,
       mu.link = "logit",
       sigma.link = "logit"

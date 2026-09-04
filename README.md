@@ -16,7 +16,7 @@ exact boundary values.
 | `NVASIM` | Standard normal | `(0, 1)` | Mean | `mu = E(Y)` |
 | `NVASIQ` | Standard normal | `(0, 1)` | Quantile | `mu = Q_Y(quantile)` |
 | `LVASIQ` | Logistic | `(0, 1)` | Quantile | `mu = Q_Y(quantile)` |
-| `HSVASIQ` | Hyperbolic secant | `(0, 1)` | Quantile | `mu = Q_Y(quantile)` |
+| `HVASIQ` | Hyperbolic secant | `(0, 1)` | Quantile | `mu = Q_Y(quantile)` |
 | `ZANVASIM` | Standard normal | `[0, 1)` | Zero-augmented mean | `mu = E(Y | Y > 0)` |
 | `OANVASIM` | Standard normal | `(0, 1]` | One-augmented mean | `mu = E(Y | Y < 1)` |
 | `ZOANVASIM` | Standard normal | `[0, 1]` | Zero-and-one-augmented | `mu = E(Y | 0 < Y < 1)` |
@@ -45,7 +45,7 @@ and random generation functions:
 - `dNVASIM()`, `pNVASIM()`, `qNVASIM()`, and `rNVASIM()`;
 - `dNVASIQ()`, `pNVASIQ()`, `qNVASIQ()`, and `rNVASIQ()`;
 - `dLVASIQ()`, `pLVASIQ()`, `qLVASIQ()`, and `rLVASIQ()`;
-- `dHSVASIQ()`, `pHSVASIQ()`, `qHSVASIQ()`, and `rHSVASIQ()`;
+- `dHVASIQ()`, `pHVASIQ()`, `qHVASIQ()`, and `rHVASIQ()`;
 - `d0NVASIM()`, `p0NVASIM()`, `q0NVASIM()`, and `r0NVASIM()`;
 - `d1NVASIM()`, `p1NVASIM()`, `q1NVASIM()`, and `r1NVASIM()`;
 - `d01NVASIM()`, `p01NVASIM()`, `q01NVASIM()`, and `r01NVASIM()`.
@@ -102,7 +102,7 @@ For the quantile parameterizations, the fixed level is supplied through the
 ```r
 qNVASIQ(p = 0.25, mu = 0.60, sigma = 0.25, quantile = 0.25)
 qLVASIQ(p = 0.25, mu = 0.60, sigma = 0.25, quantile = 0.25)
-qHSVASIQ(p = 0.25, mu = 0.60, sigma = 0.25, quantile = 0.25)
+qHVASIQ(p = 0.25, mu = 0.60, sigma = 0.25, quantile = 0.25)
 ```
 
 All three calls return `mu = 0.60` because `mu` represents the quantile at
@@ -198,8 +198,8 @@ fit_boundary <- gamlss(
 For `ZOANVASIM`, `p0 = nu`, `p1 = (1 - nu) * tau`, and
 `pc = (1 - nu) * (1 - tau)`. This parameterization guarantees valid
 probabilities while retaining logit links for both boundary parameters. Here
-Here `tau` is an estimated model parameter and is unrelated to the fixed
-`quantile` argument of `NVASIQ()`, `LVASIQ()`, and `HSVASIQ()`.
+`tau` is an estimated model parameter and is unrelated to the fixed
+`quantile` argument of `NVASIQ()`, `LVASIQ()`, and `HVASIQ()`.
 
 The included `aep` data provide a real example with both boundary values:
 
@@ -220,7 +220,7 @@ fit_aep <- gamlss(
 
 ## GAMLSS quantile regression
 
-For `NVASIQ()`, `LVASIQ()`, and `HSVASIQ()`, the fixed quantile level is passed
+For `NVASIQ()`, `LVASIQ()`, and `HVASIQ()`, the fixed quantile level is passed
 directly to the family constructor through `quantile`. Each fitted object is
 self-contained, so models at different levels can coexist without changing
 global variables.
@@ -293,7 +293,7 @@ set.seed(123)
 quantile_level <- 0.25
 
 dat_hs <- data.frame(
-  y = rHSVASIQ(
+  y = rHVASIQ(
     n = 300,
     mu = 0.60,
     sigma = 0.25,
@@ -305,7 +305,7 @@ fit_hs <- gamlss(
   y ~ 1,
   sigma.formula = ~ 1,
   data = dat_hs,
-  family = HSVASIQ(
+  family = HVASIQ(
     quantile = quantile_level,
     mu.link = "logit",
     sigma.link = "logit"
@@ -369,14 +369,14 @@ observations used in the original fit.
 The density, cumulative distribution, and quantile functions call compiled
 C++ routines through `Rcpp`. Random generation for `NVASIM` and `NVASIQ`
 uses inverse transformation with the corresponding compiled quantile
-functions, whereas `rLVASIQ()` and `rHSVASIQ()` call compiled
+functions, whereas `rLVASIQ()` and `rHVASIQ()` call compiled
 random-generation routines directly.
 The boundary-augmented functions reuse the compiled `NVASIM` functions and
 add the required point masses in R.
 
 The GAMLSS family definitions and analytical log-likelihood derivatives are
 implemented in R. Numerical differentiation is not used. The mean and
-variance components of `LVASIQ()` and `HSVASIQ()` are evaluated by numerical
+variance components of `LVASIQ()` and `HVASIQ()` are evaluated by numerical
 quadrature because these moments have no closed-form expressions.
 
 ## Testing

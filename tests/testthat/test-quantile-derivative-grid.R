@@ -21,7 +21,7 @@ test_that("quantile-family analytical derivatives agree on a parameter grid", {
     specifications <- list(
         NVASIQ = list(family = NVASIQ, density = dNVASIQ),
         LVASIQ = list(family = LVASIQ, density = dLVASIQ),
-        HSVASIQ = list(family = HSVASIQ, density = dHSVASIQ)
+        HVASIQ = list(family = HVASIQ, density = dHVASIQ)
     )
 
     for (specification in specifications) {

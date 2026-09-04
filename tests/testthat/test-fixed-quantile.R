@@ -27,7 +27,7 @@ test_that("quantile families are independent of global hyperparameters", {
     specifications <- list(
         NVASIQ = list(factory = NVASIQ, density = dNVASIQ),
         LVASIQ = list(factory = LVASIQ, density = dLVASIQ),
-        HSVASIQ = list(factory = HSVASIQ, density = dHSVASIQ)
+        HVASIQ = list(factory = HVASIQ, density = dHVASIQ)
     )
     for (specification in specifications) {
         lower <- specification$factory(quantile = 0.25)
@@ -58,7 +58,7 @@ test_that("GAMLSS family components contain no free quantile symbol", {
         "G.dev.incr", "mean", "variance"
     )
 
-    for (factory in list(NVASIQ, LVASIQ, HSVASIQ)) {
+    for (factory in list(NVASIQ, LVASIQ, HVASIQ)) {
         family <- factory(quantile = 0.37)
 
         for (component_name in component_names) {
