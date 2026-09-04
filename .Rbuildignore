@@ -6,3 +6,5 @@
 ^texput\.log$
 ^.*~$
 ^MD5$
+^doc$
+^Meta$

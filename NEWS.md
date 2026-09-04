@@ -21,6 +21,12 @@
 
 ## Interface and documentation review
 
+- Added an application-oriented vignette, replacing the obsolete draft and
+  covering all four included data sets. It fits the five `bodyfat`
+  responses, compares the three quantile kernels, illustrates the zero-, one-,
+  and zero-and-one-augmented families with `transport`, `trees`, and `aep`,
+  and documents conditional and marginal fitted quantities and simulated
+  residual envelopes.
 - Updated the package title and description to cover distribution functions,
   Vasicek-type models, and the hyperbolic-secant kernel and `HVASIQ` family.
 - Standardized boundary terminology as "augmented" and kernel terminology as

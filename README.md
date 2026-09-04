@@ -81,6 +81,13 @@ The help pages preserve the original data provenance and the citations
 associated with each dataset. Use `?bodyfat`, `?aep`, `?transport`, or
 `?trees` for variable definitions, sources, and references.
 
+An application-oriented vignette fits models to every included data set,
+including all five `bodyfat` responses and the three boundary patterns:
+
+```r
+vignette("vasicekreg", package = "vasicekreg")
+```
+
 ## Distribution functions
 
 The following example uses the normal-kernel mean parameterization:

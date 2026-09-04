@@ -36,7 +36,10 @@ Imports: Rcpp, stats, gamlss, gamlss.dist, mvtnorm
 LinkingTo: Rcpp
 Suggests:
     betareg,
+    knitr,
+    rmarkdown,
     testthat (>= 3.0.0)
+VignetteBuilder: knitr
 NeedsCompilation: yes
 Config/testthat/edition: 3
 Config/roxygen2/version: 8.1.0

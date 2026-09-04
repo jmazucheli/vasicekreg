@@ -1,0 +1,694 @@
+---
+title: "Fitting Vasicek-Type Regression Models to the Data in vasicekreg"
+author:
+  - Josmar Mazucheli
+  - Bruna Alves
+output:
+  rmarkdown::html_vignette:
+    toc: true
+bibliography: references.bib
+link-citations: true
+vignette: >
+  %\VignetteIndexEntry{Fitting Vasicek-Type Regression Models to the Data in vasicekreg}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.align = "center",
+  fig.height = 4.8,
+  fig.width = 7.0,
+  message = FALSE,
+  warning = FALSE
+)
+
+library(gamlss)
+library(vasicekreg)
+
+control <- gamlss.control(n.cyc = 200, trace = FALSE)
+options(width = 90)
+set.seed(2026)
+```
+
+# Scope
+
+The `vasicekreg` package provides distribution functions and GAMLSS families
+for responses bounded by the unit interval. This vignette is deliberately
+application-oriented: its main purpose is to fit models to all four data sets
+distributed with the package and to explain what the fitted parameters mean.
+Detailed derivations of the densities and a systematic study of random
+generation are left to a separate vignette.
+
+The package is built on the Vasicek construction [@Vasicek2002;
+@MazucheliEtAl2022] and on the Generalized Additive Models for Location, Scale
+and Shape (GAMLSS) framework [@RigbyStasinopoulos2005;
+@StasinopoulosRigby2007]. The logistic and hyperbolic-secant kernels are
+motivated by @Witzany2013 and @FischerEtAl2017, respectively.
+
+The available regression families are summarized below.
+
+| Family | Kernel | Support | Parameterization | Meaning of `mu` |
+|:--|:--|:--|:--|:--|
+| `NVASIM` | Standard normal | $(0,1)$ | Mean | $E(Y)$ |
+| `NVASIQ` | Standard normal | $(0,1)$ | Fixed quantile | $Q_Y(\mathtt{quantile})$ |
+| `LVASIQ` | Logistic | $(0,1)$ | Fixed quantile | $Q_Y(\mathtt{quantile})$ |
+| `HVASIQ` | Hyperbolic secant | $(0,1)$ | Fixed quantile | $Q_Y(\mathtt{quantile})$ |
+| `ZANVASIM` | Standard normal | $[0,1)$ | Zero-augmented mean | $E(Y\mid Y>0)$ |
+| `OANVASIM` | Standard normal | $(0,1]$ | One-augmented mean | $E(Y\mid Y<1)$ |
+| `ZOANVASIM` | Standard normal | $[0,1]$ | Zero-and-one-augmented mean | $E(Y\mid 0<Y<1)$ |
+
+In every family, `sigma` is a shape parameter in $(0,1)$. The default link is
+the logit for every distributional parameter. Thus, unless a different link
+is requested, a coefficient is an effect on a logit scale; it is not an
+additive change in a mean, quantile, or probability on the response scale.
+
+For `NVASIQ`, `LVASIQ`, and `HVASIQ`, the target probability is supplied
+directly to the family constructor. For example,
+`NVASIQ(quantile = 0.25)` defines a model in which `mu` is the conditional
+first quartile. No global variable is required. The argument `quantile` in
+these three families is unrelated to `tau` in `ZOANVASIM`, where
+$\tau=P(Y=1\mid Y>0)$ is an estimated distributional parameter.
+
+# Conditional and marginal interpretation
+
+The distinction between the continuous-component mean and the marginal mean
+is essential for the augmented models. If `mu`, `nu`, and `tau` denote fitted
+values on the response scale, then the mixture parameterizations used here
+follow the general treatment of boundary-inflated models in
+@OspinaFerrari2010 and @OspinaFerrari2012.
+
+| Family | Boundary probabilities | Marginal mean |
+|:--|:--|:--|
+| `ZANVASIM` | $P(Y=0)=\nu$ | $(1-\nu)\mu$ |
+| `OANVASIM` | $P(Y=1)=\nu$ | $\nu+(1-\nu)\mu$ |
+| `ZOANVASIM` | $P(Y=0)=\nu$, $P(Y=1)=(1-\nu)\tau$ | $(1-\nu)\{\tau+(1-\tau)\mu\}$ |
+
+Consequently, a coefficient in the `mu` predictor of an augmented model
+describes the conditional mean in the open interval. Its effect on the
+marginal mean also depends on the fitted boundary probabilities.
+
+# Helpers used in the examples
+
+The following small functions keep the output compact. All reported values
+are calculated when the vignette is built; no numerical results are hard-coded.
+
+```{r helpers}
+model_fit_table <- function(models, n) {
+  rows <- lapply(names(models), function(label) {
+    object <- models[[label]]
+    data.frame(
+      model = label,
+      family = as.character(object$family[1L]),
+      parameters = object$df.fit,
+      logLik = -object$G.deviance / 2,
+      AIC = gamlss::GAIC(object, k = 2),
+      BIC = gamlss::GAIC(object, k = log(n)),
+      converged = isTRUE(object$converged),
+      row.names = NULL
+    )
+  })
+  do.call(rbind, rows)
+}
+
+coefficient_table <- function(object, parameters) {
+  rows <- lapply(parameters, function(parameter) {
+    estimate <- stats::coef(object, what = parameter)
+    data.frame(
+      parameter = parameter,
+      term = names(estimate),
+      estimate = unname(estimate),
+      row.names = NULL
+    )
+  })
+  do.call(rbind, rows)
+}
+
+fitted_summary <- function(values) {
+  rows <- lapply(names(values), function(quantity) {
+    x <- values[[quantity]]
+    data.frame(
+      quantity = quantity,
+      minimum = min(x),
+      first_quartile = unname(stats::quantile(x, 0.25)),
+      median = stats::median(x),
+      mean = mean(x),
+      third_quartile = unname(stats::quantile(x, 0.75)),
+      maximum = max(x),
+      row.names = NULL
+    )
+  })
+  do.call(rbind, rows)
+}
+
+response_profile <- function(x) {
+  c(
+    observations = length(x),
+    zero = sum(x == 0),
+    interior = sum(x > 0 & x < 1),
+    one = sum(x == 1)
+  )
+}
+```
+
+# Overview of the included data
+
+```{r load-data}
+data("bodyfat", package = "vasicekreg")
+data("transport", package = "vasicekreg")
+data("trees", package = "vasicekreg")
+data("aep", package = "vasicekreg")
+
+bodyfat_responses <- c("ARMS", "LEGS", "BODY", "ANDROID", "GYNECOID")
+aep$inappropriate <- with(aep, noinap / los)
+
+profiles <- rbind(
+  do.call(rbind, lapply(bodyfat_responses, function(response) {
+    data.frame(
+      data = "bodyfat",
+      response = response,
+      t(response_profile(bodyfat[[response]])),
+      row.names = NULL
+    )
+  })),
+  data.frame(
+    data = "transport",
+    response = "propbiked",
+    t(response_profile(transport$propbiked)),
+    row.names = NULL
+  ),
+  data.frame(
+    data = "trees",
+    response = "prop",
+    t(response_profile(trees$prop)),
+    row.names = NULL
+  ),
+  data.frame(
+    data = "aep",
+    response = "noinap / los",
+    t(response_profile(aep$inappropriate)),
+    row.names = NULL
+  )
+)
+
+knitr::kable(profiles, caption = "Observed support of the bounded responses.")
+```
+
+This empirical support determines the admissible families. The five
+`bodyfat` responses lie strictly inside the interval and can be fitted by any
+of the four base families. `transport`, `trees`, and `aep` require boundary
+models because their responses contain zero, one, or both, respectively.
+Replacing an exact boundary value by an arbitrary small offset is unnecessary
+and would change the observed data.
+
+# Body-fat proportions: mean and quantile regression
+
+The `bodyfat` data contain five body-fat proportions measured on 298
+individuals, together with age, body mass index (BMI), sex, and physical
+activity. A value such as `ARMS = 0.163` represents 16.3%, so the responses
+are already on the unit-interval scale and must not be divided by 100. The
+data source and previous analyses are described by @PetterleEtAl2020,
+@MazucheliEtAl2021, and @MazucheliEtAl2022.
+
+The five responses are repeated measurements on the same individuals. The
+models below analyze each response separately and therefore do not estimate
+their cross-response dependence. A joint multivariate interpretation would
+require a different model.
+
+We center the continuous covariates to give the intercept a more useful
+interpretation and explicitly label the factor levels.
+
+```{r bodyfat-prepare}
+bodyfat_analysis <- within(bodyfat, {
+  AGE_centered <- AGE - mean(AGE)
+  BMI_centered <- BMI - mean(BMI)
+  SEX <- factor(SEX, levels = c(1, 2), labels = c("female", "male"))
+  IPAQ <- factor(
+    IPAQ,
+    levels = c(0, 1, 2),
+    labels = c("sedentary", "insufficiently_active", "active")
+  )
+})
+
+bodyfat_ranges <- data.frame(
+  response = bodyfat_responses,
+  minimum = vapply(bodyfat_analysis[bodyfat_responses], min, numeric(1)),
+  maximum = vapply(bodyfat_analysis[bodyfat_responses], max, numeric(1)),
+  row.names = NULL
+)
+knitr::kable(bodyfat_ranges, digits = 3,
+             caption = "Ranges of the five body-fat proportions.")
+```
+
+## Mean regression for all five responses
+
+For each body-fat response, the same linear predictor is used for the
+conditional mean and `sigma` is held constant. Keeping the formula common
+facilitates comparisons of coefficient patterns across anatomical regions,
+but AIC and BIC values from different responses should not be interpreted as
+a competition among the responses.
+
+```{r bodyfat-mean-fits}
+fit_bodyfat_mean <- setNames(
+  lapply(bodyfat_responses, function(response) {
+    mu_formula <- stats::reformulate(
+      c("AGE_centered", "BMI_centered", "SEX", "IPAQ"),
+      response = response
+    )
+    gamlss(
+      formula = mu_formula,
+      sigma.formula = ~ 1,
+      family = NVASIM(),
+      data = bodyfat_analysis,
+      control = control
+    )
+  }),
+  bodyfat_responses
+)
+
+bodyfat_mean_statistics <- model_fit_table(
+  fit_bodyfat_mean,
+  n = nrow(bodyfat_analysis)
+)
+knitr::kable(
+  bodyfat_mean_statistics,
+  digits = 3,
+  caption = "Normal-kernel Vasicek mean regressions for the body-fat responses."
+)
+```
+
+For these `NVASIM` fits, `fitted(object, what = "mu")` returns the fitted
+conditional mean on the response scale. The coefficients themselves are on
+the logit scale. The complete coefficient table for any response can be
+obtained as follows.
+
+```{r bodyfat-mean-coefficients}
+knitr::kable(
+  coefficient_table(fit_bodyfat_mean[["ARMS"]], c("mu", "sigma")),
+  digits = 4,
+  caption = "Coefficient estimates for the ARMS mean-regression model."
+)
+```
+
+## Comparing the three quantile kernels
+
+We next fit median regressions to `ARMS` with identical predictors and the
+normal, logistic, and hyperbolic-secant kernels. Here, `mu` is the fitted
+conditional median, not the conditional mean. The same construction can be
+used for another fixed level by changing `quantile_level`.
+
+```{r bodyfat-quantile-fits}
+quantile_level <- 0.50
+
+fit_arms_nq <- gamlss(
+  ARMS ~ AGE_centered + BMI_centered + SEX + IPAQ,
+  sigma.formula = ~ 1,
+  family = NVASIQ(quantile = quantile_level),
+  data = bodyfat_analysis,
+  control = control
+)
+
+fit_arms_lq <- gamlss(
+  ARMS ~ AGE_centered + BMI_centered + SEX + IPAQ,
+  sigma.formula = ~ 1,
+  family = LVASIQ(quantile = quantile_level),
+  data = bodyfat_analysis,
+  control = control
+)
+
+fit_arms_hq <- gamlss(
+  ARMS ~ AGE_centered + BMI_centered + SEX + IPAQ,
+  sigma.formula = ~ 1,
+  family = HVASIQ(quantile = quantile_level),
+  data = bodyfat_analysis,
+  control = control
+)
+
+arms_models <- c(
+  list(NVASIM_mean = fit_bodyfat_mean[["ARMS"]]),
+  list(
+    NVASIQ_median = fit_arms_nq,
+    LVASIQ_median = fit_arms_lq,
+    HVASIQ_median = fit_arms_hq
+  )
+)
+
+knitr::kable(
+  model_fit_table(arms_models, n = nrow(bodyfat_analysis)),
+  digits = 3,
+  caption = "Likelihood-based summaries for the ARMS models."
+)
+```
+
+Because all four models use the same response observations, their maximized
+likelihoods, AICs, and BICs can be compared. Such a comparison concerns the
+complete fitted distributions. It does not make `mu` directly comparable
+between the mean model and the median models.
+
+```{r bodyfat-fitted-summary}
+knitr::kable(
+  fitted_summary(list(
+    NVASIM_conditional_mean = fitted(arms_models$NVASIM_mean, what = "mu"),
+    NVASIQ_conditional_median = fitted(arms_models$NVASIQ_median, what = "mu"),
+    LVASIQ_conditional_median = fitted(arms_models$LVASIQ_median, what = "mu"),
+    HVASIQ_conditional_median = fitted(arms_models$HVASIQ_median, what = "mu")
+  )),
+  digits = 4,
+  caption = "Summaries of fitted means and medians for ARMS."
+)
+```
+
+# Bicycle-trip proportions: zero augmentation
+
+The `transport` data contain 60 respondents from a stratified transportation
+study. The response is the proportion of trips to campus made by bicycle. The
+data originate from the consulting study reported by @Korosteleva2019 and
+were subsequently analyzed by @MenezesEtAl2021; the object distributed by
+`vasicekreg` retains the values supplied by `uwquantreg` [@uwquantreg].
+
+Because `propbiked` contains exact zeros but no ones, `ZANVASIM` is the
+appropriate augmented family. We use the covariate structure from the
+previous analysis: gender, parking-permit duration, and institutional status
+in the positive-component mean; gender and distance in the zero probability.
+Centering the continuous predictors changes the intercepts but not the fitted
+values or slopes.
+
+```{r transport-fit}
+transport_analysis <- within(transport, {
+  gender <- stats::relevel(factor(gender), ref = "F")
+  status <- stats::relevel(factor(status), ref = "faculty")
+  parking_centered <- parking - mean(parking)
+  distance_centered <- distance - mean(distance)
+})
+
+fit_transport <- gamlss(
+  propbiked ~ gender + parking_centered + status,
+  sigma.formula = ~ 1,
+  nu.formula = ~ gender + distance_centered,
+  family = ZANVASIM(),
+  data = transport_analysis,
+  control = control
+)
+
+knitr::kable(
+  model_fit_table(
+    list(ZANVASIM = fit_transport),
+    n = nrow(transport_analysis)
+  ),
+  digits = 3,
+  caption = "Likelihood-based summary for the transport model."
+)
+
+knitr::kable(
+  coefficient_table(fit_transport, c("mu", "sigma", "nu")),
+  digits = 4,
+  caption = "Coefficient estimates for the zero-augmented transport model."
+)
+```
+
+Here, `mu` is the fitted mean bicycle-trip proportion among positive
+responses and `nu` is the fitted probability of no bicycle trips. The fitted
+marginal mean combines both components.
+
+```{r transport-fitted}
+transport_mu <- fitted(fit_transport, what = "mu")
+transport_nu <- fitted(fit_transport, what = "nu")
+transport_marginal_mean <- (1 - transport_nu) * transport_mu
+
+knitr::kable(
+  fitted_summary(list(
+    positive_component_mean = transport_mu,
+    probability_zero = transport_nu,
+    marginal_mean = transport_marginal_mean
+  )),
+  digits = 4,
+  caption = "Fitted quantities from the transport model."
+)
+```
+
+Although `ntrips` and `nbiked` are available, this analysis treats each
+respondent's proportion as one mixed continuous--discrete response. It is not
+a binomial model for `nbiked` conditional on `ntrips`, and respondents with
+larger denominators do not automatically receive larger weights.
+
+# Tree-survival proportions: one augmentation
+
+The `trees` data record two-year survival proportions in 26 parks. Their
+provenance is the same as that of `transport` [@Korosteleva2019;
+@MenezesEtAl2021; @uwquantreg]. The response contains exact ones but no zeros,
+so we use `OANVASIM`.
+
+The continuous-component mean depends on pest-control frequency,
+fertilization frequency, precipitation, and wind speed. The probability of
+complete survival depends on wind speed. Precipitation and wind are centered
+to make the intercepts refer to their sample-average values.
+
+```{r trees-fit}
+trees_analysis <- within(trees, {
+  precip_centered <- precip - mean(precip)
+  wind_centered <- wind - mean(wind)
+})
+
+fit_trees <- gamlss(
+  prop ~ pest + fertilization + precip_centered + wind_centered,
+  sigma.formula = ~ 1,
+  nu.formula = ~ wind_centered,
+  family = OANVASIM(),
+  data = trees_analysis,
+  control = control
+)
+
+knitr::kable(
+  model_fit_table(
+    list(OANVASIM = fit_trees),
+    n = nrow(trees_analysis)
+  ),
+  digits = 3,
+  caption = "Likelihood-based summary for the tree-survival model."
+)
+
+knitr::kable(
+  coefficient_table(fit_trees, c("mu", "sigma", "nu")),
+  digits = 4,
+  caption = "Coefficient estimates for the one-augmented tree-survival model."
+)
+```
+
+For this model, `mu` is the fitted mean survival proportion conditional on a
+value below one and `nu` is the probability of complete survival. Therefore,
+the marginal mean is `nu + (1 - nu) * mu`.
+
+```{r trees-fitted}
+trees_mu <- fitted(fit_trees, what = "mu")
+trees_nu <- fitted(fit_trees, what = "nu")
+trees_marginal_mean <- trees_nu + (1 - trees_nu) * trees_mu
+
+knitr::kable(
+  fitted_summary(list(
+    continuous_component_mean = trees_mu,
+    probability_one = trees_nu,
+    marginal_mean = trees_marginal_mean
+  )),
+  digits = 4,
+  caption = "Fitted quantities from the tree-survival model."
+)
+```
+
+The small sample of 26 parks warrants caution, particularly because several
+distributional parameters are estimated. As in the transport example, the
+model treats each park-level proportion as one response; it is not a binomial
+model that uses `planted` as a number of trials.
+
+# Inappropriate hospital-stay proportions: two-boundary augmentation
+
+The `aep` data contain 1,383 patients admitted to Hospital del Mar in
+Barcelona in 1988 and 1990. For each patient, `noinap` is the number of days
+classified as inappropriate and `los` is the total length of stay. The data
+were studied by @GangeEtAl1996 and the object in `vasicekreg` retains the
+structure supplied by `gamlss.data` [@gamlssdata]. We define
+
+$$
+Y_i=\mathrm{noinap}_i / \mathrm{los}_i.
+$$
+
+The response includes both zero and one and is therefore fitted with
+`ZOANVASIM`. In its sequential boundary parameterization,
+
+$$
+P(Y_i=0)=\nu_i,\qquad
+P(Y_i=1)=(1-\nu_i)\tau_i,\qquad
+P(0<Y_i<1)=(1-\nu_i)(1-\tau_i).
+$$
+
+Sex, ward, admission year, centered age, and length of stay enter the
+continuous-component mean. Length of stay also enters the shape and both
+boundary components. The variable `age` supplied in the data is already age
+minus 55 years, and `loglos` is $\log(\mathtt{los}/10)$.
+
+```{r aep-fit}
+aep_analysis <- within(aep, {
+  sex <- stats::relevel(factor(sex), ref = "1")
+  ward <- stats::relevel(factor(ward), ref = "1")
+  year <- stats::relevel(factor(year), ref = "88")
+})
+
+fit_aep <- gamlss(
+  inappropriate ~ sex + ward + year + age + loglos,
+  sigma.formula = ~ loglos,
+  nu.formula = ~ loglos,
+  tau.formula = ~ loglos,
+  family = ZOANVASIM(),
+  data = aep_analysis,
+  control = control
+)
+
+knitr::kable(
+  model_fit_table(
+    list(ZOANVASIM = fit_aep),
+    n = nrow(aep_analysis)
+  ),
+  digits = 3,
+  caption = "Likelihood-based summary for the hospital-stay model."
+)
+
+knitr::kable(
+  coefficient_table(fit_aep, c("mu", "sigma", "nu", "tau")),
+  digits = 4,
+  caption = "Coefficient estimates for the zero-and-one-augmented hospital-stay model."
+)
+```
+
+The four fitted components must be interpreted jointly. In particular,
+`tau` is conditional on a nonzero response; it is not the marginal
+probability of one. The following calculations recover the three component
+probabilities and the marginal fitted mean.
+
+```{r aep-fitted}
+aep_mu <- fitted(fit_aep, what = "mu")
+aep_sigma <- fitted(fit_aep, what = "sigma")
+aep_nu <- fitted(fit_aep, what = "nu")
+aep_tau <- fitted(fit_aep, what = "tau")
+
+aep_probability_zero <- aep_nu
+aep_probability_one <- (1 - aep_nu) * aep_tau
+aep_probability_continuous <- (1 - aep_nu) * (1 - aep_tau)
+aep_marginal_mean <- (1 - aep_nu) * (
+  aep_tau + (1 - aep_tau) * aep_mu
+)
+
+stopifnot(all.equal(
+  aep_probability_zero + aep_probability_one + aep_probability_continuous,
+  rep(1, nrow(aep_analysis)),
+  tolerance = 1e-8
+))
+
+knitr::kable(
+  fitted_summary(list(
+    continuous_component_mean = aep_mu,
+    shape = aep_sigma,
+    probability_zero = aep_probability_zero,
+    probability_one = aep_probability_one,
+    probability_continuous = aep_probability_continuous,
+    marginal_mean = aep_marginal_mean
+  )),
+  digits = 4,
+  caption = "Fitted quantities from the hospital-stay model."
+)
+```
+
+@GangeEtAl1996 modeled the number of inappropriate days conditional on length
+of stay using binomial and beta-binomial models. The present analysis has a
+different sampling formulation: the patient is the observational unit, and
+the patient-level proportion is modeled by a distribution with two boundary
+masses and a continuous interior component. Thus, the approaches should not
+be described as the same likelihood with a different continuous kernel.
+
+# Reading coefficients and comparing models
+
+For all fitted models, `summary(object)` supplies the usual GAMLSS coefficient
+tables. A disciplined interpretation proceeds in three stages:
+
+1. identify the modeled component (`mu`, `sigma`, `nu`, or `tau`);
+2. interpret its coefficient on the chosen link scale; and
+3. transform predictions to the response scale with `fitted()` and, for an
+   augmented family, combine the components using the appropriate marginal
+   mean formula.
+
+Likelihood-based criteria compare complete fitted distributions only when
+the response and observations are the same. A smaller AIC or BIC does not by
+itself establish adequate residual behavior, and coefficients belonging to
+different parameterizations should not be equated merely because they share
+the name `mu`.
+
+# Residual diagnostics and simulated envelopes
+
+GAMLSS uses normalized randomized quantile residuals [@DunnSmyth1996]. For an
+augmented distribution, the probability integral transform is randomized
+over the fitted CDF jump at the observed boundary. Repeated residual
+calculations can therefore differ at observations equal to zero or one.
+
+The package function `vasicek_envelope()` implements parametric-bootstrap
+pointwise envelopes for these residuals and for generalized Cox--Snell
+residuals [@CoxSnell1968]. Each accepted bootstrap sample is simulated from
+the fitted model, the model is re-estimated, and the ordered residuals are
+recalculated. The construction is related to simulated-envelope diagnostics
+described by @Atkinson1985, @MoralEtAl2017, and @ZhaoEtAl2011.
+
+Because a publication-quality envelope requires hundreds of model
+re-estimations, the code is shown but not executed while the vignette is
+built. It can be applied to any of the fitted objects above.
+
+```{r aep-envelope, eval=FALSE}
+envelope_aep <- vasicek_envelope(
+  object = fit_aep,
+  residual = c("quantile", "cox-snell"),
+  nsim = 500,
+  level = 0.95,
+  envelope = "quantile",
+  seed = 2026,
+  data = aep_analysis
+)
+
+old_par <- graphics::par(no.readonly = TRUE)
+graphics::par(mfrow = c(1, 2), mar = c(4, 4, 1, 1))
+plot(envelope_aep, which = "quantile", pch = 19, cex = 0.55)
+plot(envelope_aep, which = "cox-snell", pch = 19, cex = 0.55)
+graphics::par(old_par)
+```
+
+These are full quantile--quantile plots. The gray region is a pointwise,
+not simultaneous, envelope; the red identity line is the theoretical
+reference and the blue curve is the pointwise mean of the ordered bootstrap
+residuals. In finite samples, particularly in the upper tail of the
+Cox--Snell plot, the simulated mean can be the more informative reference.
+
+# Practical workflow
+
+For a new bounded response, the following sequence is recommended:
+
+1. verify whether the observed support is $(0,1)$, $[0,1)$, $(0,1]$, or
+   $[0,1]$;
+2. choose a compatible family rather than transforming exact boundaries;
+3. state whether `mu` is a mean or a fixed quantile;
+4. specify predictors separately for every scientifically relevant
+   distributional component;
+5. inspect convergence and coefficient estimates;
+6. calculate fitted quantities on the response scale, including the marginal
+   mean for augmented models; and
+7. assess residual behavior, preferably with simulated envelopes when the
+   final model is selected.
+
+The examples in this vignette are reproducible templates, not automatic
+model-selection prescriptions. Covariate structures should ultimately follow
+the scientific question, the sampling design, and the information available
+in each data set.
+
+# Session information
+
+```{r session-info}
+sessionInfo()
+```
+
+# References {-}
