@@ -893,7 +893,7 @@ sessionInfo()
 #> [5] gamlss.data_6.0-7
 #> 
 #> loaded via a namespace (and not attached):
-#>  [1] cli_3.6.6         knitr_1.51        rlang_1.3.0       xfun_0.60        
+#>  [1] cli_3.6.6         knitr_1.52        rlang_1.3.0       xfun_0.60        
 #>  [5] otel_0.2.0        textshaping_1.0.5 jsonlite_2.0.0    htmltools_0.5.9  
 #>  [9] ragg_1.5.2        sass_0.4.10       rmarkdown_2.32    grid_4.6.1       
 #> [13] evaluate_1.0.5    jquerylib_0.1.4   MASS_7.3-65       fastmap_1.2.0    
