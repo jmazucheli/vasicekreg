@@ -423,6 +423,8 @@ citation("vasicekreg")
 
 - Mazucheli, J. and Alves, B. (2026c). Augmented Vasicek mean regression models for rates and proportions. *Under review*.
 
+- Mazucheli, J. (2026). A zero-augmented Vasicek mixed-effects regression model for longitudinal microbiome relative abundance data. *Under review*.
+
 - Mazucheli, J., Alves, B., Korkmaz, M. Ç., and Leiva, V. (2022).
   Vasicek quantile and mean regression models for bounded data: New
   formulation, mathematical derivations, and numerical applications.
@@ -528,3 +530,4 @@ citation("vasicekreg")
 ## License
 
 `vasicekreg` is distributed under the MIT License.
+
