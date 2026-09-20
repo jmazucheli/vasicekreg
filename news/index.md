@@ -1,5 +1,42 @@
 # Changelog
 
+## vasicekreg 1.3.0 (2026-09-20)
+
+### Longitudinal two-part mixed models
+
+- Added
+  [`zavr()`](https://jmazucheli.github.io/vasicekreg/reference/zavr.md),
+  a zero-augmented normal-kernel Vasicek regression for longitudinal
+  responses in `[0, 1)`. A logistic component models presence, a Vasicek
+  component models the conditional mean of positive responses, and each
+  component has an independent subject-specific Gaussian random
+  intercept.
+- Added
+  [`zabr()`](https://jmazucheli.github.io/vasicekreg/reference/zabr.md),
+  a zero-augmented beta random-intercept model following Chen and Li
+  (2016), to provide a directly comparable beta positive component under
+  the same computational interface.
+- Added one-sided formula interfaces for the presence and positive
+  components and a `random = ~ 1 | subject` interface. The earlier
+  character-vector arguments remain temporarily available with
+  deprecation warnings.
+- Added non-adaptive Gauss–Hermite integration, multiple starting
+  values, component-wise and joint likelihood-ratio tests, Hessian-based
+  covariance estimates, optimization diagnostics, and
+  [`print()`](https://rdrr.io/r/base/print.html),
+  [`coef()`](https://rdrr.io/r/stats/coef.html),
+  [`vcov()`](https://rdrr.io/r/stats/vcov.html),
+  [`logLik()`](https://rdrr.io/r/stats/logLik.html),
+  [`nobs()`](https://rdrr.io/r/stats/nobs.html), and
+  [`BIC()`](https://rdrr.io/r/stats/AIC.html) methods.
+- Joint AIC and AICc are calculated from the complete two-part
+  likelihood. BIC uses the number of subjects in its penalty, following
+  the `PROC NLMIXED` convention; component-wise criteria are retained
+  only as diagnostics and are not added to form joint AICc or BIC.
+- Added documentation, references, examples, dependency declarations, S3
+  registrations, and integration tests for the new longitudinal
+  interfaces.
+
 ## vasicekreg 1.2.0 (2026-09-03)
 
 ### Self-contained quantile families

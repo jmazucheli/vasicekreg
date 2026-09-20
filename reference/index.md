@@ -73,3 +73,7 @@
 - [`vasicekreg`](https://jmazucheli.github.io/vasicekreg/reference/vasicekreg-package.md)
   [`vasicekreg-package`](https://jmazucheli.github.io/vasicekreg/reference/vasicekreg-package.md)
   : Overview of the vasicekreg package
+- [`zabr()`](https://jmazucheli.github.io/vasicekreg/reference/zabr.md)
+  : Zero-Augmented Beta random-intercept model
+- [`zavr()`](https://jmazucheli.github.io/vasicekreg/reference/zavr.md)
+  : Zero-Augmented Vasicek random-intercept model

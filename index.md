@@ -9,6 +9,8 @@ package supports mean and quantile regression under the standard normal
 kernel and quantile regression under the logistic and hyperbolic-secant
 kernels. Normal-kernel families augmented at zero, at one, or at both
 boundaries are available for responses containing exact boundary values.
+Dedicated two-part random-intercept functions are also available for
+zero-augmented longitudinal responses.
 
 ## Available families
 
@@ -76,6 +78,50 @@ quantile, and random generation functions:
   [`q01NVASIM()`](https://jmazucheli.github.io/vasicekreg/reference/ZOANVASIM.md),
   and
   [`r01NVASIM()`](https://jmazucheli.github.io/vasicekreg/reference/ZOANVASIM.md).
+
+## Longitudinal two-part mixed models
+
+The functions
+[`zabr()`](https://jmazucheli.github.io/vasicekreg/reference/zabr.md)
+and
+[`zavr()`](https://jmazucheli.github.io/vasicekreg/reference/zavr.md)
+fit two-part models to repeated responses in `[0, 1)`:
+
+| Function | Presence component | Positive component | Random effects |
+|----|----|----|----|
+| [`zabr()`](https://jmazucheli.github.io/vasicekreg/reference/zabr.md) | Logistic | Beta mean and precision | Independent random intercept in each component |
+| [`zavr()`](https://jmazucheli.github.io/vasicekreg/reference/zavr.md) | Logistic | `NVASIM` mean and shape | Independent random intercept in each component |
+
+These are dedicated maximum-likelihood functions rather than
+`gamlss.family` objects. Subject likelihoods are evaluated by
+non-adaptive Gauss–Hermite quadrature. The preferred interface uses
+one-sided formulas for both components and a random-intercept formula:
+
+``` r
+
+fit_longitudinal <- zavr(
+  data = longitudinal_data,
+  y = "abundance",
+  formula_bin = ~ treatment + time,
+  formula_cont = ~ treatment + time,
+  random = ~ 1 | subject,
+  time_ind = "time",
+  quad_n = 30
+)
+
+coef(fit_longitudinal)
+vcov(fit_longitudinal)
+logLik(fit_longitudinal)
+BIC(fit_longitudinal)
+```
+
+`time_ind` identifies visits and is used to detect duplicated
+subject–time pairs. A time trend is fitted only when the time variable
+is included in `formula_bin` and/or `formula_cont`. Joint
+likelihood-ratio tests require identical design matrices in the two
+components. The joint AIC and AICc use the complete two-part likelihood;
+BIC uses the number of subjects in its penalty, following the
+`PROC NLMIXED` convention.
 
 ## Installation
 
@@ -465,7 +511,7 @@ Rscript -e 'testthat::test_local(path = ".", reporter = "summary")'
 
 cd ..
 R CMD build vasicekreg
-R CMD check vasicekreg_1.2.0.tar.gz
+R CMD check vasicekreg_1.3.0.tar.gz
 ```
 
 ## Citation
@@ -499,10 +545,6 @@ citation("vasicekreg")
 - Mazucheli, J. and Alves, B. (2026c). Augmented Vasicek mean regression
   models for rates and proportions. *Under review*.
 
-- Mazucheli, J. (2026). A zero-augmented Vasicek mixed-effects
-  regression model for longitudinal microbiome relative abundance data.
-  *Under review*.
-
 - Mazucheli, J., Alves, B., Korkmaz, M. Ç., and Leiva, V. (2022).
   Vasicek quantile and mean regression models for bounded data: New
   formulation, mathematical derivations, and numerical applications.
@@ -519,6 +561,17 @@ citation("vasicekreg")
   distribution. *Ekonomický časopis (Journal of Economics)*, **61**(10),
   1053–1066. [IES Working Paper
   1/2013](https://ideas.repec.org/p/fau/wpaper/wp2013_01.html)
+
+### Longitudinal two-part mixed models
+
+- Chen, E. Z., and Li, H. (2016). A two-part mixed-effects model for
+  analyzing longitudinal microbiome compositional data.
+  *Bioinformatics*, **32**(17), 2611–2617.
+  [doi:10.1093/bioinformatics/btw308](https://doi.org/10.1093/bioinformatics/btw308)
+
+- Mazucheli, J. (2026). A zero-augmented Vasicek mixed-effects
+  regression model for longitudinal microbiome relative abundance data.
+  *Under review*.
 
 ### GAMLSS framework
 

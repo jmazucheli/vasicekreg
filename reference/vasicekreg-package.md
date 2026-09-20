@@ -31,11 +31,16 @@ The documentation uses *augmented* for these boundary mixtures and
 *Vasicek-type* for kernel-based constructions. The established family
 names are retained for backward compatibility and follow familiar GAMLSS
 abbreviations in which `ZA` and `OA` historically denote zero- and
-one-adjusted families. The shape parameter \\\sigma\in(0,1)\\ controls
-dispersion in the continuous Vasicek component. The corresponding `d`,
-`p`, `q`, and `r` functions provide density or probability mass values,
-cumulative probabilities, quantiles, and random observations,
-respectively.
+one-adjusted families. For repeated responses in \\\[0,1)\\,
+[`zabr`](https://jmazucheli.github.io/vasicekreg/reference/zabr.md) and
+[`zavr`](https://jmazucheli.github.io/vasicekreg/reference/zavr.md)
+provide two-part random-intercept regressions with, respectively, beta
+and normal-kernel Vasicek positive components. These dedicated
+maximum-likelihood functions are separate from the GAMLSS families. The
+shape parameter \\\sigma\in(0,1)\\ controls dispersion in the continuous
+Vasicek component. The corresponding `d`, `p`, `q`, and `r` functions
+provide density or probability mass values, cumulative probabilities,
+quantiles, and random observations, respectively.
 
 ## Details
 
@@ -56,6 +61,17 @@ Included datasets:
 - [`trees`](https://jmazucheli.github.io/vasicekreg/reference/trees.md):
   two-year tree-survival proportions for 26 parks, including
   observations at one.
+
+[`zabr`](https://jmazucheli.github.io/vasicekreg/reference/zabr.md):
+Zero-augmented beta regression for longitudinal responses. A logistic
+component models presence and a beta component models positive
+abundance; both include independent subject-specific Gaussian random
+intercepts.
+
+[`zavr`](https://jmazucheli.github.io/vasicekreg/reference/zavr.md):
+Zero-augmented Vasicek regression with the same two-part
+random-intercept structure, replacing the positive beta distribution by
+`NVASIM`.
 
 [`NVASIM`](https://jmazucheli.github.io/vasicekreg/reference/NVASIM.md):
 Normal-kernel mean parameterization and GAMLSS family. In regression
@@ -110,7 +126,9 @@ components of the
 and
 [`HVASIQ()`](https://jmazucheli.github.io/vasicekreg/reference/HVASIQ.md)
 family objects are obtained by numerical quadrature because these
-moments have no closed-form expressions.
+moments have no closed-form expressions. The longitudinal two-part
+models use non-adaptive Gauss–Hermite quadrature from statmod;
+Hessian-based covariance estimates are obtained with numDeriv.
 
 For the distribution functions and GAMLSS constructors associated with
 `NVASIQ`, `LVASIQ`, and `HVASIQ`, the fixed quantile level is supplied
@@ -123,6 +141,11 @@ which represents the conditional probability at one among nonzero
 observations.
 
 ## References
+
+Chen, E. Z. and Li, H. (2016). A two-part mixed-effects model for
+analyzing longitudinal microbiome compositional data. *Bioinformatics*,
+**32**(17), 2611–2617.
+[doi:10.1093/bioinformatics/btw308](https://doi.org/10.1093/bioinformatics/btw308)
 
 Dunn, P. K. and Smyth, G. K. (1996). Randomized quantile residuals.
 *Journal of Computational and Graphical Statistics*, **5**(3), 236–244.
@@ -138,6 +161,9 @@ quantile and mean regression models for bounded data: New formulation,
 mathematical derivations, and numerical applications. *Mathematics*,
 **10**, 1389.
 [doi:10.3390/math10091389](https://doi.org/10.3390/math10091389)
+
+Mazucheli, J. (2026). A zero-augmented Vasicek mixed-effects regression
+model for longitudinal microbiome relative abundance data. Under review.
 
 Moral, R. A., Hinde, J. and Demetrio, C. G. B. (2017). Half-normal plots
 and overdispersed models in R: The hnp package. *Journal of Statistical

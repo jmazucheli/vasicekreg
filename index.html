@@ -11,8 +11,8 @@
 <script src="deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Vasicek-Type Distributions and Regression Models">
-<meta name="description" content="Provides density, cumulative distribution, quantile, and random generation functions for Vasicek-type distributions with standard normal, standard logistic, and standard hyperbolic-secant kernels. The normal-kernel distribution is parameterized by either its mean or a fixed quantile, whereas the logistic- and hyperbolic-secant-kernel distributions use fixed-quantile parameterizations. Zero-augmented, one-augmented, and zero-and-one-augmented extensions of the normal-kernel mean parameterization are also provided for responses that include boundary values. The corresponding NVASIM, NVASIQ, LVASIQ, HVASIQ, ZANVASIM, OANVASIM, and ZOANVASIM families are available for fitting Generalized Additive Models for Location, Scale and Shape (GAMLSS), as introduced by Rigby and Stasinopoulos (2005, &lt;doi:10.1111/j.1467-9876.2005.00510.x&gt;). Some functions are written in C++ using Rcpp, developed by Eddelbuettel and Francois (2011, &lt;doi:10.18637/jss.v040.i08&gt;).">
-<meta property="og:description" content="Provides density, cumulative distribution, quantile, and random generation functions for Vasicek-type distributions with standard normal, standard logistic, and standard hyperbolic-secant kernels. The normal-kernel distribution is parameterized by either its mean or a fixed quantile, whereas the logistic- and hyperbolic-secant-kernel distributions use fixed-quantile parameterizations. Zero-augmented, one-augmented, and zero-and-one-augmented extensions of the normal-kernel mean parameterization are also provided for responses that include boundary values. The corresponding NVASIM, NVASIQ, LVASIQ, HVASIQ, ZANVASIM, OANVASIM, and ZOANVASIM families are available for fitting Generalized Additive Models for Location, Scale and Shape (GAMLSS), as introduced by Rigby and Stasinopoulos (2005, &lt;doi:10.1111/j.1467-9876.2005.00510.x&gt;). Some functions are written in C++ using Rcpp, developed by Eddelbuettel and Francois (2011, &lt;doi:10.18637/jss.v040.i08&gt;).">
+<meta name="description" content="Provides density, cumulative distribution, quantile, and random generation functions for Vasicek-type distributions with standard normal, standard logistic, and standard hyperbolic-secant kernels. The normal-kernel distribution is parameterized by either its mean or a fixed quantile, whereas the logistic- and hyperbolic-secant-kernel distributions use fixed-quantile parameterizations. Zero-augmented, one-augmented, and zero-and-one-augmented extensions of the normal-kernel mean parameterization are also provided for responses that include boundary values. The corresponding NVASIM, NVASIQ, LVASIQ, HVASIQ, ZANVASIM, OANVASIM, and ZOANVASIM families are available for fitting Generalized Additive Models for Location, Scale and Shape (GAMLSS), as introduced by Rigby and Stasinopoulos (2005, &lt;doi:10.1111/j.1467-9876.2005.00510.x&gt;). Two-part random-intercept regression models for zero-augmented longitudinal responses are included with either a beta or a normal-kernel Vasicek positive component, extending the framework of Chen and Li (2016, &lt;doi:10.1093/bioinformatics/btw308&gt;). Some functions are written in C++ using Rcpp, developed by Eddelbuettel and Francois (2011, &lt;doi:10.18637/jss.v040.i08&gt;).">
+<meta property="og:description" content="Provides density, cumulative distribution, quantile, and random generation functions for Vasicek-type distributions with standard normal, standard logistic, and standard hyperbolic-secant kernels. The normal-kernel distribution is parameterized by either its mean or a fixed quantile, whereas the logistic- and hyperbolic-secant-kernel distributions use fixed-quantile parameterizations. Zero-augmented, one-augmented, and zero-and-one-augmented extensions of the normal-kernel mean parameterization are also provided for responses that include boundary values. The corresponding NVASIM, NVASIQ, LVASIQ, HVASIQ, ZANVASIM, OANVASIM, and ZOANVASIM families are available for fitting Generalized Additive Models for Location, Scale and Shape (GAMLSS), as introduced by Rigby and Stasinopoulos (2005, &lt;doi:10.1111/j.1467-9876.2005.00510.x&gt;). Two-part random-intercept regression models for zero-augmented longitudinal responses are included with either a beta or a normal-kernel Vasicek positive component, extending the framework of Chen and Li (2016, &lt;doi:10.1093/bioinformatics/btw308&gt;). Some functions are written in C++ using Rcpp, developed by Eddelbuettel and Francois (2011, &lt;doi:10.18637/jss.v040.i08&gt;).">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="index.html">vasicekreg</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -50,7 +50,7 @@
 <div class="page-header"><h1 id="vasicekreg">vasicekreg<a class="anchor" aria-label="anchor" href="#vasicekreg"></a>
 </h1></div>
 <p><a href="https://CRAN.R-project.org/package=vasicekreg" class="external-link"><img src="https://www.r-pkg.org/badges/version/vasicekreg" alt="CRAN status"></a></p>
-<p><code>vasicekreg</code> provides distribution functions and GAMLSS regression families for Vasicek-type distributions on the unit interval. The package supports mean and quantile regression under the standard normal kernel and quantile regression under the logistic and hyperbolic-secant kernels. Normal-kernel families augmented at zero, at one, or at both boundaries are available for responses containing exact boundary values.</p>
+<p><code>vasicekreg</code> provides distribution functions and GAMLSS regression families for Vasicek-type distributions on the unit interval. The package supports mean and quantile regression under the standard normal kernel and quantile regression under the logistic and hyperbolic-secant kernels. Normal-kernel families augmented at zero, at one, or at both boundaries are available for responses containing exact boundary values. Dedicated two-part random-intercept functions are also available for zero-augmented longitudinal responses.</p>
 <div class="section level2">
 <h2 id="available-families">Available families<a class="anchor" aria-label="anchor" href="#available-families"></a>
 </h2>
@@ -143,13 +143,64 @@
 </ul>
 </div>
 <div class="section level2">
+<h2 id="longitudinal-two-part-mixed-models">Longitudinal two-part mixed models<a class="anchor" aria-label="anchor" href="#longitudinal-two-part-mixed-models"></a>
+</h2>
+<p>The functions <code><a href="reference/zabr.html">zabr()</a></code> and <code><a href="reference/zavr.html">zavr()</a></code> fit two-part models to repeated responses in <code>[0, 1)</code>:</p>
+<table class="table">
+<colgroup>
+<col width="25%">
+<col width="25%">
+<col width="25%">
+<col width="25%">
+</colgroup>
+<thead><tr>
+<th>Function</th>
+<th>Presence component</th>
+<th>Positive component</th>
+<th>Random effects</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code><a href="reference/zabr.html">zabr()</a></code></td>
+<td>Logistic</td>
+<td>Beta mean and precision</td>
+<td>Independent random intercept in each component</td>
+</tr>
+<tr>
+<td><code><a href="reference/zavr.html">zavr()</a></code></td>
+<td>Logistic</td>
+<td>
+<code>NVASIM</code> mean and shape</td>
+<td>Independent random intercept in each component</td>
+</tr>
+</tbody>
+</table>
+<p>These are dedicated maximum-likelihood functions rather than <code>gamlss.family</code> objects. Subject likelihoods are evaluated by non-adaptive Gauss–Hermite quadrature. The preferred interface uses one-sided formulas for both components and a random-intercept formula:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">fit_longitudinal</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/zavr.html">zavr</a></span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="va">longitudinal_data</span>,</span>
+<span>  y <span class="op">=</span> <span class="st">"abundance"</span>,</span>
+<span>  formula_bin <span class="op">=</span> <span class="op">~</span> <span class="va">treatment</span> <span class="op">+</span> <span class="va">time</span>,</span>
+<span>  formula_cont <span class="op">=</span> <span class="op">~</span> <span class="va">treatment</span> <span class="op">+</span> <span class="va">time</span>,</span>
+<span>  random <span class="op">=</span> <span class="op">~</span> <span class="fl">1</span> <span class="op">|</span> <span class="va">subject</span>,</span>
+<span>  time_ind <span class="op">=</span> <span class="st">"time"</span>,</span>
+<span>  quad_n <span class="op">=</span> <span class="fl">30</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit_longitudinal</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/vcov.html" class="external-link">vcov</a></span><span class="op">(</span><span class="va">fit_longitudinal</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/logLik.html" class="external-link">logLik</a></span><span class="op">(</span><span class="va">fit_longitudinal</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">BIC</a></span><span class="op">(</span><span class="va">fit_longitudinal</span><span class="op">)</span></span></code></pre></div>
+<p><code>time_ind</code> identifies visits and is used to detect duplicated subject–time pairs. A time trend is fitted only when the time variable is included in <code>formula_bin</code> and/or <code>formula_cont</code>. Joint likelihood-ratio tests require identical design matrices in the two components. The joint AIC and AICc use the complete two-part likelihood; BIC uses the number of subjects in its penalty, following the <code>PROC NLMIXED</code> convention.</p>
+</div>
+<div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
 <p>Install the released version from CRAN:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"vasicekreg"</span><span class="op">)</span></span></code></pre></div>
 <p>Install the development version from GitHub:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"jmazucheli/vasicekreg"</span><span class="op">)</span></span></code></pre></div>
 <p>Because the package contains compiled C++ code, installation from source requires an appropriate compiler toolchain.</p>
@@ -202,14 +253,14 @@
 </table>
 <p>The help pages preserve the original data provenance and the citations associated with each dataset. Use <code><a href="reference/bodyfat.html">?bodyfat</a></code>, <code><a href="reference/aep.html">?aep</a></code>, <code><a href="reference/transport.html">?transport</a></code>, or <code><a href="reference/trees.html">?trees</a></code> for variable definitions, sources, and references.</p>
 <p>An application-oriented vignette fits models to every included data set, including all five <code>bodyfat</code> responses and the three boundary patterns:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/vignette.html" class="external-link">vignette</a></span><span class="op">(</span><span class="st">"vasicekreg"</span>, package <span class="op">=</span> <span class="st">"vasicekreg"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="distribution-functions">Distribution functions<a class="anchor" aria-label="anchor" href="#distribution-functions"></a>
 </h2>
 <p>The following example uses the normal-kernel mean parameterization:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://jmazucheli.github.io/vasicekreg/">vasicekreg</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
@@ -219,7 +270,7 @@
 <span><span class="fu"><a href="reference/NVASIM.html">pNVASIM</a></span><span class="op">(</span>q <span class="op">=</span> <span class="fl">0.50</span>, mu <span class="op">=</span> <span class="fl">0.50</span>, sigma <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/NVASIM.html">qNVASIM</a></span><span class="op">(</span>p <span class="op">=</span> <span class="fl">0.50</span>, mu <span class="op">=</span> <span class="fl">0.50</span>, sigma <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span></span></code></pre></div>
 <p>For the quantile parameterizations, the fixed level is supplied through the <code>quantile</code> argument:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/NVASIQ.html">qNVASIQ</a></span><span class="op">(</span>p <span class="op">=</span> <span class="fl">0.25</span>, mu <span class="op">=</span> <span class="fl">0.60</span>, sigma <span class="op">=</span> <span class="fl">0.25</span>, quantile <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/LVASIQ.html">qLVASIQ</a></span><span class="op">(</span>p <span class="op">=</span> <span class="fl">0.25</span>, mu <span class="op">=</span> <span class="fl">0.60</span>, sigma <span class="op">=</span> <span class="fl">0.25</span>, quantile <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/HVASIQ.html">qHVASIQ</a></span><span class="op">(</span>p <span class="op">=</span> <span class="fl">0.25</span>, mu <span class="op">=</span> <span class="fl">0.60</span>, sigma <span class="op">=</span> <span class="fl">0.25</span>, quantile <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span></span></code></pre></div>
@@ -228,7 +279,7 @@
 <div class="section level2">
 <h2 id="gamlss-mean-regression">GAMLSS mean regression<a class="anchor" aria-label="anchor" href="#gamlss-mean-regression"></a>
 </h2>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://www.gamlss.com/" class="external-link">gamlss</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://jmazucheli.github.io/vasicekreg/">vasicekreg</a></span><span class="op">)</span></span>
 <span></span>
@@ -252,7 +303,7 @@
 <div class="section level2">
 <h2 id="gamlss-zero-augmented-mean-regression">GAMLSS zero-augmented mean regression<a class="anchor" aria-label="anchor" href="#gamlss-zero-augmented-mean-regression"></a>
 </h2>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
 <span><span class="va">dat_zero</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  y <span class="op">=</span> <span class="fu"><a href="reference/ZANVASIM.html">r0NVASIM</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">500</span>, mu <span class="op">=</span> <span class="fl">0.60</span>, sigma <span class="op">=</span> <span class="fl">0.25</span>, nu <span class="op">=</span> <span class="fl">0.20</span><span class="op">)</span></span>
@@ -279,7 +330,7 @@
 <div class="section level2">
 <h2 id="gamlss-one-augmented-and-zero-and-one-augmented-regression">GAMLSS one-augmented and zero-and-one-augmented regression<a class="anchor" aria-label="anchor" href="#gamlss-one-augmented-and-zero-and-one-augmented-regression"></a>
 </h2>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dat_one</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  y <span class="op">=</span> <span class="fu"><a href="reference/OANVASIM.html">r1NVASIM</a></span><span class="op">(</span><span class="fl">500</span>, mu <span class="op">=</span> <span class="fl">0.60</span>, sigma <span class="op">=</span> <span class="fl">0.25</span>, nu <span class="op">=</span> <span class="fl">0.20</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
@@ -310,7 +361,7 @@
 <span><span class="op">)</span></span></code></pre></div>
 <p>For <code>ZOANVASIM</code>, <code>p0 = nu</code>, <code>p1 = (1 - nu) * tau</code>, and <code>pc = (1 - nu) * (1 - tau)</code>. This parameterization guarantees valid probabilities while retaining logit links for both boundary parameters. Here <code>tau</code> is an estimated model parameter and is unrelated to the fixed <code>quantile</code> argument of <code><a href="reference/NVASIQ.html">NVASIQ()</a></code>, <code><a href="reference/LVASIQ.html">LVASIQ()</a></code>, and <code><a href="reference/HVASIQ.html">HVASIQ()</a></code>.</p>
 <p>The included <code>aep</code> data provide a real example with both boundary values:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"aep"</span>, package <span class="op">=</span> <span class="st">"vasicekreg"</span><span class="op">)</span></span>
 <span><span class="va">aep</span><span class="op">$</span><span class="va">inappropriate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">aep</span>, <span class="va">noinap</span> <span class="op">/</span> <span class="va">los</span><span class="op">)</span></span>
 <span></span>
@@ -331,7 +382,7 @@
 <div class="section level3">
 <h3 id="normal-kernel">Normal kernel<a class="anchor" aria-label="anchor" href="#normal-kernel"></a>
 </h3>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://www.gamlss.com/" class="external-link">gamlss</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://jmazucheli.github.io/vasicekreg/">vasicekreg</a></span><span class="op">)</span></span>
 <span></span>
@@ -363,7 +414,7 @@
 <div class="section level3">
 <h3 id="logistic-kernel">Logistic kernel<a class="anchor" aria-label="anchor" href="#logistic-kernel"></a>
 </h3>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
 <span><span class="va">quantile_level</span> <span class="op">&lt;-</span> <span class="fl">0.25</span></span>
 <span></span>
@@ -392,7 +443,7 @@
 <div class="section level3">
 <h3 id="hyperbolic-secant-kernel">Hyperbolic-secant kernel<a class="anchor" aria-label="anchor" href="#hyperbolic-secant-kernel"></a>
 </h3>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
 <span><span class="va">quantile_level</span> <span class="op">&lt;-</span> <span class="fl">0.25</span></span>
 <span></span>
@@ -426,7 +477,7 @@
 </h2>
 <p>The function <code><a href="reference/vasicek_envelope.html">vasicek_envelope()</a></code> constructs pointwise simulated envelopes for normalized randomized quantile residuals and generalized Cox–Snell residuals. In every bootstrap replication, a new response is generated under the fitted model, the same GAMLSS model is re-estimated, and the residuals are recalculated and ordered. This accounts for parameter-estimation variability.</p>
 <p>For augmented families, the probability integral transform is randomized over the fitted CDF jump at zero and/or one. Quantile residuals are compared with the standard normal distribution, whereas Cox–Snell residuals are compared with the unit-mean exponential distribution. Cox–Snell residuals are evaluated as <code>-pnorm(rq, lower.tail = FALSE, log.p = TRUE)</code>, which is equivalent to <code>-log(1 - pnorm(rq))</code> but remains stable in the upper tail.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">envelope_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/vasicek_envelope.html">vasicek_envelope</a></span><span class="op">(</span></span>
 <span>  object <span class="op">=</span> <span class="va">fit_mean</span>,</span>
 <span>  residual <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"quantile"</span>, <span class="st">"cox-snell"</span><span class="op">)</span>,</span>
@@ -450,17 +501,17 @@
 <h2 id="testing">Testing<a class="anchor" aria-label="anchor" href="#testing"></a>
 </h2>
 <p>From the package root directory:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">-e</span> <span class="st">'testthat::test_local(path = ".", reporter = "summary")'</span></span>
-<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a></span>
-<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="bu">cd</span> ..</span>
-<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="ex">R</span> CMD build vasicekreg</span>
-<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a><span class="ex">R</span> CMD check vasicekreg_1.2.0.tar.gz</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">-e</span> <span class="st">'testthat::test_local(path = ".", reporter = "summary")'</span></span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a><span class="bu">cd</span> ..</span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a><span class="ex">R</span> CMD build vasicekreg</span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a><span class="ex">R</span> CMD check vasicekreg_1.3.0.tar.gz</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
 </h2>
 <p>To cite the package, use:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/citation.html" class="external-link">citation</a></span><span class="op">(</span><span class="st">"vasicekreg"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -475,11 +526,18 @@
 <li><p>Mazucheli, J. and Alves, B. (2026a). A hyperbolic-secant-kernel Vasicek-type quantile regression for rates and proportions. <em>Under review</em>.</p></li>
 <li><p>Mazucheli, J. and Alves, B. (2026b). A logistic-kernel Vasicek-type quantile regression for rates and proportions. <em>Under review</em>.</p></li>
 <li><p>Mazucheli, J. and Alves, B. (2026c). Augmented Vasicek mean regression models for rates and proportions. <em>Under review</em>.</p></li>
-<li><p>Mazucheli, J. (2026). A zero-augmented Vasicek mixed-effects regression model for longitudinal microbiome relative abundance data. <em>Under review</em>.</p></li>
 <li><p>Mazucheli, J., Alves, B., Korkmaz, M. Ç., and Leiva, V. (2022). Vasicek quantile and mean regression models for bounded data: New formulation, mathematical derivations, and numerical applications. <em>Mathematics</em>, <strong>10</strong>, 1389. <a href="https://doi.org/10.3390/math10091389" class="external-link">doi:10.3390/math10091389</a></p></li>
 <li><p>Vasicek, O. A. (1987). <em>Probability of Loss on Loan Portfolio</em>. KMV Corporation.</p></li>
 <li><p>Vasicek, O. A. (2002). The distribution of loan portfolio value. <em>Risk</em>, <strong>15</strong>(12), 160–162.</p></li>
 <li><p>Witzany, J. (2013). A note on the Vasicek’s model with the logistic distribution. <em>Ekonomický časopis (Journal of Economics)</em>, <strong>61</strong>(10), 1053–1066. <a href="https://ideas.repec.org/p/fau/wpaper/wp2013_01.html" class="external-link">IES Working Paper 1/2013</a></p></li>
+</ul>
+</div>
+<div class="section level3">
+<h3 id="longitudinal-two-part-mixed-models-1">Longitudinal two-part mixed models<a class="anchor" aria-label="anchor" href="#longitudinal-two-part-mixed-models-1"></a>
+</h3>
+<ul>
+<li><p>Chen, E. Z., and Li, H. (2016). A two-part mixed-effects model for analyzing longitudinal microbiome compositional data. <em>Bioinformatics</em>, <strong>32</strong>(17), 2611–2617. <a href="https://doi.org/10.1093/bioinformatics/btw308" class="external-link">doi:10.1093/bioinformatics/btw308</a></p></li>
+<li><p>Mazucheli, J. (2026). A zero-augmented Vasicek mixed-effects regression model for longitudinal microbiome relative abundance data. <em>Under review</em>.</p></li>
 </ul>
 </div>
 <div class="section level3">
