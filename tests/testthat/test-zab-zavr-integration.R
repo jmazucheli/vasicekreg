@@ -1,35 +1,35 @@
 test_that("longitudinal two-part functions are exported", {
-    expect_true(is.function(zibr))
-    expect_true(is.function(zivr))
+    expect_true(is.function(zab))
+    expect_true(is.function(zavr))
 
     exports <- getNamespaceExports("vasicekreg")
-    expect_true(all(c("zibr", "zivr") %in% exports))
+    expect_true(all(c("zab", "zavr") %in% exports))
 })
 
 test_that("the shared longitudinal engine is available internally", {
     engine <- getFromNamespace(
-        ".fit_zero_inflated_engine",
+        ".fit_zero_augmented_engine",
         "vasicekreg"
     )
     expect_true(is.function(engine))
 })
 
-test_that("zibr S3 methods are registered", {
+test_that("zab S3 methods are registered", {
     generics <- c("print", "coef", "vcov", "logLik", "nobs", "BIC")
 
     for (generic in generics) {
         expect_true(is.function(
-            utils::getS3method(generic, "zibr", optional = TRUE)
+            utils::getS3method(generic, "zab", optional = TRUE)
         ))
     }
 })
 
-test_that("zivr S3 methods are registered", {
+test_that("zavr S3 methods are registered", {
     generics <- c("print", "coef", "vcov", "logLik", "nobs", "BIC")
 
     for (generic in generics) {
         expect_true(is.function(
-            utils::getS3method(generic, "zivr", optional = TRUE)
+            utils::getS3method(generic, "zavr", optional = TRUE)
         ))
     }
 })
@@ -39,13 +39,13 @@ test_that("formula and legacy arguments remain present", {
         c(
             "data", "y", "formula_bin", "formula_cont", "random",
             "logistic_cov", "beta_cov", "subject_ind", "time_ind"
-        ) %in% names(formals(zibr))
+        ) %in% names(formals(zab))
     ))
 
     expect_true(all(
         c(
             "data", "y", "formula_bin", "formula_cont", "random",
             "logistic_cov", "vasicek_cov", "subject_ind", "time_ind"
-        ) %in% names(formals(zivr))
+        ) %in% names(formals(zavr))
     ))
 })

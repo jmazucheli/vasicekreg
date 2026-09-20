@@ -65,7 +65,7 @@
   group_var
 }
 
-#' Fit a zero-inflated (or zero-augmented) random-intercept model
+#' Fit a zero-augmented random-intercept model
 #'
 #' Shared engine for two-component models: a presence (logistic) component
 #' and a positive (Beta or Vasicek) component. Uses non-adaptive
@@ -103,7 +103,7 @@
 #' @return A list with all fitted quantities.
 #' @keywords internal
 #' @noRd
-.fit_zero_inflated_engine <- function(data, y, formula_bin = NULL, formula_cont = NULL, random = NULL,
+.fit_zero_augmented_engine <- function(data, y, formula_bin = NULL, formula_cont = NULL, random = NULL,
                                       logistic_cov = NULL, positive_cov = NULL, subject_ind = NULL, time_ind,
                                       component_wise_test, quad_n, verbose, joint_test, sd_lower,
                                       start, control, hessian, model_name, required_pkgs,

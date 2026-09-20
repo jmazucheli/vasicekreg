@@ -53,13 +53,13 @@ and random generation functions:
 
 ## Longitudinal two-part mixed models
 
-The functions `zibr()` and `zivr()` fit two-part models to repeated
+The functions `zab()` and `zavr()` fit two-part models to repeated
 responses in `[0, 1)`:
 
 | Function | Presence component | Positive component | Random effects |
 |---|---|---|---|
-| `zibr()` | Logistic | Beta mean and precision | Independent random intercept in each component |
-| `zivr()` | Logistic | `NVASIM` mean and shape | Independent random intercept in each component |
+| `zab()` | Logistic | Beta mean and precision | Independent random intercept in each component |
+| `zavr()` | Logistic | `NVASIM` mean and shape | Independent random intercept in each component |
 
 These are dedicated maximum-likelihood functions rather than
 `gamlss.family` objects. Subject likelihoods are evaluated by non-adaptive
@@ -67,7 +67,7 @@ Gauss--Hermite quadrature. The preferred interface uses one-sided formulas
 for both components and a random-intercept formula:
 
 ```r
-fit_longitudinal <- zivr(
+fit_longitudinal <- zavr(
   data = longitudinal_data,
   y = "abundance",
   formula_bin = ~ treatment + time,

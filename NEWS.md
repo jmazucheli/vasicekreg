@@ -2,12 +2,12 @@
 
 ## Longitudinal two-part mixed models
 
-- Added `zivr()`, a zero-augmented normal-kernel Vasicek regression for
+- Added `zavr()`, a zero-augmented normal-kernel Vasicek regression for
   longitudinal responses in `[0, 1)`. A logistic component models presence,
   a Vasicek component models the conditional mean of positive responses, and
   each component has an independent subject-specific Gaussian random
   intercept.
-- Added `zibr()`, a zero-inflated beta random-intercept model following
+- Added `zab()`, a zero-augmented beta random-intercept model following
   Chen and Li (2016), to provide a directly comparable beta positive
   component under the same computational interface.
 - Added one-sided formula interfaces for the presence and positive components
