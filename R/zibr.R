@@ -110,4 +110,3 @@ BIC.zibr <- function(object, ...) {
   k <- length(object$estimates)
   -2 * as.numeric(stats::logLik(object)) + k * log(object$nsubjects)
 }
-
