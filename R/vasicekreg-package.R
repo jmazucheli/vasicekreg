@@ -54,7 +54,7 @@
 #' }
 #'
 #' \code{\link[vasicekreg]{zabr}}:
-#' Zero-inflated beta regression for longitudinal responses. A logistic
+#' Zero-augmented beta regression for longitudinal responses. A logistic
 #' component models presence and a beta component models positive abundance;
 #' both include independent subject-specific Gaussian random intercepts.
 #'

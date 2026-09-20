@@ -70,7 +70,7 @@ zabr <- function(data, y, formula_bin = NULL, formula_cont = NULL, random = NULL
 
 #' @export
 print.zabr <- function(x, digits = 6, ...) {
-  cat("Zero-inflated Beta random-intercept model\n")
+  cat("Zero-augmented Beta random-intercept model\n")
   cat("Presence component (Pvalue = LRT; Wald_Pvalue = normal reference):\n"); print(x$logistic_est_table, digits = digits)
   cat("\nPositive-abundance component:\n"); print(x$beta_est_table, digits = digits)
   cat("\nBeta precision:\n"); print(x$precision_table, digits = digits)
