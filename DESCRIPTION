@@ -1,8 +1,8 @@
 Package: vasicekreg
 Type: Package
 Title: Vasicek-Type Distributions and Regression Models
-Version: 1.2.0
-Date: 2026-09-03
+Version: 1.3.0
+Date: 2026-09-20
 Authors@R: 
     c(person(given = "Josmar",
              family = "Mazucheli",
@@ -24,16 +24,27 @@ Description: Provides density, cumulative distribution, quantile, and
     'ZANVASIM', 'OANVASIM', and 'ZOANVASIM' families are available for fitting
     Generalized Additive Models for Location, Scale and Shape (GAMLSS),
     as introduced by Rigby and Stasinopoulos (2005,
-    <doi:10.1111/j.1467-9876.2005.00510.x>). Some functions are written in
-    'C++' using 'Rcpp', developed by Eddelbuettel and Francois (2011,
-    <doi:10.18637/jss.v040.i08>).
+    <doi:10.1111/j.1467-9876.2005.00510.x>). Two-part random-intercept
+    regression models for zero-augmented longitudinal responses are included
+    with either a beta or a normal-kernel Vasicek positive component, extending
+    the framework of Chen and Li (2016, <doi:10.1093/bioinformatics/btw308>).
+    Some functions are written in 'C++' using 'Rcpp', developed by Eddelbuettel
+    and Francois (2011, <doi:10.18637/jss.v040.i08>).
 URL: https://jmazucheli.github.io/vasicekreg/
 License: MIT + file LICENSE
 Encoding: UTF-8
 ByteCompile: yes
 LazyData: true
 Depends: R (>= 3.6)
-Imports: Rcpp, stats, gamlss, gamlss.dist, mvtnorm
+Imports:
+    Rcpp,
+    stats,
+    utils,
+    gamlss,
+    gamlss.dist,
+    mvtnorm,
+    numDeriv,
+    statmod
 LinkingTo: Rcpp
 Suggests:
     betareg,
