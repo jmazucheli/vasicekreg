@@ -360,4 +360,3 @@
        null_l = null_l, null_v = null_v, logistic_names = colnames(X), positive_names = colnames(Z)
   )
 }
-
