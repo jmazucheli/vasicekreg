@@ -35,6 +35,11 @@ The documentation uses \emph{augmented} for these boundary mixtures and
 names are retained for backward compatibility and follow familiar GAMLSS
 abbreviations in which \code{ZA} and \code{OA} historically denote
 zero- and one-adjusted families.
+For repeated responses in \eqn{[0,1)}, \code{\link{zibr}} and
+\code{\link{zivr}} provide two-part random-intercept regressions with,
+respectively, beta and normal-kernel Vasicek positive components. These
+dedicated maximum-likelihood functions are separate from the GAMLSS
+families.
 The shape parameter \eqn{\sigma\in(0,1)} controls dispersion in the continuous
 Vasicek component. The corresponding \code{d}, \code{p}, \code{q}, and
 \code{r} functions provide density or probability mass values, cumulative
@@ -52,6 +57,15 @@ Included datasets:
   \item \code{\link[vasicekreg]{trees}}: two-year tree-survival
   proportions for 26 parks, including observations at one.
 }
+
+\code{\link[vasicekreg]{zibr}}:
+Zero-inflated beta regression for longitudinal responses. A logistic
+component models presence and a beta component models positive abundance;
+both include independent subject-specific Gaussian random intercepts.
+
+\code{\link[vasicekreg]{zivr}}:
+Zero-augmented Vasicek regression with the same two-part random-intercept
+structure, replacing the positive beta distribution by \code{NVASIM}.
 
 \code{\link[vasicekreg]{NVASIM}}:
 Normal-kernel mean parameterization and GAMLSS family. In regression
@@ -109,6 +123,9 @@ log-likelihood derivatives are implemented in \proglang{R}. The mean and
 variance components of the \code{LVASIQ()} and \code{HVASIQ()} family
 objects are obtained by numerical quadrature because these moments have no
 closed-form expressions.
+The longitudinal two-part models use non-adaptive Gauss--Hermite
+quadrature from \pkg{statmod}; Hessian-based covariance estimates are
+obtained with \pkg{numDeriv}.
 
 For the distribution functions and GAMLSS constructors associated with
 \code{NVASIQ}, \code{LVASIQ}, and \code{HVASIQ}, the fixed quantile level
@@ -169,6 +186,11 @@ if (requireNamespace("betareg", quietly = TRUE)) {
 
 }
 \references{
+Chen, E. Z. and Li, H. (2016). A two-part mixed-effects model for
+analyzing longitudinal microbiome compositional data.
+\emph{Bioinformatics}, \bold{32}(17), 2611--2617.
+\doi{10.1093/bioinformatics/btw308}
+
 Dunn, P. K. and Smyth, G. K. (1996). Randomized quantile residuals.
 \emph{Journal of Computational and Graphical Statistics}, \bold{5}(3),
 236--244. \doi{10.1080/10618600.1996.10474708}
@@ -182,6 +204,9 @@ Mazucheli, J., Alves, B., Korkmaz, M. Ç., and Leiva, V. (2022).
 Vasicek quantile and mean regression models for bounded data: New
 formulation, mathematical derivations, and numerical applications.
 \emph{Mathematics}, \bold{10}, 1389. \doi{10.3390/math10091389}
+
+Mazucheli, J. (2026). A zero-augmented Vasicek mixed-effects regression
+model for longitudinal microbiome relative abundance data. Under review.
 
 Moral, R. A., Hinde, J. and Demetrio, C. G. B. (2017). Half-normal plots
 and overdispersed models in R: The hnp package. \emph{Journal of
