@@ -35,7 +35,7 @@ The documentation uses \emph{augmented} for these boundary mixtures and
 names are retained for backward compatibility and follow familiar GAMLSS
 abbreviations in which \code{ZA} and \code{OA} historically denote
 zero- and one-adjusted families.
-For repeated responses in \eqn{[0,1)}, \code{\link{zab}} and
+For repeated responses in \eqn{[0,1)}, \code{\link{zabr}} and
 \code{\link{zavr}} provide two-part random-intercept regressions with,
 respectively, beta and normal-kernel Vasicek positive components. These
 dedicated maximum-likelihood functions are separate from the GAMLSS
@@ -58,7 +58,7 @@ Included datasets:
   proportions for 26 parks, including observations at one.
 }
 
-\code{\link[vasicekreg]{zab}}:
+\code{\link[vasicekreg]{zabr}}:
 Zero-inflated beta regression for longitudinal responses. A logistic
 component models presence and a beta component models positive abundance;
 both include independent subject-specific Gaussian random intercepts.

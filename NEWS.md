@@ -7,7 +7,7 @@
   a Vasicek component models the conditional mean of positive responses, and
   each component has an independent subject-specific Gaussian random
   intercept.
-- Added `zab()`, a zero-augmented beta random-intercept model following
+- Added `zabr()`, a zero-augmented beta random-intercept model following
   Chen and Li (2016), to provide a directly comparable beta positive
   component under the same computational interface.
 - Added one-sided formula interfaces for the presence and positive components

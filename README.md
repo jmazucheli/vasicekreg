@@ -53,12 +53,12 @@ and random generation functions:
 
 ## Longitudinal two-part mixed models
 
-The functions `zab()` and `zavr()` fit two-part models to repeated
+The functions `zabr()` and `zavr()` fit two-part models to repeated
 responses in `[0, 1)`:
 
 | Function | Presence component | Positive component | Random effects |
 |---|---|---|---|
-| `zab()` | Logistic | Beta mean and precision | Independent random intercept in each component |
+| `zabr()` | Logistic | Beta mean and precision | Independent random intercept in each component |
 | `zavr()` | Logistic | `NVASIM` mean and shape | Independent random intercept in each component |
 
 These are dedicated maximum-likelihood functions rather than

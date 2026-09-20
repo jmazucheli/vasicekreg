@@ -24,9 +24,9 @@
 #' @param start Optional list of starting values.
 #' @param control List of control parameters.
 #' @param hessian Logical; compute Hessian-based standard errors?
-#' @return An object of class "zab".
+#' @return An object of class "zabr".
 #' @export
-zab <- function(data, y, formula_bin = NULL, formula_cont = NULL, random = NULL,
+zabr <- function(data, y, formula_bin = NULL, formula_cont = NULL, random = NULL,
                  logistic_cov = NULL, beta_cov = NULL, subject_ind = NULL, time_ind,
                  component_wise_test = TRUE, quad_n = 30, verbose = FALSE,
                  joint_test = NULL, sd_lower = 1e-5, start = NULL, control = list(), hessian = TRUE) {
@@ -36,7 +36,7 @@ zab <- function(data, y, formula_bin = NULL, formula_cont = NULL, random = NULL,
     logistic_cov = logistic_cov, positive_cov = beta_cov, subject_ind = subject_ind, time_ind = time_ind,
     component_wise_test = component_wise_test, quad_n = quad_n, verbose = verbose,
     joint_test = joint_test, sd_lower = sd_lower, start = start, control = control, hessian = hessian,
-    model_name = "zab", required_pkgs = c("statmod", "numDeriv"),
+    model_name = "zabr", required_pkgs = c("statmod", "numDeriv"),
     positive_name = "beta", shape_param_name = "phi",
     positive_density_fn = function(yy, mm, phi, sz) stats::dbeta(yy, shape1 = mm * phi, shape2 = (1 - mm) * phi, log = TRUE),
     validate_shape_fn = function(t2) { phi <- exp(t2); if (!is.finite(phi) || phi <= 0) NULL else phi },
@@ -64,12 +64,12 @@ zab <- function(data, y, formula_bin = NULL, formula_cont = NULL, random = NULL,
     optimization = list(logistic = res$full_l$opt, beta = res$full_v$opt),
     starts = list(logistic = res$full_l$candidates, beta = res$full_v$candidates)
   )
-  class(out) <- "zab"
+  class(out) <- "zabr"
   out
 }
 
 #' @export
-print.zab <- function(x, digits = 6, ...) {
+print.zabr <- function(x, digits = 6, ...) {
   cat("Zero-inflated Beta random-intercept model\n")
   cat("Presence component (Pvalue = LRT; Wald_Pvalue = normal reference):\n"); print(x$logistic_est_table, digits = digits)
   cat("\nPositive-abundance component:\n"); print(x$beta_est_table, digits = digits)
@@ -88,13 +88,13 @@ print.zab <- function(x, digits = 6, ...) {
 }
 
 #' @export
-coef.zab <- function(object, ...) object$estimates
+coef.zabr <- function(object, ...) object$estimates
 
 #' @export
-vcov.zab <- function(object, ...) object$vcov
+vcov.zabr <- function(object, ...) object$vcov
 
 #' @export
-logLik.zab <- function(object, ...) {
+logLik.zabr <- function(object, ...) {
   structure(object$loglikelihood,
             df    = length(object$estimates),
             nobs  = object$nobs,
@@ -102,11 +102,11 @@ logLik.zab <- function(object, ...) {
 }
 
 #' @export
-nobs.zab <- function(object, ...) object$nobs
+nobs.zabr <- function(object, ...) object$nobs
 
 #' @export
 # BIC compatible with SAS/NLMIXED: uses log(number of subjects)
-BIC.zab <- function(object, ...) {
+BIC.zabr <- function(object, ...) {
   k <- length(object$estimates)
   -2 * as.numeric(stats::logLik(object)) + k * log(object$nsubjects)
 }
