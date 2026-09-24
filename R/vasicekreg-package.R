@@ -51,6 +51,10 @@
 #'   60 respondents, including observations at zero.
 #'   \item \code{\link[vasicekreg]{trees}}: two-year tree-survival
 #'   proportions for 26 parks, including observations at one.
+#'   \item \code{\link[vasicekreg]{please_microbiome}}: longitudinal
+#'   genus-level relative abundances from the pediatric study of
+#'   Lewis et al. (2015), in long format (3186 rows, 59 subjects,
+#'   18 genera, baseline included as a subject-level covariate).
 #' }
 #'
 #' \code{\link[vasicekreg]{zabr}}:
@@ -199,6 +203,12 @@
 #' Systems}, \bold{20}(1), 67--89.
 #' \doi{10.1080/09720510.2016.1190575}
 #'
+#' Lewis, J. D., Chen, E. Z., Baldassano, R. N., et al. (2015).
+#' Inflammation, antibiotics, and diet as environmental stressors of the
+#' gut microbiome in pediatric Crohn's disease.
+#' \emph{Cell Host & Microbe}, \bold{18}(4), 489--500.
+#' \doi{10.1016/j.chom.2015.09.008}
+#'
 #' Mazucheli, J., Alves, B., Korkmaz, M. Ç., and Leiva, V. (2022).
 #' Vasicek quantile and mean regression models for bounded data: New
 #' formulation, mathematical derivations, and numerical applications.
@@ -225,6 +235,11 @@
 #' for location, scale and shape. \emph{Applied Statistics}, \bold{54}(3),
 #' 507--554. \doi{10.1111/j.1467-9876.2005.00510.x}
 #'
+#' Segata, N., Waldron, L., Ballarini, A., et al. (2012). Metagenomic
+#' microbial community profiling using unique clade-specific marker genes.
+#' \emph{Nature Methods}, \bold{9}(8), 811--814.
+#' \doi{10.1038/nmeth.2066}
+#'
 #' Vasicek, O. A. (2002). The distribution of loan portfolio value.
 #' \emph{Risk}, \bold{15}(12), 160--162.
 #'
@@ -239,6 +254,7 @@
 #'
 #' @useDynLib vasicekreg
 #' @importFrom Rcpp evalCpp
+#' @importFrom stats BIC coef logLik nobs vcov
 "_PACKAGE"
 
 .onUnload <- function(libpath) {

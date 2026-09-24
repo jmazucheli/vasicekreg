@@ -15,7 +15,7 @@ test_that("the shared longitudinal engine is available internally", {
 })
 
 test_that("zabr S3 methods are registered", {
-    generics <- c("print", "coef", "vcov", "logLik", "nobs", "BIC")
+    generics <- c("print", "coef", "vcov", "logLik", "nobs")
 
     for (generic in generics) {
         expect_true(is.function(
@@ -25,7 +25,7 @@ test_that("zabr S3 methods are registered", {
 })
 
 test_that("zavr S3 methods are registered", {
-    generics <- c("print", "coef", "vcov", "logLik", "nobs", "BIC")
+    generics <- c("print", "coef", "vcov", "logLik", "nobs")
 
     for (generic in generics) {
         expect_true(is.function(

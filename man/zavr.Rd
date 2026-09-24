@@ -60,9 +60,140 @@ zavr(
 \item{hessian}{Logical; compute Hessian-based standard errors?}
 }
 \value{
-An object of class \code{"zavr"}.
+An object of class \code{"zavr"} with components including
+  \code{logistic_est_table}, \code{vasicek_est_table},
+  \code{shape_table}, \code{random_effects}, \code{loglikelihood},
+  \code{joint_p}, \code{fit_statistics} (joint model),
+  \code{fit_statistics_bin} and \code{fit_statistics_cont}
+  (per component; see section \emph{Fit statistics}), and \code{vcov}.
+  Fixed-effect names in \code{coef()} and \code{vcov()} use the prefix
+  \code{gamma_} for the discrete component and \code{beta_} for the
+  continuous component, including their intercepts.
 }
 \description{
-Fits a two-component model for responses in \eqn{[0,1)} with a point mass at
-zero (presence component) and a Vasicek distribution for positive values.
+Fits a two-component model for responses in \eqn{[0,1)} with a point
+mass at zero (discrete component, parameterized by \eqn{\gamma}) and a
+Vasicek distribution for positive values (continuous component,
+parameterized by \eqn{\beta}).
+}
+\details{
+Formula and legacy arguments are mutually exclusive for each model
+component: use either \code{formula_bin} or \code{logistic_cov}, either
+\code{formula_cont} or \code{vasicek_cov}, and either \code{random}
+or \code{subject_ind}. Supplying both arguments in any pair is an error.
+
+For a response \eqn{Y_{it} \in [0,1)} observed on subject \eqn{i}
+(\eqn{i = 1, \ldots, N}) at time \eqn{t} (\eqn{t = 1, \ldots, T}),
+the model places a point mass at zero and a continuous component on
+\eqn{(0,1)}:
+
+\deqn{
+  Y_{it} = 0 \quad \mbox{with probability } 1 - p_{it},
+}
+\deqn{
+  Y_{it} \sim \mathrm{NVASIM}\left(\mu_{it}, \sigma\right)
+  \quad \mbox{with probability } p_{it},
+}
+
+where \eqn{0 < p_{it} < 1}, \eqn{0 < \mu_{it} < 1}, and
+\eqn{\sigma \in (0,1)}. The continuous component is the normal-kernel
+Vasicek (mean-parameterized) distribution \code{NVASIM}, for which
+\eqn{\mu_{it} = E(Y_{it} \mid Y_{it} > 0)}. Let \eqn{X_{it}} and
+\eqn{Z_{it}} be the covariate vectors entering the discrete and
+continuous components, respectively; they may share columns or be
+disjoint. Both components are modeled on the logit scale:
+
+\deqn{
+  \mathrm{logit}(p_{it}) = \log\left(\frac{p_{it}}{1 - p_{it}}\right)
+  = a_i + \gamma_0 + X_{it}^\top \gamma,
+}
+\deqn{
+  \mathrm{logit}(\mu_{it}) = \log\left(\frac{\mu_{it}}{1 - \mu_{it}}\right)
+  = b_i + \beta_0 + Z_{it}^\top \beta,
+}
+
+where \eqn{a_i} and \eqn{b_i} are subject-specific random intercepts
+that induce correlation across repeated measurements on the same
+subject,
+
+\deqn{
+  a_i \sim N(0, \sigma_1^2), \qquad b_i \sim N(0, \sigma_2^2).
+}
+
+The fixed-effect coefficients are denoted by \eqn{\gamma} (discrete
+component) and \eqn{\beta} (continuous component); \eqn{\sigma} is the
+shape parameter of the Vasicek component. The two random intercepts are
+independent, and the components have no shared parameters. Consequently,
+the marginal likelihood factorizes into discrete and continuous components.
+The two components are optimized separately; this is equivalent to
+maximizing their joint likelihood. Random effects are integrated out using
+non-adaptive Gauss--Hermite quadrature.
+
+This function differs from \code{\link{zabr}} only in the continuous
+component: \code{zabr} uses a Beta distribution with precision
+\eqn{\phi}, whereas \code{zavr} uses the Vasicek \code{NVASIM}
+distribution with shape \eqn{\sigma}. The two models share the same
+discrete component and the same random-intercept structure.
+}
+\section{Fit statistics}{
+
+\code{fit_statistics} refers to the joint model and follows the
+"Fit Statistics" table of SAS PROC NLMIXED:
+\eqn{AIC = -2\ell + 2k}{AIC = -2 logL + 2k} and
+\eqn{BIC = -2\ell + k\log(s)}{BIC = -2 logL + k log(s)}, where \eqn{\ell}{logL} is the maximized
+log-likelihood, \eqn{k} the total number of parameters and \eqn{s} the
+number of subjects. BIC uses subjects, not observations. \code{AIC()} and
+\code{BIC()} return the same values as \code{fit_statistics}.
+
+\code{fit_statistics_bin} and \code{fit_statistics_cont} are informational.
+The continuous component counts only observations with \eqn{Y > 0} and
+subjects with at least one such observation, as if it were fitted alone to
+the positive responses. Consequently, AIC is additive across components,
+whereas BIC is additive only when every subject has at least one positive
+response. To compare models, use \code{fit_statistics} or \code{BIC()};
+do not sum component-wise values.
+
+\code{logLik()} sets the \code{nobs} attribute to the number of subjects,
+so that \code{BIC()} follows PROC NLMIXED.
+
+The values coincide numerically with PROC NLMIXED only when the
+log-likelihood coincides: the same model with independent random
+intercepts and the same number of parameters, non-adaptive quadrature with
+the same number of points (\code{NOAD} and \code{QPOINTS=} equal to
+\code{quad_n}), and data sorted by subject.
+}
+
+\examples{
+\donttest{
+data(please_microbiome)
+
+d <- subset(please_microbiome, Genus == "g__Bifidobacterium")
+d$Subject <- factor(d$Subject)
+
+fit <- zavr(
+  data         = d,
+  y            = "Y",
+  formula_bin  = ~ Baseline + Time + Treat,
+  formula_cont = ~ Baseline + Time + Treat,
+  random       = ~ 1 | Subject,
+  time_ind     = "Time"
+)
+fit
+}
+
+}
+\references{
+Chen, E. Z. and Li, H. (2016). A two-part mixed-effects model for
+analyzing longitudinal microbiome compositional data.
+\emph{Bioinformatics}, \bold{32}(17), 2611--2617.
+\doi{10.1093/bioinformatics/btw308}
+
+Mazucheli, J., Alves, B., Korkmaz, M. Ç., and Leiva, V. (2022).
+Vasicek quantile and mean regression models for bounded data: New
+formulation, mathematical derivations, and numerical applications.
+\emph{Mathematics}, \bold{10}, 1389.
+\doi{10.3390/math10091389}
+}
+\seealso{
+\code{\link{zabr}}, \code{\link{NVASIM}}
 }

@@ -27,13 +27,11 @@
     stop(label, " must be a formula or a character vector.")
   }
 
+  missing_cols <- setdiff(all.vars(formula_obj), names(data))
+  if (length(missing_cols)) stop(label, ": column(s) not found: ", paste(missing_cols, collapse = ", "))
+
   mm <- stats::model.matrix(formula_obj, data = data)
-  mm <- mm[, colnames(mm) != "(Intercept)", drop = FALSE]
-  if (ncol(mm) > 0) {
-    missing_cols <- setdiff(all.vars(formula_obj), names(data))
-    if (length(missing_cols)) stop(label, ": column(s) not found: ", paste(missing_cols, collapse = ", "))
-  }
-  mm
+  mm[, colnames(mm) != "(Intercept)", drop = FALSE]
 }
 
 #' Parse a random-effects formula of the form ~ 1 | Subject
@@ -45,9 +43,9 @@
 #' @return A character string with the subject variable name.
 #' @keywords internal
 #' @noRd
-.parse_random_formula <- function(random_formula, legacy_arg = NULL) {
+.parse_random_formula <- function(random_formula, legacy_arg = NULL, legacy_arg_name = "subject_ind") {
   if (!is.null(legacy_arg)) {
-    warning("Argument '", legacy_arg, "' is deprecated. Use: random = ~ 1 | Subject", call. = FALSE)
+    warning("Argument '", legacy_arg_name, "' is deprecated. Use: random = ~ 1 | Subject", call. = FALSE)
     return(legacy_arg)
   }
   if (!inherits(random_formula, "formula")) stop("random must be a formula of the form ~ 1 | Subject.")
@@ -88,7 +86,6 @@
 #' @param start Optional list of starting values.
 #' @param control List of control parameters passed to nlminb.
 #' @param hessian Logical; compute Hessian-based standard errors?
-#' @param model_name Character; name of the model (for messages).
 #' @param required_pkgs Character vector of required package names.
 #' @param positive_density_fn Function(yy, mm, shape, sz) returning the
 #'   log-density of the positive component.
@@ -106,9 +103,17 @@
 .fit_zero_augmented_engine <- function(data, y, formula_bin = NULL, formula_cont = NULL, random = NULL,
                                       logistic_cov = NULL, positive_cov = NULL, subject_ind = NULL, time_ind,
                                       component_wise_test, quad_n, verbose, joint_test, sd_lower,
-                                      start, control, hessian, model_name, required_pkgs,
+                                      start, control, hessian, required_pkgs,
                                       positive_density_fn, positive_name, validate_shape_fn,
                                       natural_shape_fn, start_seeds_fn, shape_param_name = positive_name) {
+  # Reject competing interfaces before constructing matrices or fitting.
+  if (!is.null(formula_bin) && !is.null(logistic_cov))
+    stop("Use either 'formula_bin' or 'logistic_cov', not both.", call. = FALSE)
+  if (!is.null(formula_cont) && !is.null(positive_cov))
+    stop("Use either 'formula_cont' or '", positive_name, "_cov', not both.", call. = FALSE)
+  if (!is.null(random) && !is.null(subject_ind))
+    stop("Use either 'random' or 'subject_ind', not both.", call. = FALSE)
+
   for (pkg in required_pkgs) if (!requireNamespace(pkg, quietly = TRUE)) stop("Please install package '", pkg, "'.")
 
   scalar_flag <- function(x) is.logical(x) && length(x) == 1L && !is.na(x)
@@ -243,7 +248,7 @@
   covariance_block <- function(fit, positive, names_coef) {
     t <- fit$opt$par; natural <- t; natural[1L] <- exp(t[1L]); jac <- rep(1, length(t)); jac[1L] <- natural[1L]
     if (positive) { res_shape <- natural_shape_fn(t[2L], get_jacobian = TRUE); natural[2L] <- res_shape$val; jac[2L] <- res_shape$jac }
-    names(natural) <- if (positive) c("s2", shape_param_name, paste0("beta_", names_coef)) else c("s1", paste0("alpha_", names_coef))
+    names(natural) <- if (positive) c("s2", shape_param_name, paste0("beta_", names_coef)) else c("s1", paste0("gamma_", names_coef))
     V <- matrix(NA_real_, length(t), length(t), dimnames = list(names(natural), names(natural)))
     status <- "Not requested"
     if (hessian) {
@@ -303,10 +308,12 @@
                              row.names = c("Presence_SD", "Presence_variance", "Positive_SD", "Positive_variance"))
 
   # ------------------------------------------------------------------
-  # FIT STATISTICS (aligned with PROC NLMIXED, SAS/STAT 14.2)
+  # FIT STATISTICS (as in the PROC NLMIXED "Fit Statistics" table)
   #   AIC  = 2f + 2p
   #   BIC  = 2f + p * log(s)
-  #   where f = -logLik, p = #params, n = #obs, s = #subjects
+  #   f = -logLik, p = #parameters, s = #subjects.
+  #   Checked against the NLMIXED orange-tree example (n = 35, s = 5,
+  #   p = 5): -2LL 263.1, AIC 273.1, BIC 271.2.
   # ------------------------------------------------------------------
   minus2ll_bin   <- 2 * full_l$opt$objective
   minus2ll_cont  <- 2 * full_v$opt$objective
@@ -330,7 +337,9 @@
   AIC_total  <- minus2ll_total + 2 * k
   BIC_total  <- minus2ll_total + k * log(ns)
 
-  # Component-wise statistics (informational, NOT additive)
+  # Component-wise statistics (informational): AIC is additive.
+  # BIC is additive only when ns_cont equals ns_bin.
+  # For model comparison use the joint statistics above.
   AIC_bin    <- minus2ll_bin  + 2 * k_bin
   BIC_bin    <- minus2ll_bin  + k_bin  * log(ns_bin)
 
@@ -346,7 +355,7 @@
   for (j in idx_v) diagnostics <- rbind(diagnostics, diag_row(null_v[[j]], paste0(positive_name, "_without_", colnames(Z)[j])))
 
   if (any(diagnostics$Convergence != 0L)) warning("Some optimizations did not converge. Inspect $diagnostics.")
-  if (any(diagnostics$Boundary, NA, na.rm = TRUE)) warning("An SD reached the lower bound; Wald/LRT inference requires caution.")
+  if (any(diagnostics$Boundary, na.rm = TRUE)) warning("An SD reached the lower bound; Wald/LRT inference requires caution.")
   if (hessian && (cv_l$status != "OK" || cv_v$status != "OK")) warning("Some standard errors are unavailable. Inspect $diagnostics.")
   if (anyNA(stat_l[idx_l]) || anyNA(stat_v[idx_v])) warning("Some LRTs are unavailable.")
 
