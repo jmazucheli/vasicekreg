@@ -385,6 +385,18 @@ when direct later use of `update()` is planned, use a literal level in the
 original call (for example, `NVASIQ(quantile = 0.25)`) or keep the referenced
 symbol available and unchanged.
 
+**Note on standard errors with a variable quantile level.** When the level is
+stored in a variable, the family is created in a separate object before
+fitting. Passing the call directly, as in
+`gamlss(..., family = NVASIQ(quantile = quantile_level))`, produces the same
+fitted coefficients, but `summary()` may emit the warning
+`vcov has failed, option qr is used instead`. In that case the standard errors
+of `sigma` are computed by a QR fallback that can be about 15 to 20 percent
+smaller than the analytical values. Defining the family separately, as in the
+examples above, avoids the fallback. Residual warnings may still occur at
+extreme quantile levels such as 0.10 and 0.90, where the analytical Hessian is
+numerically less stable.
+
 ## Simulated residual envelopes
 
 The function `vasicek_envelope()` constructs pointwise simulated envelopes
