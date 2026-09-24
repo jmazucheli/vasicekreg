@@ -119,9 +119,18 @@ BIC(fit_longitudinal)
 subject–time pairs. A time trend is fitted only when the time variable
 is included in `formula_bin` and/or `formula_cont`. Joint
 likelihood-ratio tests require identical design matrices in the two
-components. The joint AIC and AICc use the complete two-part likelihood;
+components. The joint AIC and BIC use the complete two-part likelihood.
 BIC uses the number of subjects in its penalty, following the
-`PROC NLMIXED` convention.
+`PROC NLMIXED` convention. Component-wise AIC values sum to the joint
+AIC. Component-wise BIC values do not generally sum to the joint BIC
+because the positive component uses only subjects with at least one
+positive response.
+
+For both longitudinal models, `gamma` denotes the discrete-component
+fixed effects and `beta` denotes the continuous-component fixed effects.
+The names returned by [`coef()`](https://rdrr.io/r/stats/coef.html) and
+the corresponding [`vcov()`](https://rdrr.io/r/stats/vcov.html)
+dimension names use `gamma_` and `beta_`, including the intercepts.
 
 ## Installation
 
@@ -731,6 +740,8 @@ citation("vasicekreg")
   Hospital-stay appropriateness data
 - [`bodyfat`](https://jmazucheli.github.io/vasicekreg/reference/bodyfat.md)
   : Body Fat Proportions Dataset
+- [`please_microbiome`](https://jmazucheli.github.io/vasicekreg/reference/please_microbiome.md)
+  : Longitudinal microbiome abundances from the PLEASE study
 - [`transport`](https://jmazucheli.github.io/vasicekreg/reference/transport.md)
   : Transportation to campus
 - [`trees`](https://jmazucheli.github.io/vasicekreg/reference/trees.md)

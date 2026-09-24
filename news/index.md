@@ -2,7 +2,44 @@
 
 ## vasicekreg 1.3.0 (2026-09-20)
 
+### Datasets
+
+- Added `please_microbiome`, a long-format data frame of genus-level
+  relative abundances from the pediatric study of Lewis et al. (2015),
+  reconstructed from the public `chvlyl/PLEASE` repository following the
+  filtering and recoding conventions of the `ZIBR` R package (Chen and
+  Li, 2016, <https://CRAN.R-project.org/package=ZIBR>). The data cover
+  3186 post-baseline observations from 59 subjects (47 anti-TNF, 12 EEN)
+  and 18 bacterial genera, with the week-0 abundance of each genus
+  stored as a subject-level covariate. The dataset is documented in
+  `R/please_microbiome.R` and reproduced by
+  `data-raw/please_microbiome.R`.
+
 ### Longitudinal two-part mixed models
+
+- Reject simultaneous formula and legacy arguments for either component
+  or for the subject grouping variable, with explicit error messages.
+
+- Removed the unused internal `model_name` argument and the redundant
+  `NA` in the random-effect boundary check.
+
+- Clarified that separate component optimization maximizes the joint
+  likelihood under independent random effects and no shared parameters.
+
+- Removed installation and export checks for the package itself from
+  [`zavr()`](https://jmazucheli.github.io/vasicekreg/reference/zavr.md).
+  The positive density now calls
+  [`dNVASIM()`](https://jmazucheli.github.io/vasicekreg/reference/NVASIM.md)
+  directly, and dependency checks and version reporting cover external
+  packages only.
+
+- Standardized longitudinal fixed-effect notation as `gamma` for the
+  discrete component and `beta` for the continuous component. Renamed
+  the discrete coefficient prefix from `alpha_` to `gamma_` in
+  [`coef()`](https://rdrr.io/r/stats/coef.html) and
+  [`vcov()`](https://rdrr.io/r/stats/vcov.html) and aligned printed
+  headings and documentation. Code that selects discrete coefficients by
+  name must use `gamma_`.
 
 - Added
   [`zavr()`](https://jmazucheli.github.io/vasicekreg/reference/zavr.md),
@@ -11,15 +48,18 @@
   component models the conditional mean of positive responses, and each
   component has an independent subject-specific Gaussian random
   intercept.
+
 - Added
   [`zabr()`](https://jmazucheli.github.io/vasicekreg/reference/zabr.md),
   a zero-augmented beta random-intercept model following Chen and Li
   (2016), to provide a directly comparable beta positive component under
   the same computational interface.
+
 - Added one-sided formula interfaces for the presence and positive
   components and a `random = ~ 1 | subject` interface. The earlier
   character-vector arguments remain temporarily available with
   deprecation warnings.
+
 - Added non-adaptive Gauss–Hermite integration, multiple starting
   values, component-wise and joint likelihood-ratio tests, Hessian-based
   covariance estimates, optimization diagnostics, and
@@ -29,10 +69,14 @@
   [`logLik()`](https://rdrr.io/r/stats/logLik.html),
   [`nobs()`](https://rdrr.io/r/stats/nobs.html), and
   [`BIC()`](https://rdrr.io/r/stats/AIC.html) methods.
-- Joint AIC and AICc are calculated from the complete two-part
+
+- Joint AIC and BIC are calculated from the complete two-part
   likelihood. BIC uses the number of subjects in its penalty, following
-  the `PROC NLMIXED` convention; component-wise criteria are retained
-  only as diagnostics and are not added to form joint AICc or BIC.
+  the `PROC NLMIXED` convention. Component-wise criteria are retained as
+  diagnostics: AIC values are additive, whereas BIC values are not
+  generally additive because the positive component uses only subjects
+  with at least one positive response.
+
 - Added documentation, references, examples, dependency declarations, S3
   registrations, and integration tests for the new longitudinal
   interfaces.

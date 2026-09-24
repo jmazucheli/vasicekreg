@@ -62,6 +62,11 @@ Included datasets:
   two-year tree-survival proportions for 26 parks, including
   observations at one.
 
+- [`please_microbiome`](https://jmazucheli.github.io/vasicekreg/reference/please_microbiome.md):
+  longitudinal genus-level relative abundances from the pediatric study
+  of Lewis et al. (2015), in long format (3186 rows, 59 subjects, 18
+  genera, baseline included as a subject-level covariate).
+
 [`zabr`](https://jmazucheli.github.io/vasicekreg/reference/zabr.md):
 Zero-augmented beta regression for longitudinal responses. A logistic
 component models presence and a beta component models positive
@@ -156,6 +161,12 @@ with application to finance. *Journal of Statistics and Management
 Systems*, **20**(1), 67–89.
 [doi:10.1080/09720510.2016.1190575](https://doi.org/10.1080/09720510.2016.1190575)
 
+Lewis, J. D., Chen, E. Z., Baldassano, R. N., et al. (2015).
+Inflammation, antibiotics, and diet as environmental stressors of the
+gut microbiome in pediatric Crohn's disease. *Cell Host & Microbe*,
+**18**(4), 489–500.
+[doi:10.1016/j.chom.2015.09.008](https://doi.org/10.1016/j.chom.2015.09.008)
+
 Mazucheli, J., Alves, B., Korkmaz, M. Ç., and Leiva, V. (2022). Vasicek
 quantile and mean regression models for bounded data: New formulation,
 mathematical derivations, and numerical applications. *Mathematics*,
@@ -184,6 +195,11 @@ models for location, scale and shape. *Applied Statistics*, **54**(3),
 507–554.
 [doi:10.1111/j.1467-9876.2005.00510.x](https://doi.org/10.1111/j.1467-9876.2005.00510.x)
 
+Segata, N., Waldron, L., Ballarini, A., et al. (2012). Metagenomic
+microbial community profiling using unique clade-specific marker genes.
+*Nature Methods*, **9**(8), 811–814.
+[doi:10.1038/nmeth.2066](https://doi.org/10.1038/nmeth.2066)
+
 Vasicek, O. A. (2002). The distribution of loan portfolio value. *Risk*,
 **15**(12), 160–162.
 
@@ -195,6 +211,12 @@ Zhao, Y., Lee, A. H., Yau, K. K. W. and McLachlan, G. J. (2011).
 Assessing the adequacy of Weibull survival models: A simulated envelope
 approach. *Journal of Applied Statistics*, **38**(10), 2089–2097.
 [doi:10.1080/02664763.2010.545115](https://doi.org/10.1080/02664763.2010.545115)
+
+## See also
+
+Useful links:
+
+- <https://jmazucheli.github.io/vasicekreg/>
 
 ## Author
 

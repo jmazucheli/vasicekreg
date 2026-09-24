@@ -62,6 +62,8 @@
   Hospital-stay appropriateness data
 - [`bodyfat`](https://jmazucheli.github.io/vasicekreg/reference/bodyfat.md)
   : Body Fat Proportions Dataset
+- [`please_microbiome`](https://jmazucheli.github.io/vasicekreg/reference/please_microbiome.md)
+  : Longitudinal microbiome abundances from the PLEASE study
 - [`transport`](https://jmazucheli.github.io/vasicekreg/reference/transport.md)
   : Transportation to campus
 - [`trees`](https://jmazucheli.github.io/vasicekreg/reference/trees.md)
