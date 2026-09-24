@@ -77,7 +77,7 @@ fitmean <- gamlss(
   data = bodyfat,
   family = NVASIM(mu.link = "logit", sigma.link = "logit")
 )
-#> GAMLSS-RS iteration 1: Global Deviance = -667.3348 
+#> GAMLSS-RS iteration 1: Global Deviance = -667.3347 
 #> GAMLSS-RS iteration 2: Global Deviance = -908.7608 
 #> GAMLSS-RS iteration 3: Global Deviance = -911.2209 
 #> GAMLSS-RS iteration 4: Global Deviance = -911.2213 
