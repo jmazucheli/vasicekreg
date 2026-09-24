@@ -224,7 +224,7 @@ fitquantiles <- lapply(c(0.10, 0.25, 0.50, 0.75, 0.90), function(level) {
 #> GAMLSS-RS iteration 2: Global Deviance = -54.9158 
 #> GAMLSS-RS iteration 3: Global Deviance = -55.2943 
 #> GAMLSS-RS iteration 4: Global Deviance = -55.3801 
-#> GAMLSS-RS iteration 5: Global Deviance = -55.3986 
+#> GAMLSS-RS iteration 5: Global Deviance = -55.3985 
 #> GAMLSS-RS iteration 6: Global Deviance = -55.4029 
 #> GAMLSS-RS iteration 7: Global Deviance = -55.4038 
 
@@ -251,7 +251,7 @@ lapply(fitquantiles, summary)
 #> Sigma link function:  logit
 #> Sigma Coefficients:
 #>             Estimate Std. Error t value Pr(>|t|)   
-#> (Intercept)  -0.2913     0.1031  -2.825  0.00573 **
+#> (Intercept)  -0.2913     0.1031  -2.825  0.00572 **
 #> ---
 #> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 #> 
@@ -261,9 +261,9 @@ lapply(fitquantiles, summary)
 #>       Residual Deg. of Freedom:  97 
 #>                       at cycle:  7 
 #>  
-#> Global Deviance:     -55.40398 
-#>             AIC:     -49.40398 
-#>             SBC:     -41.58847 
+#> Global Deviance:     -55.404 
+#>             AIC:     -49.404 
+#>             SBC:     -41.58849 
 #> ******************************************************************
 #> Warning: summary: vcov has failed, option qr is used instead
 #> ******************************************************************
@@ -297,9 +297,9 @@ lapply(fitquantiles, summary)
 #>       Residual Deg. of Freedom:  97 
 #>                       at cycle:  5 
 #>  
-#> Global Deviance:     -55.40424 
-#>             AIC:     -49.40424 
-#>             SBC:     -41.58873 
+#> Global Deviance:     -55.40425 
+#>             AIC:     -49.40425 
+#>             SBC:     -41.58874 
 #> ******************************************************************
 #> Warning: summary: vcov has failed, option qr is used instead
 #> ******************************************************************
@@ -369,9 +369,9 @@ lapply(fitquantiles, summary)
 #>       Residual Deg. of Freedom:  97 
 #>                       at cycle:  5 
 #>  
-#> Global Deviance:     -55.40423 
-#>             AIC:     -49.40423 
-#>             SBC:     -41.58872 
+#> Global Deviance:     -55.40422 
+#>             AIC:     -49.40422 
+#>             SBC:     -41.58871 
 #> ******************************************************************
 #> Warning: summary: vcov has failed, option qr is used instead
 #> ******************************************************************
@@ -411,32 +411,32 @@ lapply(fitquantiles, summary)
 #> ******************************************************************
 #> [[1]]
 #>               Estimate Std. Error   t value     Pr(>|t|)
-#> (Intercept) -1.1440331  0.2008641 -5.695557 1.288755e-07
-#> x            0.8953730  0.2848997  3.142765 2.214282e-03
-#> (Intercept) -0.2913003  0.1031328 -2.824517 5.726746e-03
+#> (Intercept) -1.1439644  0.2008508 -5.695593 1.288551e-07
+#> x            0.8953719  0.2848844  3.142931 2.213147e-03
+#> (Intercept) -0.2913352  0.1031299 -2.824935 5.719860e-03
 #> 
 #> [[2]]
 #>               Estimate Std. Error   t value    Pr(>|t|)
-#> (Intercept) -0.2798791  0.1901741 -1.471700 0.144306041
-#> x            0.8746436  0.2795444  3.128818 0.002311964
+#> (Intercept) -0.2798791  0.1901741 -1.471700 0.144306042
+#> x            0.8746436  0.2795444  3.128818 0.002311963
 #> (Intercept) -0.2927525  0.1256391 -2.330107 0.021830569
 #> 
 #> [[3]]
 #>               Estimate Std. Error   t value    Pr(>|t|)
-#> (Intercept)  0.6553778  0.1936272  3.384739 0.001025921
+#> (Intercept)  0.6553778  0.1936273  3.384739 0.001025921
 #> x            0.9284338  0.2921506  3.177929 0.001984805
-#> (Intercept) -0.2928562  0.1395562 -2.098481 0.038407805
+#> (Intercept) -0.2928562  0.1395562 -2.098481 0.038407803
 #> 
 #> [[4]]
 #>               Estimate Std. Error   t value     Pr(>|t|)
-#> (Intercept)  1.6510553  0.2081502  7.932036 3.541343e-12
-#> x            1.0613602  0.3174911  3.342960 1.174862e-03
-#> (Intercept) -0.2926235  0.1259989 -2.322430 2.225752e-02
+#> (Intercept)  1.6510553  0.2081503  7.932036 3.541345e-12
+#> x            1.0613601  0.3174911  3.342960 1.174862e-03
+#> (Intercept) -0.2926236  0.1259989 -2.322431 2.225749e-02
 #> 
 #> [[5]]
 #>               Estimate Std. Error   t value     Pr(>|t|)
-#> (Intercept)  2.6719901  0.2273284 11.753879 2.005136e-20
-#> x            1.2421165  0.3504167  3.544684 6.043309e-04
-#> (Intercept) -0.2908391  0.1039514 -2.797837 6.183251e-03
+#> (Intercept)  2.6719902  0.2273284 11.753879 2.005138e-20
+#> x            1.2421167  0.3504167  3.544684 6.043298e-04
+#> (Intercept) -0.2908391  0.1039514 -2.797836 6.183260e-03
 #> 
 ```
