@@ -332,10 +332,14 @@ construction can be used for another fixed level by changing
 
 quantile_level <- 0.50
 
+fam_arms_nq <- NVASIQ(quantile = quantile_level)
+fam_arms_lq <- LVASIQ(quantile = quantile_level)
+fam_arms_hq <- HVASIQ(quantile = quantile_level)
+
 fit_arms_nq <- gamlss(
   ARMS ~ AGE_centered + BMI_centered + SEX + IPAQ,
   sigma.formula = ~ 1,
-  family = NVASIQ(quantile = quantile_level),
+  family = fam_arms_nq,
   data = bodyfat_analysis,
   control = control
 )
@@ -343,7 +347,7 @@ fit_arms_nq <- gamlss(
 fit_arms_lq <- gamlss(
   ARMS ~ AGE_centered + BMI_centered + SEX + IPAQ,
   sigma.formula = ~ 1,
-  family = LVASIQ(quantile = quantile_level),
+  family = fam_arms_lq,
   data = bodyfat_analysis,
   control = control
 )
@@ -351,7 +355,7 @@ fit_arms_lq <- gamlss(
 fit_arms_hq <- gamlss(
   ARMS ~ AGE_centered + BMI_centered + SEX + IPAQ,
   sigma.formula = ~ 1,
-  family = HVASIQ(quantile = quantile_level),
+  family = fam_arms_hq,
   data = bodyfat_analysis,
   control = control
 )
@@ -364,7 +368,6 @@ arms_models <- c(
     HVASIQ_median = fit_arms_hq
   )
 )
-
 knitr::kable(
   model_fit_table(arms_models, n = nrow(bodyfat_analysis)),
   digits = 3,

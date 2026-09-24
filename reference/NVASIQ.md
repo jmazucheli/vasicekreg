@@ -199,7 +199,8 @@ fit <- gamlss(
 #> GAMLSS-RS iteration 2: Global Deviance = -55.4042 
 
 fitquantiles <- lapply(c(0.10, 0.25, 0.50, 0.75, 0.90), function(level) {
-  gamlss(y ~ x, data = data, family = NVASIQ(quantile = level))
+  fam <- NVASIQ(quantile = level)
+  gamlss(y ~ x, data = data, family = fam)
 })
 #> GAMLSS-RS iteration 1: Global Deviance = -53.4337 
 #> GAMLSS-RS iteration 2: Global Deviance = -54.9224 
@@ -233,8 +234,7 @@ lapply(fitquantiles, summary)
 #> ******************************************************************
 #> Family:  c("NVASIQ", "Normal-kernel Vasicek-type quantile") 
 #> 
-#> Call:  gamlss(formula = y ~ x, family = NVASIQ(quantile = level), data = data) 
-#> 
+#> Call:  gamlss(formula = y ~ x, family = fam, data = data) 
 #> 
 #> Fitting method: RS() 
 #> 
@@ -269,8 +269,7 @@ lapply(fitquantiles, summary)
 #> ******************************************************************
 #> Family:  c("NVASIQ", "Normal-kernel Vasicek-type quantile") 
 #> 
-#> Call:  gamlss(formula = y ~ x, family = NVASIQ(quantile = level), data = data) 
-#> 
+#> Call:  gamlss(formula = y ~ x, family = fam, data = data) 
 #> 
 #> Fitting method: RS() 
 #> 
@@ -305,8 +304,7 @@ lapply(fitquantiles, summary)
 #> ******************************************************************
 #> Family:  c("NVASIQ", "Normal-kernel Vasicek-type quantile") 
 #> 
-#> Call:  gamlss(formula = y ~ x, family = NVASIQ(quantile = level), data = data) 
-#> 
+#> Call:  gamlss(formula = y ~ x, family = fam, data = data) 
 #> 
 #> Fitting method: RS() 
 #> 
@@ -341,8 +339,7 @@ lapply(fitquantiles, summary)
 #> ******************************************************************
 #> Family:  c("NVASIQ", "Normal-kernel Vasicek-type quantile") 
 #> 
-#> Call:  gamlss(formula = y ~ x, family = NVASIQ(quantile = level), data = data) 
-#> 
+#> Call:  gamlss(formula = y ~ x, family = fam, data = data) 
 #> 
 #> Fitting method: RS() 
 #> 
@@ -377,8 +374,7 @@ lapply(fitquantiles, summary)
 #> ******************************************************************
 #> Family:  c("NVASIQ", "Normal-kernel Vasicek-type quantile") 
 #> 
-#> Call:  gamlss(formula = y ~ x, family = NVASIQ(quantile = level), data = data) 
-#> 
+#> Call:  gamlss(formula = y ~ x, family = fam, data = data) 
 #> 
 #> Fitting method: RS() 
 #> 

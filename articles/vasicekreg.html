@@ -632,10 +632,14 @@ level by changing <code>quantile_level</code>.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">quantile_level</span> <span class="op">&lt;-</span> <span class="fl">0.50</span></span>
 <span></span>
+<span><span class="va">fam_arms_nq</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NVASIQ.html">NVASIQ</a></span><span class="op">(</span>quantile <span class="op">=</span> <span class="va">quantile_level</span><span class="op">)</span></span>
+<span><span class="va">fam_arms_lq</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/LVASIQ.html">LVASIQ</a></span><span class="op">(</span>quantile <span class="op">=</span> <span class="va">quantile_level</span><span class="op">)</span></span>
+<span><span class="va">fam_arms_hq</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/HVASIQ.html">HVASIQ</a></span><span class="op">(</span>quantile <span class="op">=</span> <span class="va">quantile_level</span><span class="op">)</span></span>
+<span></span>
 <span><span class="va">fit_arms_nq</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/gamlss/man/gamlss.html" class="external-link">gamlss</a></span><span class="op">(</span></span>
 <span>  <span class="va">ARMS</span> <span class="op">~</span> <span class="va">AGE_centered</span> <span class="op">+</span> <span class="va">BMI_centered</span> <span class="op">+</span> <span class="va">SEX</span> <span class="op">+</span> <span class="va">IPAQ</span>,</span>
 <span>  sigma.formula <span class="op">=</span> <span class="op">~</span> <span class="fl">1</span>,</span>
-<span>  family <span class="op">=</span> <span class="fu"><a href="../reference/NVASIQ.html">NVASIQ</a></span><span class="op">(</span>quantile <span class="op">=</span> <span class="va">quantile_level</span><span class="op">)</span>,</span>
+<span>  family <span class="op">=</span> <span class="va">fam_arms_nq</span>,</span>
 <span>  data <span class="op">=</span> <span class="va">bodyfat_analysis</span>,</span>
 <span>  control <span class="op">=</span> <span class="va">control</span></span>
 <span><span class="op">)</span></span>
@@ -643,7 +647,7 @@ level by changing <code>quantile_level</code>.</p>
 <span><span class="va">fit_arms_lq</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/gamlss/man/gamlss.html" class="external-link">gamlss</a></span><span class="op">(</span></span>
 <span>  <span class="va">ARMS</span> <span class="op">~</span> <span class="va">AGE_centered</span> <span class="op">+</span> <span class="va">BMI_centered</span> <span class="op">+</span> <span class="va">SEX</span> <span class="op">+</span> <span class="va">IPAQ</span>,</span>
 <span>  sigma.formula <span class="op">=</span> <span class="op">~</span> <span class="fl">1</span>,</span>
-<span>  family <span class="op">=</span> <span class="fu"><a href="../reference/LVASIQ.html">LVASIQ</a></span><span class="op">(</span>quantile <span class="op">=</span> <span class="va">quantile_level</span><span class="op">)</span>,</span>
+<span>  family <span class="op">=</span> <span class="va">fam_arms_lq</span>,</span>
 <span>  data <span class="op">=</span> <span class="va">bodyfat_analysis</span>,</span>
 <span>  control <span class="op">=</span> <span class="va">control</span></span>
 <span><span class="op">)</span></span>
@@ -651,7 +655,7 @@ level by changing <code>quantile_level</code>.</p>
 <span><span class="va">fit_arms_hq</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/gamlss/man/gamlss.html" class="external-link">gamlss</a></span><span class="op">(</span></span>
 <span>  <span class="va">ARMS</span> <span class="op">~</span> <span class="va">AGE_centered</span> <span class="op">+</span> <span class="va">BMI_centered</span> <span class="op">+</span> <span class="va">SEX</span> <span class="op">+</span> <span class="va">IPAQ</span>,</span>
 <span>  sigma.formula <span class="op">=</span> <span class="op">~</span> <span class="fl">1</span>,</span>
-<span>  family <span class="op">=</span> <span class="fu"><a href="../reference/HVASIQ.html">HVASIQ</a></span><span class="op">(</span>quantile <span class="op">=</span> <span class="va">quantile_level</span><span class="op">)</span>,</span>
+<span>  family <span class="op">=</span> <span class="va">fam_arms_hq</span>,</span>
 <span>  data <span class="op">=</span> <span class="va">bodyfat_analysis</span>,</span>
 <span>  control <span class="op">=</span> <span class="va">control</span></span>
 <span><span class="op">)</span></span>
@@ -664,7 +668,6 @@ level by changing <code>quantile_level</code>.</p>
 <span>    HVASIQ_median <span class="op">=</span> <span class="va">fit_arms_hq</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span></span>
 <span>  <span class="fu">model_fit_table</span><span class="op">(</span><span class="va">arms_models</span>, n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">bodyfat_analysis</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  digits <span class="op">=</span> <span class="fl">3</span>,</span>
