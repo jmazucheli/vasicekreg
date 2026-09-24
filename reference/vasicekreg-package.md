@@ -273,8 +273,8 @@ if (requireNamespace("betareg", quietly = TRUE)) {
     )
     comparison
 }
-#>     family   logLik      AIC      BIC
-#> 1 OANVASIM 10.46635 -4.93271 9.340807
-#> 2     BEOI 10.95973 -5.91945 8.354067
+#>     family   logLik       AIC      BIC
+#> 1 OANVASIM 10.46635 -4.932709 9.340808
+#> 2     BEOI 10.95973 -5.919450 8.354067
 # }
 ```

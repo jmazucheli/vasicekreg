@@ -181,5 +181,5 @@ fit <- gamlss::gamlss(
 #> GAMLSS-RS iteration 2: Global Deviance = -55.5263 
 #> GAMLSS-RS iteration 3: Global Deviance = -55.5263 
 fitted(fit, what = "mu")[1:5]
-#> [1] 0.4838787 0.4838787 0.4838787 0.4838787 0.4838787
+#> [1] 0.4838788 0.4838788 0.4838788 0.4838788 0.4838788
 ```
