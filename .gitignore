@@ -12,3 +12,8 @@ MD5
 /Meta/
 /docs/
 vignettes/*.html
+
+# Build artifacts
+*.tar.gz
+*.Rcheck/
+..Rcheck/
