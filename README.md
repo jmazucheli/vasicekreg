@@ -298,14 +298,16 @@ dat_normal <- data.frame(
   )
 )
 
+fam_normal <- NVASIQ(
+  quantile = quantile_level,
+  mu.link = "logit",
+  sigma.link = "logit"
+)
+
 fit_normal <- gamlss(
   y ~ 1,
   data = dat_normal,
-  family = NVASIQ(
-    quantile = quantile_level,
-    mu.link = "logit",
-    sigma.link = "logit"
-  ),
+  family = fam_normal,
   control = gamlss.control(trace = FALSE)
 )
 
@@ -327,14 +329,16 @@ dat_logistic <- data.frame(
   )
 )
 
+fam_logistic <- LVASIQ(
+  quantile = quantile_level,
+  mu.link = "logit",
+  sigma.link = "logit"
+)
+
 fit_logistic <- gamlss(
   y ~ 1,
   data = dat_logistic,
-  family = LVASIQ(
-    quantile = quantile_level,
-    mu.link = "logit",
-    sigma.link = "logit"
-  ),
+  family = fam_logistic,
   control = gamlss.control(trace = FALSE)
 )
 
@@ -356,15 +360,17 @@ dat_hs <- data.frame(
   )
 )
 
+fam_hs <- HVASIQ(
+  quantile = quantile_level,
+  mu.link = "logit",
+  sigma.link = "logit"
+)
+
 fit_hs <- gamlss(
   y ~ 1,
   sigma.formula = ~ 1,
   data = dat_hs,
-  family = HVASIQ(
-    quantile = quantile_level,
-    mu.link = "logit",
-    sigma.link = "logit"
-  ),
+  family = fam_hs,
   control = gamlss.control(trace = FALSE)
 )
 

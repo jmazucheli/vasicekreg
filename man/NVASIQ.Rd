@@ -127,7 +127,8 @@ fit <- gamlss(
 )
 
 fitquantiles <- lapply(c(0.10, 0.25, 0.50, 0.75, 0.90), function(level) {
-  gamlss(y ~ x, data = data, family = NVASIQ(quantile = level))
+  fam <- NVASIQ(quantile = level)
+  gamlss(y ~ x, data = data, family = fam)
 })
 
 lapply(fitquantiles, summary)

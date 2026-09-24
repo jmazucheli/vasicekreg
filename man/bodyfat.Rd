@@ -52,40 +52,43 @@ quantile_levels <- c(0.25, 0.50, 0.75)
 
 ## Quantile regression models with the normal kernel
 fit_normal <- lapply(quantile_levels, function(level) {
+  fam <- NVASIQ(
+    quantile = level,
+    mu.link = "logit",
+    sigma.link = "logit"
+  )
   gamlss(
     ARMS ~ AGE + BMI + SEX + IPAQ,
     data = bodyfat,
-    family = NVASIQ(
-      quantile = level,
-      mu.link = "logit",
-      sigma.link = "logit"
-    )
+    family = fam
   )
 })
 
 ## Quantile regression models with the logistic kernel
 fit_logistic <- lapply(quantile_levels, function(level) {
+  fam <- LVASIQ(
+    quantile = level,
+    mu.link = "logit",
+    sigma.link = "logit"
+  )
   gamlss(
     ARMS ~ AGE + BMI + SEX + IPAQ,
     data = bodyfat,
-    family = LVASIQ(
-      quantile = level,
-      mu.link = "logit",
-      sigma.link = "logit"
-    )
+    family = fam
   )
 })
 
 ## Quantile regression models with the Hyperbolic-secant-kernel
 fit_hsk <- lapply(quantile_levels, function(level) {
+  fam <- HVASIQ(
+    quantile = level,
+    mu.link = "logit",
+    sigma.link = "logit"
+  )
   gamlss(
     ARMS ~ AGE + BMI + SEX + IPAQ,
     data = bodyfat,
-    family = HVASIQ(
-      quantile = level,
-      mu.link = "logit",
-      sigma.link = "logit"
-    )
+    family = fam
   )
 })
 
