@@ -287,27 +287,24 @@ library(gamlss)
 library(vasicekreg)
 
 set.seed(123)
-quantile_level <- 0.50
 
 dat_normal <- data.frame(
   y = rNVASIQ(
     n = 300,
     mu = 0.60,
     sigma = 0.25,
-    quantile = quantile_level
+    quantile = 0.50
   )
-)
-
-fam_normal <- NVASIQ(
-  quantile = quantile_level,
-  mu.link = "logit",
-  sigma.link = "logit"
 )
 
 fit_normal <- gamlss(
   y ~ 1,
   data = dat_normal,
-  family = fam_normal,
+  family = NVASIQ(
+    quantile = 0.50,
+    mu.link = "logit",
+    sigma.link = "logit"
+  ),
   control = gamlss.control(trace = FALSE)
 )
 
@@ -318,27 +315,24 @@ fitted(fit_normal, what = "mu")[1]
 
 ```r
 set.seed(123)
-quantile_level <- 0.25
 
 dat_logistic <- data.frame(
   y = rLVASIQ(
     n = 300,
     mu = 0.60,
     sigma = 0.25,
-    quantile = quantile_level
+    quantile = 0.25
   )
-)
-
-fam_logistic <- LVASIQ(
-  quantile = quantile_level,
-  mu.link = "logit",
-  sigma.link = "logit"
 )
 
 fit_logistic <- gamlss(
   y ~ 1,
   data = dat_logistic,
-  family = fam_logistic,
+  family = LVASIQ(
+    quantile = 0.25,
+    mu.link = "logit",
+    sigma.link = "logit"
+  ),
   control = gamlss.control(trace = FALSE)
 )
 
@@ -349,28 +343,25 @@ fitted(fit_logistic, what = "mu")[1]
 
 ```r
 set.seed(123)
-quantile_level <- 0.25
 
 dat_hs <- data.frame(
   y = rHVASIQ(
     n = 300,
     mu = 0.60,
     sigma = 0.25,
-    quantile = quantile_level
+    quantile = 0.25
   )
-)
-
-fam_hs <- HVASIQ(
-  quantile = quantile_level,
-  mu.link = "logit",
-  sigma.link = "logit"
 )
 
 fit_hs <- gamlss(
   y ~ 1,
   sigma.formula = ~ 1,
   data = dat_hs,
-  family = fam_hs,
+  family = HVASIQ(
+    quantile = 0.25,
+    mu.link = "logit",
+    sigma.link = "logit"
+  ),
   control = gamlss.control(trace = FALSE)
 )
 

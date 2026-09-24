@@ -122,16 +122,11 @@ sigma <- 0.5
 y <- rNVASIQ(n, mu, sigma, quantile = 0.5)
 data <- data.frame(y, x)
 
-fit <- gamlss(
+fit_median <- gamlss(
   y ~ x, data = data, family = NVASIQ(quantile = 0.50)
 )
 
-fitquantiles <- lapply(c(0.10, 0.25, 0.50, 0.75, 0.90), function(level) {
-  fam <- NVASIQ(quantile = level)
-  gamlss(y ~ x, data = data, family = fam)
-})
-
-lapply(fitquantiles, summary)
+summary(fit_median)
 }
 \references{
 Hastie, T. J. and Tibshirani, R. J. (1990).

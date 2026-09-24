@@ -208,7 +208,6 @@ arms_models <- c(
     HVASIQ_median = fit_arms_hq
   )
 )
-
 knitr::kable(
   model_fit_table(arms_models, n = nrow(bodyfat_analysis)),
   digits = 3,
