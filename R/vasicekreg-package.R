@@ -134,55 +134,6 @@
 #' parameter \code{tau} in \code{ZOANVASIM()}, which represents the
 #' conditional probability at one among nonzero observations.
 #'
-#' @examples
-#' \donttest{
-#' if (requireNamespace("betareg", quietly = TRUE)) {
-#'     data("ReadingSkills", package = "betareg")
-#'     ReadingSkills$dyslexia <- stats::relevel(
-#'         factor(ReadingSkills$dyslexia), ref = "no"
-#'     )
-#'
-#'     control <- gamlss::gamlss.control(n.cyc = 200, trace = FALSE)
-#'
-#'     ## In both models, mu = E(Y | Y < 1) and nu = P(Y = 1).
-#'     fit_oanvasim <- gamlss::gamlss(
-#'         accuracy1 ~ dyslexia * iq,
-#'         sigma.formula = ~ dyslexia + iq,
-#'         nu.formula = ~ 1,
-#'         family = OANVASIM(),
-#'         data = ReadingSkills,
-#'         control = control
-#'     )
-#'
-#'     fit_beoi <- gamlss::gamlss(
-#'         accuracy1 ~ dyslexia * iq,
-#'         sigma.formula = ~ dyslexia + iq,
-#'         nu.formula = ~ 1,
-#'         family = gamlss.dist::BEOI(),
-#'         data = ReadingSkills,
-#'         control = control
-#'     )
-#'
-#'     n <- nrow(ReadingSkills)
-#'     comparison <- data.frame(
-#'         family = c("OANVASIM", "BEOI"),
-#'         logLik = -c(
-#'             fit_oanvasim$G.deviance,
-#'             fit_beoi$G.deviance
-#'         ) / 2,
-#'         AIC = c(
-#'             gamlss::GAIC(fit_oanvasim, k = 2),
-#'             gamlss::GAIC(fit_beoi, k = 2)
-#'         ),
-#'         BIC = c(
-#'             gamlss::GAIC(fit_oanvasim, k = log(n)),
-#'             gamlss::GAIC(fit_beoi, k = log(n))
-#'         )
-#'     )
-#'     comparison
-#' }
-#' }
-#'
 #' @author
 #' Josmar Mazucheli \email{jmazucheli@gmail.com}
 #'
