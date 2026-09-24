@@ -192,119 +192,18 @@ sigma <- 0.5
 y <- rNVASIQ(n, mu, sigma, quantile = 0.5)
 data <- data.frame(y, x)
 
-fit <- gamlss(
+fit_median <- gamlss(
   y ~ x, data = data, family = NVASIQ(quantile = 0.50)
 )
 #> GAMLSS-RS iteration 1: Global Deviance = -55.4043 
 #> GAMLSS-RS iteration 2: Global Deviance = -55.4042 
 
-fitquantiles <- lapply(c(0.10, 0.25, 0.50, 0.75, 0.90), function(level) {
-  fam <- NVASIQ(quantile = level)
-  gamlss(y ~ x, data = data, family = fam)
-})
-#> GAMLSS-RS iteration 1: Global Deviance = -53.4337 
-#> GAMLSS-RS iteration 2: Global Deviance = -54.9224 
-#> GAMLSS-RS iteration 3: Global Deviance = -55.2968 
-#> GAMLSS-RS iteration 4: Global Deviance = -55.3813 
-#> GAMLSS-RS iteration 5: Global Deviance = -55.3992 
-#> GAMLSS-RS iteration 6: Global Deviance = -55.4031 
-#> GAMLSS-RS iteration 7: Global Deviance = -55.404 
-#> GAMLSS-RS iteration 1: Global Deviance = -54.5352 
-#> GAMLSS-RS iteration 2: Global Deviance = -55.3657 
-#> GAMLSS-RS iteration 3: Global Deviance = -55.4029 
-#> GAMLSS-RS iteration 4: Global Deviance = -55.4042 
-#> GAMLSS-RS iteration 5: Global Deviance = -55.4042 
-#> GAMLSS-RS iteration 1: Global Deviance = -55.4043 
-#> GAMLSS-RS iteration 2: Global Deviance = -55.4042 
-#> GAMLSS-RS iteration 1: Global Deviance = -54.5314 
-#> GAMLSS-RS iteration 2: Global Deviance = -55.3641 
-#> GAMLSS-RS iteration 3: Global Deviance = -55.4025 
-#> GAMLSS-RS iteration 4: Global Deviance = -55.4041 
-#> GAMLSS-RS iteration 5: Global Deviance = -55.4042 
-#> GAMLSS-RS iteration 1: Global Deviance = -53.4294 
-#> GAMLSS-RS iteration 2: Global Deviance = -54.9158 
-#> GAMLSS-RS iteration 3: Global Deviance = -55.2943 
-#> GAMLSS-RS iteration 4: Global Deviance = -55.3801 
-#> GAMLSS-RS iteration 5: Global Deviance = -55.3986 
-#> GAMLSS-RS iteration 6: Global Deviance = -55.4029 
-#> GAMLSS-RS iteration 7: Global Deviance = -55.4038 
-
-lapply(fitquantiles, summary)
-#> Warning: summary: vcov has failed, option qr is used instead
+summary(fit_median)
 #> ******************************************************************
 #> Family:  c("NVASIQ", "Normal-kernel Vasicek-type quantile") 
 #> 
-#> Call:  gamlss(formula = y ~ x, family = fam, data = data) 
-#> 
-#> Fitting method: RS() 
-#> 
-#> ------------------------------------------------------------------
-#> Mu link function:  logit
-#> Mu Coefficients:
-#>             Estimate Std. Error t value Pr(>|t|)    
-#> (Intercept)  -1.1440     0.2009  -5.696 1.29e-07 ***
-#> x             0.8954     0.2849   3.143  0.00221 ** 
-#> ---
-#> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-#> 
-#> ------------------------------------------------------------------
-#> Sigma link function:  logit
-#> Sigma Coefficients:
-#>             Estimate Std. Error t value Pr(>|t|)   
-#> (Intercept)  -0.2913     0.1031  -2.825  0.00573 **
-#> ---
-#> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-#> 
-#> ------------------------------------------------------------------
-#> No. of observations in the fit:  100 
-#> Degrees of Freedom for the fit:  3
-#>       Residual Deg. of Freedom:  97 
-#>                       at cycle:  7 
-#>  
-#> Global Deviance:     -55.40398 
-#>             AIC:     -49.40398 
-#>             SBC:     -41.58847 
-#> ******************************************************************
-#> Warning: summary: vcov has failed, option qr is used instead
-#> ******************************************************************
-#> Family:  c("NVASIQ", "Normal-kernel Vasicek-type quantile") 
-#> 
-#> Call:  gamlss(formula = y ~ x, family = fam, data = data) 
-#> 
-#> Fitting method: RS() 
-#> 
-#> ------------------------------------------------------------------
-#> Mu link function:  logit
-#> Mu Coefficients:
-#>             Estimate Std. Error t value Pr(>|t|)   
-#> (Intercept)  -0.2799     0.1902  -1.472  0.14431   
-#> x             0.8746     0.2795   3.129  0.00231 **
-#> ---
-#> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-#> 
-#> ------------------------------------------------------------------
-#> Sigma link function:  logit
-#> Sigma Coefficients:
-#>             Estimate Std. Error t value Pr(>|t|)  
-#> (Intercept)  -0.2928     0.1256   -2.33   0.0218 *
-#> ---
-#> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-#> 
-#> ------------------------------------------------------------------
-#> No. of observations in the fit:  100 
-#> Degrees of Freedom for the fit:  3
-#>       Residual Deg. of Freedom:  97 
-#>                       at cycle:  5 
-#>  
-#> Global Deviance:     -55.40424 
-#>             AIC:     -49.40424 
-#>             SBC:     -41.58873 
-#> ******************************************************************
-#> Warning: summary: vcov has failed, option qr is used instead
-#> ******************************************************************
-#> Family:  c("NVASIQ", "Normal-kernel Vasicek-type quantile") 
-#> 
-#> Call:  gamlss(formula = y ~ x, family = fam, data = data) 
+#> Call:  gamlss(formula = y ~ x, family = NVASIQ(quantile = 0.5),  
+#>     data = data) 
 #> 
 #> Fitting method: RS() 
 #> 
@@ -313,7 +212,7 @@ lapply(fitquantiles, summary)
 #> Mu Coefficients:
 #>             Estimate Std. Error t value Pr(>|t|)   
 #> (Intercept)   0.6554     0.1936   3.385  0.00103 **
-#> x             0.9284     0.2922   3.178  0.00198 **
+#> x             0.9284     0.2975   3.120  0.00238 **
 #> ---
 #> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 #> 
@@ -321,7 +220,7 @@ lapply(fitquantiles, summary)
 #> Sigma link function:  logit
 #> Sigma Coefficients:
 #>             Estimate Std. Error t value Pr(>|t|)  
-#> (Intercept)  -0.2929     0.1396  -2.098   0.0384 *
+#> (Intercept)  -0.2929     0.1414  -2.071    0.041 *
 #> ---
 #> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 #> 
@@ -335,104 +234,4 @@ lapply(fitquantiles, summary)
 #>             AIC:     -49.40423 
 #>             SBC:     -41.58872 
 #> ******************************************************************
-#> Warning: summary: vcov has failed, option qr is used instead
-#> ******************************************************************
-#> Family:  c("NVASIQ", "Normal-kernel Vasicek-type quantile") 
-#> 
-#> Call:  gamlss(formula = y ~ x, family = fam, data = data) 
-#> 
-#> Fitting method: RS() 
-#> 
-#> ------------------------------------------------------------------
-#> Mu link function:  logit
-#> Mu Coefficients:
-#>             Estimate Std. Error t value Pr(>|t|)    
-#> (Intercept)   1.6511     0.2082   7.932 3.54e-12 ***
-#> x             1.0614     0.3175   3.343  0.00117 ** 
-#> ---
-#> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-#> 
-#> ------------------------------------------------------------------
-#> Sigma link function:  logit
-#> Sigma Coefficients:
-#>             Estimate Std. Error t value Pr(>|t|)  
-#> (Intercept)  -0.2926     0.1260  -2.322   0.0223 *
-#> ---
-#> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-#> 
-#> ------------------------------------------------------------------
-#> No. of observations in the fit:  100 
-#> Degrees of Freedom for the fit:  3
-#>       Residual Deg. of Freedom:  97 
-#>                       at cycle:  5 
-#>  
-#> Global Deviance:     -55.40423 
-#>             AIC:     -49.40423 
-#>             SBC:     -41.58872 
-#> ******************************************************************
-#> Warning: summary: vcov has failed, option qr is used instead
-#> ******************************************************************
-#> Family:  c("NVASIQ", "Normal-kernel Vasicek-type quantile") 
-#> 
-#> Call:  gamlss(formula = y ~ x, family = fam, data = data) 
-#> 
-#> Fitting method: RS() 
-#> 
-#> ------------------------------------------------------------------
-#> Mu link function:  logit
-#> Mu Coefficients:
-#>             Estimate Std. Error t value Pr(>|t|)    
-#> (Intercept)   2.6720     0.2273  11.754  < 2e-16 ***
-#> x             1.2421     0.3504   3.545 0.000604 ***
-#> ---
-#> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-#> 
-#> ------------------------------------------------------------------
-#> Sigma link function:  logit
-#> Sigma Coefficients:
-#>             Estimate Std. Error t value Pr(>|t|)   
-#> (Intercept)  -0.2908     0.1040  -2.798  0.00618 **
-#> ---
-#> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-#> 
-#> ------------------------------------------------------------------
-#> No. of observations in the fit:  100 
-#> Degrees of Freedom for the fit:  3
-#>       Residual Deg. of Freedom:  97 
-#>                       at cycle:  7 
-#>  
-#> Global Deviance:     -55.40379 
-#>             AIC:     -49.40379 
-#>             SBC:     -41.58828 
-#> ******************************************************************
-#> [[1]]
-#>               Estimate Std. Error   t value     Pr(>|t|)
-#> (Intercept) -1.1440331  0.2008641 -5.695557 1.288755e-07
-#> x            0.8953730  0.2848997  3.142765 2.214282e-03
-#> (Intercept) -0.2913003  0.1031328 -2.824517 5.726746e-03
-#> 
-#> [[2]]
-#>               Estimate Std. Error   t value    Pr(>|t|)
-#> (Intercept) -0.2798791  0.1901741 -1.471700 0.144306041
-#> x            0.8746436  0.2795444  3.128818 0.002311964
-#> (Intercept) -0.2927525  0.1256391 -2.330107 0.021830569
-#> 
-#> [[3]]
-#>               Estimate Std. Error   t value    Pr(>|t|)
-#> (Intercept)  0.6553778  0.1936272  3.384739 0.001025921
-#> x            0.9284338  0.2921506  3.177929 0.001984805
-#> (Intercept) -0.2928562  0.1395562 -2.098481 0.038407805
-#> 
-#> [[4]]
-#>               Estimate Std. Error   t value     Pr(>|t|)
-#> (Intercept)  1.6510553  0.2081502  7.932036 3.541343e-12
-#> x            1.0613602  0.3174911  3.342960 1.174862e-03
-#> (Intercept) -0.2926235  0.1259989 -2.322430 2.225752e-02
-#> 
-#> [[5]]
-#>               Estimate Std. Error   t value     Pr(>|t|)
-#> (Intercept)  2.6719901  0.2273284 11.753879 2.005136e-20
-#> x            1.2421165  0.3504167  3.544684 6.043309e-04
-#> (Intercept) -0.2908391  0.1039514 -2.797837 6.183251e-03
-#> 
 ```

@@ -238,119 +238,18 @@ The distribution of loan portfolio value.
 <span class="r-in"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu">rNVASIQ</span><span class="op">(</span><span class="va">n</span>, <span class="va">mu</span>, <span class="va">sigma</span>, quantile <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="va">y</span>, <span class="va">x</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/gamlss/man/gamlss.html" class="external-link">gamlss</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span><span class="va">fit_median</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/gamlss/man/gamlss.html" class="external-link">gamlss</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">y</span> <span class="op">~</span> <span class="va">x</span>, data <span class="op">=</span> <span class="va">data</span>, family <span class="op">=</span> <span class="fu">NVASIQ</span><span class="op">(</span>quantile <span class="op">=</span> <span class="fl">0.50</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> GAMLSS-RS iteration 1: Global Deviance = -55.4043 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> GAMLSS-RS iteration 2: Global Deviance = -55.4042 </span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">fitquantiles</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.10</span>, <span class="fl">0.25</span>, <span class="fl">0.50</span>, <span class="fl">0.75</span>, <span class="fl">0.90</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">level</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>  <span class="va">fam</span> <span class="op">&lt;-</span> <span class="fu">NVASIQ</span><span class="op">(</span>quantile <span class="op">=</span> <span class="va">level</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/pkg/gamlss/man/gamlss.html" class="external-link">gamlss</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x</span>, data <span class="op">=</span> <span class="va">data</span>, family <span class="op">=</span> <span class="va">fam</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> GAMLSS-RS iteration 1: Global Deviance = -53.4337 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> GAMLSS-RS iteration 2: Global Deviance = -54.9224 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> GAMLSS-RS iteration 3: Global Deviance = -55.2968 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> GAMLSS-RS iteration 4: Global Deviance = -55.3813 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> GAMLSS-RS iteration 5: Global Deviance = -55.3992 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> GAMLSS-RS iteration 6: Global Deviance = -55.4031 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> GAMLSS-RS iteration 7: Global Deviance = -55.404 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> GAMLSS-RS iteration 1: Global Deviance = -54.5352 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> GAMLSS-RS iteration 2: Global Deviance = -55.3657 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> GAMLSS-RS iteration 3: Global Deviance = -55.4029 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> GAMLSS-RS iteration 4: Global Deviance = -55.4042 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> GAMLSS-RS iteration 5: Global Deviance = -55.4042 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> GAMLSS-RS iteration 1: Global Deviance = -55.4043 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> GAMLSS-RS iteration 2: Global Deviance = -55.4042 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> GAMLSS-RS iteration 1: Global Deviance = -54.5314 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> GAMLSS-RS iteration 2: Global Deviance = -55.3641 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> GAMLSS-RS iteration 3: Global Deviance = -55.4025 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> GAMLSS-RS iteration 4: Global Deviance = -55.4041 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> GAMLSS-RS iteration 5: Global Deviance = -55.4042 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> GAMLSS-RS iteration 1: Global Deviance = -53.4294 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> GAMLSS-RS iteration 2: Global Deviance = -54.9158 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> GAMLSS-RS iteration 3: Global Deviance = -55.2943 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> GAMLSS-RS iteration 4: Global Deviance = -55.3801 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> GAMLSS-RS iteration 5: Global Deviance = -55.3986 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> GAMLSS-RS iteration 6: Global Deviance = -55.4029 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> GAMLSS-RS iteration 7: Global Deviance = -55.4038 </span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">fitquantiles</span>, <span class="va">summary</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>summary: vcov has failed, option qr is used instead</span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit_median</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ******************************************************************</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Family:  c("NVASIQ", "Normal-kernel Vasicek-type quantile") </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Call:  gamlss(formula = y ~ x, family = fam, data = data) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Fitting method: RS() </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ------------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Mu link function:  logit</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Mu Coefficients:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             Estimate Std. Error t value Pr(&gt;|t|)    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)  -1.1440     0.2009  -5.696 1.29e-07 ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> x             0.8954     0.2849   3.143  0.00221 ** </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ---</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ------------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Sigma link function:  logit</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Sigma Coefficients:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             Estimate Std. Error t value Pr(&gt;|t|)   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)  -0.2913     0.1031  -2.825  0.00573 **</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ---</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ------------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> No. of observations in the fit:  100 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Degrees of Freedom for the fit:  3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       Residual Deg. of Freedom:  97 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                       at cycle:  7 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Global Deviance:     -55.40398 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             AIC:     -49.40398 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             SBC:     -41.58847 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ******************************************************************</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>summary: vcov has failed, option qr is used instead</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ******************************************************************</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Family:  c("NVASIQ", "Normal-kernel Vasicek-type quantile") </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Call:  gamlss(formula = y ~ x, family = fam, data = data) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Fitting method: RS() </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ------------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Mu link function:  logit</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Mu Coefficients:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             Estimate Std. Error t value Pr(&gt;|t|)   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)  -0.2799     0.1902  -1.472  0.14431   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> x             0.8746     0.2795   3.129  0.00231 **</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ---</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ------------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Sigma link function:  logit</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Sigma Coefficients:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             Estimate Std. Error t value Pr(&gt;|t|)  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)  -0.2928     0.1256   -2.33   0.0218 *</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ---</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ------------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> No. of observations in the fit:  100 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Degrees of Freedom for the fit:  3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       Residual Deg. of Freedom:  97 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                       at cycle:  5 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Global Deviance:     -55.40424 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             AIC:     -49.40424 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             SBC:     -41.58873 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ******************************************************************</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>summary: vcov has failed, option qr is used instead</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ******************************************************************</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Family:  c("NVASIQ", "Normal-kernel Vasicek-type quantile") </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Call:  gamlss(formula = y ~ x, family = fam, data = data) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Call:  gamlss(formula = y ~ x, family = NVASIQ(quantile = 0.5),  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     data = data) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Fitting method: RS() </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -359,7 +258,7 @@ The distribution of loan portfolio value.
 <span class="r-out co"><span class="r-pr">#&gt;</span> Mu Coefficients:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             Estimate Std. Error t value Pr(&gt;|t|)   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)   0.6554     0.1936   3.385  0.00103 **</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> x             0.9284     0.2922   3.178  0.00198 **</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> x             0.9284     0.2975   3.120  0.00238 **</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ---</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -367,7 +266,7 @@ The distribution of loan portfolio value.
 <span class="r-out co"><span class="r-pr">#&gt;</span> Sigma link function:  logit</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Sigma Coefficients:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             Estimate Std. Error t value Pr(&gt;|t|)  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)  -0.2929     0.1396  -2.098   0.0384 *</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)  -0.2929     0.1414  -2.071    0.041 *</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ---</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -381,106 +280,6 @@ The distribution of loan portfolio value.
 <span class="r-out co"><span class="r-pr">#&gt;</span>             AIC:     -49.40423 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             SBC:     -41.58872 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ******************************************************************</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>summary: vcov has failed, option qr is used instead</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ******************************************************************</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Family:  c("NVASIQ", "Normal-kernel Vasicek-type quantile") </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Call:  gamlss(formula = y ~ x, family = fam, data = data) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Fitting method: RS() </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ------------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Mu link function:  logit</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Mu Coefficients:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             Estimate Std. Error t value Pr(&gt;|t|)    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)   1.6511     0.2082   7.932 3.54e-12 ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> x             1.0614     0.3175   3.343  0.00117 ** </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ---</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ------------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Sigma link function:  logit</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Sigma Coefficients:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             Estimate Std. Error t value Pr(&gt;|t|)  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)  -0.2926     0.1260  -2.322   0.0223 *</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ---</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ------------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> No. of observations in the fit:  100 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Degrees of Freedom for the fit:  3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       Residual Deg. of Freedom:  97 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                       at cycle:  5 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Global Deviance:     -55.40423 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             AIC:     -49.40423 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             SBC:     -41.58872 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ******************************************************************</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>summary: vcov has failed, option qr is used instead</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ******************************************************************</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Family:  c("NVASIQ", "Normal-kernel Vasicek-type quantile") </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Call:  gamlss(formula = y ~ x, family = fam, data = data) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Fitting method: RS() </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ------------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Mu link function:  logit</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Mu Coefficients:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             Estimate Std. Error t value Pr(&gt;|t|)    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)   2.6720     0.2273  11.754  &lt; 2e-16 ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> x             1.2421     0.3504   3.545 0.000604 ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ---</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ------------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Sigma link function:  logit</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Sigma Coefficients:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             Estimate Std. Error t value Pr(&gt;|t|)   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)  -0.2908     0.1040  -2.798  0.00618 **</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ---</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ------------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> No. of observations in the fit:  100 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Degrees of Freedom for the fit:  3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       Residual Deg. of Freedom:  97 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                       at cycle:  7 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Global Deviance:     -55.40379 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             AIC:     -49.40379 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             SBC:     -41.58828 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ******************************************************************</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>               Estimate Std. Error   t value     Pr(&gt;|t|)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept) -1.1440331  0.2008641 -5.695557 1.288755e-07</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> x            0.8953730  0.2848997  3.142765 2.214282e-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept) -0.2913003  0.1031328 -2.824517 5.726746e-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>               Estimate Std. Error   t value    Pr(&gt;|t|)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept) -0.2798791  0.1901741 -1.471700 0.144306041</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> x            0.8746436  0.2795444  3.128818 0.002311964</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept) -0.2927525  0.1256391 -2.330107 0.021830569</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>               Estimate Std. Error   t value    Pr(&gt;|t|)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)  0.6553778  0.1936272  3.384739 0.001025921</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> x            0.9284338  0.2921506  3.177929 0.001984805</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept) -0.2928562  0.1395562 -2.098481 0.038407805</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>               Estimate Std. Error   t value     Pr(&gt;|t|)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)  1.6510553  0.2081502  7.932036 3.541343e-12</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> x            1.0613602  0.3174911  3.342960 1.174862e-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept) -0.2926235  0.1259989 -2.322430 2.225752e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[5]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>               Estimate Std. Error   t value     Pr(&gt;|t|)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)  2.6719901  0.2273284 11.753879 2.005136e-20</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> x            1.2421165  0.3504167  3.544684 6.043309e-04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept) -0.2908391  0.1039514 -2.797837 6.183251e-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

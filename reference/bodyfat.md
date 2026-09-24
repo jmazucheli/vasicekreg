@@ -64,8 +64,8 @@ Bruna Alves <pg402900@uem.br>
 ``` r
 data(bodyfat, package = "vasicekreg")
 
-bodyfat$AGE <- bodyfat$AGE - 46.00
-bodyfat$BMI <- bodyfat$BMI - 24.72
+bodyfat$AGE <- bodyfat$AGE - mean(bodyfat$AGE)
+bodyfat$BMI <- bodyfat$BMI - mean(bodyfat$BMI)
 bodyfat$SEX <- as.factor(bodyfat$SEX)
 bodyfat$IPAQ<- as.factor(bodyfat$IPAQ)
 
@@ -83,52 +83,41 @@ fitmean <- gamlss(
 #> GAMLSS-RS iteration 4: Global Deviance = -911.2213 
 
 if (FALSE) { # \dontrun{
-quantile_levels <- c(0.25, 0.50, 0.75)
-
-## Quantile regression models with the normal kernel
-fit_normal <- lapply(quantile_levels, function(level) {
-  fam <- NVASIQ(
-    quantile = level,
+## Median regression with the normal kernel
+fit_normal <- gamlss(
+  ARMS ~ AGE + BMI + SEX + IPAQ,
+  data = bodyfat,
+  family = NVASIQ(
+    quantile = 0.50,
     mu.link = "logit",
     sigma.link = "logit"
   )
-  gamlss(
-    ARMS ~ AGE + BMI + SEX + IPAQ,
-    data = bodyfat,
-    family = fam
-  )
-})
+)
 
-## Quantile regression models with the logistic kernel
-fit_logistic <- lapply(quantile_levels, function(level) {
-  fam <- LVASIQ(
-    quantile = level,
+## Median regression with the logistic kernel
+fit_logistic <- gamlss(
+  ARMS ~ AGE + BMI + SEX + IPAQ,
+  data = bodyfat,
+  family = LVASIQ(
+    quantile = 0.50,
     mu.link = "logit",
     sigma.link = "logit"
   )
-  gamlss(
-    ARMS ~ AGE + BMI + SEX + IPAQ,
-    data = bodyfat,
-    family = fam
-  )
-})
+)
 
-## Quantile regression models with the Hyperbolic-secant-kernel
-fit_hsk <- lapply(quantile_levels, function(level) {
-  fam <- HVASIQ(
-    quantile = level,
+## Median regression with the hyperbolic-secant kernel
+fit_hsk <- gamlss(
+  ARMS ~ AGE + BMI + SEX + IPAQ,
+  data = bodyfat,
+  family = HVASIQ(
+    quantile = 0.50,
     mu.link = "logit",
     sigma.link = "logit"
   )
-  gamlss(
-    ARMS ~ AGE + BMI + SEX + IPAQ,
-    data = bodyfat,
-    family = fam
-  )
-})
+)
 
-lapply(fit_normal, summary)
-lapply(fit_logistic, summary)
-lapply(fit_hsk, summary)
+summary(fit_normal)
+summary(fit_logistic)
+summary(fit_hsk)
 } # }
 ```
