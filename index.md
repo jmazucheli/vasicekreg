@@ -1,9 +1,17 @@
 # vasicekreg
 
-[![Downloads (último
-mês)](https://cranlogs.r-pkg.org/badges/last-month/vasicekreg)](https://cranlogs.r-pkg.org/badges/last-month/vasicekreg)
-[![Downloads
-(total)](https://cranlogs.r-pkg.org/badges/grand-total/vasicekreg)](https://cranlogs.r-pkg.org/badges/grand-total/vasicekreg)
+[![CRAN
+version](https://www.r-pkg.org/badges/version/vasicekreg)](https://cran.r-project.org/package=vasicekreg)
+[![DOI](https://img.shields.io/badge/DOI-10.32614/CRAN.package.vasicekreg-blue)](https://doi.org/10.32614/CRAN.package.vasicekreg)
+
+[![downloads](https://cranlogs.r-pkg.org/badges/last-month/vasicekreg)](https://cranlogs.r-pkg.org/badges/last-month/vasicekreg)
+[![downloads](https://cranlogs.r-pkg.org/badges/grand-total/vasicekreg)](https://cranlogs.r-pkg.org/badges/grand-total/vasicekreg)
+
+[![R-CMD-check](https://github.com/jmazucheli/vasicekreg/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jmazucheli/vasicekreg/actions/workflows/R-CMD-check.yaml)
+
+[![License:
+MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 [![CRAN
 status](https://www.r-pkg.org/badges/version/vasicekreg)](https://CRAN.R-project.org/package=vasicekreg)
 
