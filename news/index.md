@@ -2,6 +2,8 @@
 
 ## vasicekreg 1.3.0 (2026-09-20)
 
+CRAN release: 2026-09-25
+
 ### Datasets
 
 - Added `please_microbiome`, a long-format data frame of genus-level

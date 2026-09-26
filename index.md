@@ -1,5 +1,9 @@
 # vasicekreg
 
+[![Downloads (último
+mês)](https://cranlogs.r-pkg.org/badges/last-month/vasicekreg)](https://cranlogs.r-pkg.org/badges/last-month/vasicekreg)
+[![Downloads
+(total)](https://cranlogs.r-pkg.org/badges/grand-total/vasicekreg)](https://cranlogs.r-pkg.org/badges/grand-total/vasicekreg)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/vasicekreg)](https://CRAN.R-project.org/package=vasicekreg)
 

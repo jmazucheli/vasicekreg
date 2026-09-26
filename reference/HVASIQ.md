@@ -146,5 +146,5 @@ fit <- gamlss::gamlss(
     control = gamlss::gamlss.control(trace = FALSE)
 )
 fitted(fit, what = "mu")[1]
-#> [1] 0.5968614
+#> [1] 0.5968944
 ```

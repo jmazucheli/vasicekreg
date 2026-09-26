@@ -379,7 +379,7 @@ knitr::kable(
 |:--------------|:-------|-----------:|--------:|---------:|---------:|:----------|
 | NVASIM_mean   | NVASIM |          7 | 455.611 | -897.221 | -871.342 | TRUE      |
 | NVASIQ_median | NVASIQ |          7 | 455.495 | -896.989 | -871.109 | TRUE      |
-| LVASIQ_median | LVASIQ |          7 | 451.201 | -888.401 | -862.522 | TRUE      |
+| LVASIQ_median | LVASIQ |          7 | 451.201 | -888.402 | -862.522 | TRUE      |
 | HVASIQ_median | HVASIQ |          7 | 446.193 | -878.387 | -852.507 | TRUE      |
 
 Likelihood-based summaries for the ARMS models. {.table}
